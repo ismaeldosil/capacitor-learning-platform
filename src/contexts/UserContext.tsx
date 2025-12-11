@@ -3,11 +3,89 @@ import {
   useContext,
   useCallback,
   useMemo,
+  useEffect,
+  useRef,
   type ReactNode,
 } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { STORAGE_KEYS, XP_REWARDS, LEVELS } from '../data/constants'
+import { STORAGE_KEYS, XP_REWARDS, LEVELS, MODULES, BADGES } from '../data/constants'
 import type { User } from '../data/types'
+
+// Badge checking utility
+function checkAndAwardBadges(user: User): string[] {
+  const newBadges: string[] = []
+
+  for (const badge of BADGES) {
+    // Skip if already has badge
+    if (user.badges.includes(badge.id)) continue
+
+    const { condition } = badge
+    let shouldAward = false
+
+    switch (condition.type) {
+      case 'first_lesson':
+        shouldAward = user.completedLessons.length >= 1
+        break
+
+      case 'perfect_quiz': {
+        const perfectCount = user.completedQuizzes.filter((q) =>
+          q.endsWith('-perfect')
+        ).length
+        shouldAward = perfectCount >= (condition.count || 1)
+        break
+      }
+
+      case 'streak':
+        shouldAward = user.streak >= (condition.days || 3)
+        break
+
+      case 'complete_module': {
+        const module = MODULES.find((m) => m.id === condition.moduleId)
+        if (module) {
+          const allLessons = module.lessons.every((l) =>
+            user.completedLessons.includes(l)
+          )
+          const quizDone = user.completedQuizzes.some((q) =>
+            q.startsWith(module.quizId)
+          )
+          const gameDone = user.completedGames.includes(module.gameId)
+          shouldAward = allLessons && quizDone && gameDone
+        }
+        break
+      }
+
+      case 'complete_all_modules': {
+        shouldAward = MODULES.every((module) => {
+          const allLessons = module.lessons.every((l) =>
+            user.completedLessons.includes(l)
+          )
+          const quizDone = user.completedQuizzes.some((q) =>
+            q.startsWith(module.quizId)
+          )
+          const gameDone = user.completedGames.includes(module.gameId)
+          return allLessons && quizDone && gameDone
+        })
+        break
+      }
+
+      case 'complete_all_games':
+        shouldAward = MODULES.every((m) =>
+          user.completedGames.includes(m.gameId)
+        )
+        break
+
+      // speed_run would require tracking module start times - skip for now
+      case 'speed_run':
+        break
+    }
+
+    if (shouldAward) {
+      newBadges.push(badge.id)
+    }
+  }
+
+  return newBadges
+}
 
 // Initial user state
 const createInitialUser = (): User => ({
@@ -42,6 +120,7 @@ interface UserContextType {
   // Badges
   unlockBadge: (badgeId: string) => void
   hasBadge: (badgeId: string) => boolean
+  syncBadges: () => void
   // Streak
   updateStreak: () => number
   // Reset
@@ -116,13 +195,21 @@ export function UserProvider({ children }: UserProviderProps) {
         const newXP = prev.xp + XP_REWARDS.LESSON_COMPLETE
         const newLevel = calculateLevel(newXP)
 
-        return {
+        const updatedUser = {
           ...prev,
           xp: newXP,
           level: newLevel.level,
           completedLessons: [...prev.completedLessons, lessonId],
           lastActivityDate: new Date().toISOString().split('T')[0]!,
         }
+
+        // Check and award badges
+        const newBadges = checkAndAwardBadges(updatedUser)
+        if (newBadges.length > 0) {
+          updatedUser.badges = [...updatedUser.badges, ...newBadges]
+        }
+
+        return updatedUser
       })
     },
     [setUser, calculateLevel]
@@ -145,13 +232,21 @@ export function UserProvider({ children }: UserProviderProps) {
 
         const quizRecord = isPerfect ? `${quizId}-perfect` : quizId
 
-        return {
+        const updatedUser = {
           ...prev,
           xp: newXP,
           level: newLevel.level,
           completedQuizzes: [...prev.completedQuizzes, quizRecord],
           lastActivityDate: new Date().toISOString().split('T')[0]!,
         }
+
+        // Check and award badges
+        const newBadges = checkAndAwardBadges(updatedUser)
+        if (newBadges.length > 0) {
+          updatedUser.badges = [...updatedUser.badges, ...newBadges]
+        }
+
+        return updatedUser
       })
     },
     [setUser, calculateLevel]
@@ -168,13 +263,21 @@ export function UserProvider({ children }: UserProviderProps) {
         const newXP = prev.xp + XP_REWARDS.GAME_COMPLETE
         const newLevel = calculateLevel(newXP)
 
-        return {
+        const updatedUser = {
           ...prev,
           xp: newXP,
           level: newLevel.level,
           completedGames: [...prev.completedGames, gameId],
           lastActivityDate: new Date().toISOString().split('T')[0]!,
         }
+
+        // Check and award badges
+        const newBadges = checkAndAwardBadges(updatedUser)
+        if (newBadges.length > 0) {
+          updatedUser.badges = [...updatedUser.badges, ...newBadges]
+        }
+
+        return updatedUser
       })
     },
     [setUser, calculateLevel]
@@ -250,12 +353,22 @@ export function UserProvider({ children }: UserProviderProps) {
       }
     }
 
-    setUser((prev) => ({
-      ...prev,
-      streak: newStreak,
-      xp: prev.xp + bonusXP,
-      lastActivityDate: today,
-    }))
+    setUser((prev) => {
+      const updatedUser = {
+        ...prev,
+        streak: newStreak,
+        xp: prev.xp + bonusXP,
+        lastActivityDate: today,
+      }
+
+      // Check and award badges (including streak badges)
+      const newBadges = checkAndAwardBadges(updatedUser)
+      if (newBadges.length > 0) {
+        updatedUser.badges = [...updatedUser.badges, ...newBadges]
+      }
+
+      return updatedUser
+    })
 
     return newStreak
   }, [user.lastActivityDate, user.streak, setUser])
@@ -264,6 +377,29 @@ export function UserProvider({ children }: UserProviderProps) {
   const resetProgress = useCallback(() => {
     setUser(createInitialUser())
   }, [setUser])
+
+  // Sync badges - retroactively award any earned badges
+  const syncBadges = useCallback(() => {
+    setUser((prev) => {
+      const newBadges = checkAndAwardBadges(prev)
+      if (newBadges.length > 0) {
+        return {
+          ...prev,
+          badges: [...prev.badges, ...newBadges],
+        }
+      }
+      return prev
+    })
+  }, [setUser])
+
+  // Sync badges on mount (retroactive award for existing users)
+  const hasSyncedRef = useRef(false)
+  useEffect(() => {
+    if (!hasSyncedRef.current) {
+      hasSyncedRef.current = true
+      syncBadges()
+    }
+  }, [syncBadges])
 
   const value = useMemo(
     () => ({
@@ -280,6 +416,7 @@ export function UserProvider({ children }: UserProviderProps) {
       isGameCompleted,
       unlockBadge,
       hasBadge,
+      syncBadges,
       updateStreak,
       resetProgress,
     }),
@@ -297,6 +434,7 @@ export function UserProvider({ children }: UserProviderProps) {
       isGameCompleted,
       unlockBadge,
       hasBadge,
+      syncBadges,
       updateStreak,
       resetProgress,
     ]
