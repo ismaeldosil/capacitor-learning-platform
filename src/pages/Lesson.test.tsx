@@ -50,12 +50,13 @@ describe('Lesson', () => {
       expect(screen.getByRole('button', { name: /completar lección/i })).toBeInTheDocument()
     })
 
-    it('should render content placeholder', () => {
+    it('should render lesson content', () => {
       renderWithRoute(<Lesson />, {
         route: '/lesson/module-1/what-is-capacitor',
         path: '/lesson/:moduleId/:lessonId',
       })
-      expect(screen.getByText(/capacitor-learning-content/i)).toBeInTheDocument()
+      // Lesson has real content now
+      expect(screen.getByText(/runtime nativo moderno/i)).toBeInTheDocument()
     })
   })
 
