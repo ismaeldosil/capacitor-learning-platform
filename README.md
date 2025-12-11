@@ -1,5 +1,15 @@
 # Capacitor Learning Platform
 
+[![CI](https://github.com/ismaeldosil/capacitor-learning-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/ismaeldosil/capacitor-learning-platform/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/ismaeldosil/capacitor-learning-platform/graph/badge.svg)](https://codecov.io/gh/ismaeldosil/capacitor-learning-platform)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+
 Plataforma educativa gamificada para aprender **Ionic + Capacitor** de forma acelerada.
 
 ## Descripción
@@ -21,7 +31,7 @@ Una Single Page Application (SPA) moderna que incluye:
 | State | React hooks (useState, useReducer, useContext) |
 | Routing | React Router v6 |
 | Storage | localStorage |
-| Testing | Jest + React Testing Library |
+| Testing | Vitest + React Testing Library |
 | Animations | CSS transitions + Framer Motion |
 | Icons | Lucide React |
 
@@ -60,8 +70,14 @@ npm run build
 # Ejecutar tests
 npm test
 
+# Tests con cobertura
+npm test -- --coverage
+
 # Lint
 npm run lint
+
+# Type check
+npm run typecheck
 ```
 
 ## Módulos Educativos
