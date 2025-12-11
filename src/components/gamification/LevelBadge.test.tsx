@@ -8,15 +8,15 @@ const mockLevel: Level = {
   name: 'Build Master',
   minXP: 301,
   maxXP: 600,
-  icon: '🏗️',
+  icon: 'hammer',
   color: 'text-purple-500',
 }
 
 describe('LevelBadge', () => {
   describe('default variant', () => {
-    it('should render level icon', () => {
+    it('should render level badge', () => {
       render(<LevelBadge level={mockLevel} />)
-      expect(screen.getByText('🏗️')).toBeInTheDocument()
+      expect(screen.getByText('Lvl 3')).toBeInTheDocument()
     })
 
     it('should render level number with Lvl prefix', () => {
@@ -38,7 +38,6 @@ describe('LevelBadge', () => {
   describe('minimal variant', () => {
     it('should render only icon and level number', () => {
       render(<LevelBadge level={mockLevel} variant="minimal" />)
-      expect(screen.getByText('🏗️')).toBeInTheDocument()
       expect(screen.getByText('3')).toBeInTheDocument()
     })
 
@@ -51,17 +50,17 @@ describe('LevelBadge', () => {
   describe('sizes', () => {
     it('should render sm size', () => {
       render(<LevelBadge level={mockLevel} size="sm" />)
-      expect(screen.getByText('🏗️')).toBeInTheDocument()
+      expect(screen.getByText('Lvl 3')).toBeInTheDocument()
     })
 
     it('should render md size', () => {
       render(<LevelBadge level={mockLevel} size="md" />)
-      expect(screen.getByText('🏗️')).toBeInTheDocument()
+      expect(screen.getByText('Lvl 3')).toBeInTheDocument()
     })
 
     it('should render lg size', () => {
       render(<LevelBadge level={mockLevel} size="lg" />)
-      expect(screen.getByText('🏗️')).toBeInTheDocument()
+      expect(screen.getByText('Lvl 3')).toBeInTheDocument()
     })
   })
 })

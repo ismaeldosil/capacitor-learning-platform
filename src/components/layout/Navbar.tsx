@@ -2,6 +2,7 @@ import { useUser } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
 import { Flame, Zap } from 'lucide-react'
 import { LanguageSwitcher } from '../common/LanguageSwitcher'
+import { Icon } from '../common/Icon'
 
 export function Navbar() {
   const { user, currentLevel, xpProgress, nextLevel } = useUser()
@@ -12,8 +13,8 @@ export function Navbar() {
       <div className="flex h-16 items-center justify-between px-6">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 text-xl">
-            ⚡
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600">
+            <Zap className="h-6 w-6 text-white" />
           </div>
           <span className="hidden text-lg font-bold sm:block">
             Capacitor Learning
@@ -40,7 +41,7 @@ export function Navbar() {
 
           {/* Level Badge */}
           <div className="flex items-center gap-2 rounded-full bg-gray-700 px-3 py-1">
-            <span className="text-lg">{currentLevel.icon}</span>
+            <Icon name={currentLevel.icon} className={`h-5 w-5 ${currentLevel.color}`} />
             <span className={`font-medium ${currentLevel.color}`}>
               Lvl {currentLevel.level}
             </span>

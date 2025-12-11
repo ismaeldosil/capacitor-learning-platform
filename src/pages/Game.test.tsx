@@ -339,8 +339,8 @@ describe('Game', () => {
         },
       })
 
-      // Game icon appears in multiple places
-      expect(screen.getAllByText('🔧').length).toBeGreaterThan(0)
+      // Game header and content should render with the game title
+      expect(screen.getByText(/constructor de comandos/i)).toBeInTheDocument()
     })
   })
 })

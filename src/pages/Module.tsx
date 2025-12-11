@@ -9,7 +9,9 @@ import {
   Circle,
   Play,
   Gamepad2,
+  Clock,
 } from 'lucide-react'
+import { Icon } from '../components/common/Icon'
 
 export function Module() {
   const { moduleId } = useParams<{ moduleId: string }>()
@@ -49,8 +51,8 @@ export function Module() {
       {/* Module Header */}
       <div className="card mb-8">
         <div className="flex items-start gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-gray-700 text-3xl">
-            {module.icon}
+          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-gray-700">
+            <Icon name={module.icon} className="h-8 w-8 text-primary-400" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">
@@ -59,8 +61,9 @@ export function Module() {
             <p className="mt-1 text-gray-400">
               {tGamification(`modules.${module.id}.description`)}
             </p>
-            <p className="mt-2 text-sm text-gray-500">
-              ⏱️ {tGamification(`modules.${module.id}.estimatedTime`)}
+            <p className="mt-2 flex items-center gap-1 text-sm text-gray-500">
+              <Clock className="h-4 w-4" />
+              {tGamification(`modules.${module.id}.estimatedTime`)}
             </p>
           </div>
         </div>

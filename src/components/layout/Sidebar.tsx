@@ -3,13 +3,7 @@ import { Home, Lock, CheckCircle, Circle } from 'lucide-react'
 import { useUser } from '../../contexts/UserContext'
 import { MODULES } from '../../data/constants'
 import { getModuleStatus } from '../../utils'
-
-const moduleIcons: Record<string, string> = {
-  'module-1': '🚀',
-  'module-2': '🔌',
-  'module-3': '🔨',
-  'module-4': '🏪',
-}
+import { Icon } from '../common/Icon'
 
 export function Sidebar() {
   const { user } = useUser()
@@ -67,9 +61,7 @@ export function Sidebar() {
                       }`
                     }
                   >
-                    <span className="text-lg">
-                      {moduleIcons[module.id] || '📚'}
-                    </span>
+                    <Icon name={module.icon} className="h-5 w-5 text-primary-400" />
                     <span className="flex-1 truncate text-sm font-medium">
                       {module.title}
                     </span>

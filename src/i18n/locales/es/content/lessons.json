@@ -1,0 +1,672 @@
+{
+  "what-is-capacitor": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "**Capacitor** es un runtime nativo moderno que permite ejecutar aplicaciones web de forma nativa en iOS, Android y la Web. Creado por el equipo de Ionic, Capacitor es el sucesor espiritual de Apache Cordova."
+      },
+      {
+        "type": "info",
+        "content": "Capacitor te permite reutilizar tu código web existente y acceder a APIs nativas de forma sencilla."
+      },
+      {
+        "type": "text",
+        "content": "A diferencia de otras soluciones, Capacitor adopta un enfoque \"web-first\", lo que significa que tu aplicación se ejecuta principalmente como una aplicación web dentro de un WebView nativo."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Acceso completo a APIs nativas de iOS y Android",
+          "Compatible con cualquier framework web (React, Vue, Angular, etc.)",
+          "Sistema de plugins extensible y moderno",
+          "Soporte para Progressive Web Apps (PWA)",
+          "Integración con herramientas de desarrollo nativas"
+        ]
+      },
+      {
+        "type": "tip",
+        "content": "Capacitor funciona con cualquier proyecto web que genere archivos estáticos. No necesitas usar Ionic Framework."
+      }
+    ]
+  },
+  "architecture": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "La arquitectura de Capacitor se basa en tres componentes principales: el **WebView**, el **Bridge** y los **Plugins nativos**."
+      },
+      {
+        "type": "text",
+        "content": "El **WebView** es un componente nativo que renderiza tu aplicación web. En iOS usa WKWebView y en Android usa Android WebView (basado en Chromium)."
+      },
+      {
+        "type": "info",
+        "content": "El Bridge de Capacitor utiliza comunicación asíncrona basada en Promises, lo que hace el código más limpio y fácil de manejar."
+      },
+      {
+        "type": "warning",
+        "content": "El WebView no tiene acceso directo al hardware del dispositivo. Siempre necesitas usar plugins para acceder a funcionalidades nativas."
+      },
+      {
+        "type": "text",
+        "content": "Los **Plugins** son el puente entre tu código JavaScript y las APIs nativas. Capacitor incluye plugins oficiales para las funcionalidades más comunes."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Camera - Acceso a la cámara y galería",
+          "Geolocation - Ubicación del dispositivo",
+          "Push Notifications - Notificaciones push",
+          "Storage - Almacenamiento persistente",
+          "Haptics - Retroalimentación háptica"
+        ]
+      }
+    ]
+  },
+  "project-structure": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Un proyecto Capacitor tiene una estructura específica que combina tu aplicación web con los proyectos nativos de iOS y Android."
+      },
+      {
+        "type": "success",
+        "content": "Los archivos en android/ e ios/ son proyectos nativos completos que puedes abrir y modificar directamente en Android Studio y Xcode."
+      },
+      {
+        "type": "text",
+        "content": "El archivo **capacitor.config.ts** es el corazón de la configuración:"
+      },
+      {
+        "type": "tip",
+        "content": "Usa capacitor.config.ts en lugar de .json para tener autocompletado y validación de tipos."
+      }
+    ]
+  },
+  "commands": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "La CLI de Capacitor proporciona comandos esenciales para gestionar tu proyecto. Aquí están los más importantes:"
+      },
+      {
+        "type": "warning",
+        "content": "Siempre ejecuta \"npx cap sync\" después de instalar nuevos plugins o actualizar dependencias nativas."
+      },
+      {
+        "type": "text",
+        "content": "El comando **sync** es una combinación de **copy** + **update**:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "copy: Copia tu build web a los proyectos nativos",
+          "update: Actualiza los plugins nativos de Capacitor",
+          "sync: Ejecuta copy y update juntos"
+        ]
+      },
+      {
+        "type": "tip",
+        "content": "Usa \"npx cap run\" en lugar de \"npx cap open\" para compilar y ejecutar directamente desde la terminal."
+      }
+    ]
+  },
+  "live-reload": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "El **Live Reload** te permite ver los cambios de tu código web en tiempo real mientras desarrollas en un dispositivo o emulador."
+      },
+      {
+        "type": "warning",
+        "content": "Usa tu IP local, no localhost. El dispositivo/emulador necesita conectarse a tu máquina de desarrollo."
+      },
+      {
+        "type": "text",
+        "content": "Pasos para configurar Live Reload:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Obtén tu IP local (ifconfig o ipconfig)",
+          "Configura la URL del servidor en capacitor.config.ts",
+          "Inicia tu servidor de desarrollo (npm run dev)",
+          "Ejecuta npx cap sync para aplicar la configuración",
+          "Abre y ejecuta la app en el IDE nativo"
+        ]
+      },
+      {
+        "type": "success",
+        "content": "Con Live Reload configurado, cada vez que guardes un archivo, la app se recargará automáticamente en el dispositivo."
+      },
+      {
+        "type": "tip",
+        "content": "Recuerda eliminar la configuración de server.url antes de hacer un build de producción."
+      }
+    ]
+  },
+  "app-plugin": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "El **App Plugin** es el plugin más fundamental de Capacitor. Proporciona acceso a información básica de la aplicación y eventos del ciclo de vida."
+      },
+      {
+        "type": "text",
+        "content": "Con este plugin puedes detectar cuándo la app entra en segundo plano, vuelve al primer plano, o manejar el botón de retroceso en Android."
+      },
+      {
+        "type": "info",
+        "content": "El evento backButton solo funciona en Android. En iOS, el sistema maneja la navegación de forma diferente."
+      },
+      {
+        "type": "text",
+        "content": "También puedes obtener información útil de la app y abrir URLs externas:"
+      },
+      {
+        "type": "warning",
+        "content": "exitApp() y minimizeApp() solo funcionan en Android. En iOS, Apple no permite que las apps se cierren programáticamente."
+      },
+      {
+        "type": "tip",
+        "content": "Usa el evento appStateChange para pausar operaciones costosas (como animaciones o polling) cuando la app no está visible."
+      }
+    ]
+  },
+  "push-notifications": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Las **Push Notifications** permiten enviar mensajes a los usuarios incluso cuando la app no está activa. Capacitor proporciona un plugin oficial para manejar notificaciones en iOS y Android."
+      },
+      {
+        "type": "warning",
+        "content": "Para usar push notifications necesitas configurar Firebase Cloud Messaging (Android) y Apple Push Notification service (iOS)."
+      },
+      {
+        "type": "text",
+        "content": "El flujo básico para implementar push notifications:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Solicitar permisos al usuario",
+          "Registrar el dispositivo y obtener el token",
+          "Enviar el token a tu servidor",
+          "Manejar las notificaciones entrantes"
+        ]
+      },
+      {
+        "type": "info",
+        "content": "El token de push es único para cada dispositivo y puede cambiar. Siempre actualiza el token en tu servidor cuando se emita uno nuevo."
+      },
+      {
+        "type": "text",
+        "content": "Para Android, necesitas agregar tu archivo google-services.json y para iOS, configurar el certificado de APNs en el Apple Developer Portal."
+      },
+      {
+        "type": "tip",
+        "content": "Usa Firebase Cloud Messaging (FCM) como backend único para simplificar el envío de notificaciones a ambas plataformas."
+      }
+    ]
+  },
+  "splash-statusbar": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "El **Splash Screen** y la **Status Bar** son elementos visuales importantes para la experiencia del usuario. Capacitor proporciona plugins para personalizar ambos."
+      },
+      {
+        "type": "text",
+        "content": "El Splash Screen se muestra mientras tu app carga. Puedes controlar su duración y animación:"
+      },
+      {
+        "type": "text",
+        "content": "También puedes controlar el splash screen programáticamente:"
+      },
+      {
+        "type": "text",
+        "content": "La Status Bar puede personalizarse para que coincida con el diseño de tu app:"
+      },
+      {
+        "type": "warning",
+        "content": "setBackgroundColor() solo funciona en Android. En iOS, el color de la status bar depende del estilo (Dark/Light)."
+      },
+      {
+        "type": "tip",
+        "content": "Configura launchAutoHide: false si necesitas hacer tareas asíncronas antes de mostrar la app, y llama a hide() manualmente."
+      }
+    ]
+  },
+  "keyboard-browser": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "El **Keyboard Plugin** te permite controlar el comportamiento del teclado virtual, mientras que el **Browser Plugin** permite abrir URLs en un navegador in-app."
+      },
+      {
+        "type": "text",
+        "content": "El plugin de Keyboard es esencial para manejar inputs en dispositivos móviles:"
+      },
+      {
+        "type": "info",
+        "content": "Los eventos keyboardWillShow/Hide se disparan antes de la animación del teclado, permitiéndote sincronizar animaciones."
+      },
+      {
+        "type": "text",
+        "content": "También puedes configurar el comportamiento del teclado en capacitor.config.ts:"
+      },
+      {
+        "type": "text",
+        "content": "El Browser Plugin permite abrir URLs en un navegador in-app con mejor UX que redirigir al navegador del sistema:"
+      },
+      {
+        "type": "tip",
+        "content": "Usa Browser.open() para flujos de OAuth, términos y condiciones, o cualquier contenido externo que no quieras cargar en tu WebView principal."
+      }
+    ]
+  },
+  "preferences": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "El **Preferences Plugin** (anteriormente Storage) proporciona almacenamiento persistente de clave-valor, perfecto para guardar configuraciones de usuario y datos pequeños."
+      },
+      {
+        "type": "info",
+        "content": "Preferences usa SharedPreferences en Android y UserDefaults en iOS, garantizando persistencia nativa."
+      },
+      {
+        "type": "text",
+        "content": "Ejemplo práctico: guardar preferencias de usuario"
+      },
+      {
+        "type": "warning",
+        "content": "Preferences no está diseñado para datos grandes. Para archivos o bases de datos, usa plugins específicos como Filesystem o SQLite."
+      },
+      {
+        "type": "tip",
+        "content": "Crea un wrapper con TypeScript generics para tener type-safety en todas las operaciones de storage."
+      }
+    ]
+  },
+  "biometric": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "La **autenticación biométrica** permite a los usuarios autenticarse usando Face ID, Touch ID o huella dactilar. Es esencial para apps con datos sensibles como finanzas o salud."
+      },
+      {
+        "type": "warning",
+        "content": "Este plugin requiere configuración adicional en los proyectos nativos para manejar permisos de biometría."
+      },
+      {
+        "type": "text",
+        "content": "Primero, verifica si el dispositivo soporta autenticación biométrica:"
+      },
+      {
+        "type": "text",
+        "content": "El plugin también permite almacenar credenciales de forma segura usando el Keychain (iOS) o Keystore (Android):"
+      },
+      {
+        "type": "info",
+        "content": "Las credenciales almacenadas en el Keychain/Keystore están encriptadas y protegidas por el hardware del dispositivo."
+      },
+      {
+        "type": "text",
+        "content": "Configuración necesaria en iOS (Info.plist):"
+      },
+      {
+        "type": "tip",
+        "content": "Siempre ofrece una alternativa (PIN o contraseña) para usuarios que no tengan o no quieran usar biometría."
+      }
+    ]
+  },
+  "web-integration": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Capacitor se integra perfectamente con cualquier framework web moderno. La clave está en configurar correctamente el **webDir** y entender cómo fluyen los datos entre tu app web y los componentes nativos."
+      },
+      {
+        "type": "info",
+        "content": "Capacitor soporta React, Vue, Angular, Svelte, y cualquier framework que genere archivos estáticos."
+      },
+      {
+        "type": "text",
+        "content": "Configuración para diferentes frameworks:"
+      },
+      {
+        "type": "text",
+        "content": "Para detectar si tu app está corriendo en un contexto nativo o web:"
+      },
+      {
+        "type": "text",
+        "content": "Manejo de deep links y URLs personalizadas:"
+      },
+      {
+        "type": "tip",
+        "content": "Usa Capacitor.isNativePlatform() para habilitar funciones nativas solo cuando la app corre en dispositivos reales."
+      }
+    ]
+  },
+  "native-features": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Capacitor proporciona acceso a funcionalidades nativas del dispositivo que no están disponibles en la web estándar. Veamos cómo usar las más comunes."
+      },
+      {
+        "type": "text",
+        "content": "**Cámara y Galería:**"
+      },
+      {
+        "type": "text",
+        "content": "**Geolocalización:**"
+      },
+      {
+        "type": "text",
+        "content": "**Haptics (Vibración):**"
+      },
+      {
+        "type": "warning",
+        "content": "Siempre verifica los permisos antes de usar funcionalidades como cámara o ubicación. El usuario puede denegarlos."
+      },
+      {
+        "type": "tip",
+        "content": "Usa Haptics para dar feedback táctil en acciones importantes como confirmaciones o errores."
+      }
+    ]
+  },
+  "android-build": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Generar un build de Android para producción requiere varios pasos: compilar la app web, sincronizar con Capacitor, y crear el APK o AAB firmado."
+      },
+      {
+        "type": "text",
+        "content": "Primero, asegúrate de tener configurado tu proyecto correctamente:"
+      },
+      {
+        "type": "text",
+        "content": "Para publicar en Google Play, necesitas crear un **Android App Bundle (AAB)** firmado:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Generar un keystore para firmar la app",
+          "Configurar la firma en build.gradle",
+          "Generar el AAB desde Android Studio",
+          "Subir a Google Play Console"
+        ]
+      },
+      {
+        "type": "warning",
+        "content": "NUNCA pierdas tu keystore ni olvides la contraseña. Sin ellos no podrás actualizar tu app en Google Play."
+      },
+      {
+        "type": "text",
+        "content": "Configurar la firma en el proyecto Android:"
+      },
+      {
+        "type": "text",
+        "content": "En Android Studio: **Build > Generate Signed Bundle / APK > Android App Bundle**"
+      },
+      {
+        "type": "info",
+        "content": "Google Play requiere AAB (App Bundle) para nuevas apps. Los APK solo se aceptan para actualizaciones de apps existentes."
+      },
+      {
+        "type": "tip",
+        "content": "Usa variables de entorno para las contraseñas del keystore. Nunca las guardes en el código."
+      }
+    ]
+  },
+  "ios-build": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Compilar para iOS requiere una Mac con Xcode instalado y una cuenta de Apple Developer. El proceso es más estricto que Android por los requisitos de firma de código."
+      },
+      {
+        "type": "text",
+        "content": "Requisitos para publicar en App Store:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Cuenta Apple Developer ($99/año)",
+          "Certificados de distribución configurados",
+          "App ID registrado en Apple Developer Portal",
+          "Perfil de aprovisionamiento (Provisioning Profile)",
+          "Screenshots y metadata para App Store Connect"
+        ]
+      },
+      {
+        "type": "text",
+        "content": "Configuración en Xcode:"
+      },
+      {
+        "type": "warning",
+        "content": "El Bundle Identifier debe coincidir exactamente con el registrado en Apple Developer Portal y en capacitor.config.ts."
+      },
+      {
+        "type": "text",
+        "content": "Para crear el archivo .ipa para App Store:"
+      },
+      {
+        "type": "text",
+        "content": "Configuraciones adicionales importantes en Info.plist:"
+      },
+      {
+        "type": "tip",
+        "content": "Prueba siempre en dispositivos físicos antes de enviar a revisión. El simulador no detecta todos los problemas."
+      }
+    ]
+  },
+  "automation": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Automatizar el proceso de build con CI/CD ahorra tiempo y reduce errores. Las herramientas más comunes son GitHub Actions, Fastlane, y servicios como Bitrise o App Center."
+      },
+      {
+        "type": "text",
+        "content": "Ejemplo de workflow con GitHub Actions para Android:"
+      },
+      {
+        "type": "text",
+        "content": "Fastlane simplifica la automatización de iOS y Android:"
+      },
+      {
+        "type": "info",
+        "content": "Fastlane maneja automáticamente certificados, provisioning profiles, y la subida a las tiendas."
+      },
+      {
+        "type": "text",
+        "content": "Script npm para automatizar el proceso completo:"
+      },
+      {
+        "type": "tip",
+        "content": "Configura notificaciones de Slack o Discord en tu CI/CD para saber cuándo los builds terminan o fallan."
+      }
+    ]
+  },
+  "testing-strategy": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Una estrategia de testing sólida es crucial para apps Capacitor. Debes cubrir tanto el código web como la integración con plugins nativos."
+      },
+      {
+        "type": "text",
+        "content": "Niveles de testing para apps Capacitor:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Unit Tests: Lógica de negocio y componentes aislados",
+          "Integration Tests: Interacción entre componentes",
+          "E2E Tests: Flujos completos de usuario",
+          "Native Tests: Funcionalidad específica de plataforma"
+        ]
+      },
+      {
+        "type": "text",
+        "content": "Para probar componentes que usan plugins de Capacitor, usa mocks:"
+      },
+      {
+        "type": "text",
+        "content": "Configuración de Vitest para proyectos Capacitor:"
+      },
+      {
+        "type": "info",
+        "content": "Configura umbrales de cobertura para mantener la calidad del código a lo largo del tiempo."
+      },
+      {
+        "type": "tip",
+        "content": "Usa testing-library para tests de componentes: renderiza como lo haría un usuario, no los detalles de implementación."
+      }
+    ]
+  },
+  "play-store": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Google Play Store tiene requisitos específicos que debes cumplir para publicar tu app. Vamos a revisar el proceso completo de publicación."
+      },
+      {
+        "type": "text",
+        "content": "Requisitos previos para Google Play:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Cuenta de Google Play Developer ($25 una vez)",
+          "AAB firmado con tu keystore de release",
+          "Screenshots de la app (mínimo 2 por tipo de dispositivo)",
+          "Ícono de la app (512x512 PNG)",
+          "Feature graphic (1024x500)",
+          "Descripción corta (80 caracteres) y larga (4000 caracteres)",
+          "Política de privacidad (URL pública)"
+        ]
+      },
+      {
+        "type": "text",
+        "content": "Pasos para publicar en Google Play Console:"
+      },
+      {
+        "type": "warning",
+        "content": "La primera revisión puede tardar hasta 7 días. Las actualizaciones suelen ser más rápidas (1-3 días)."
+      },
+      {
+        "type": "text",
+        "content": "Rechazos comunes y cómo evitarlos:"
+      },
+      {
+        "type": "info",
+        "content": "Usa el testing interno para probar la app con un grupo pequeño antes del lanzamiento público."
+      },
+      {
+        "type": "tip",
+        "content": "Responde rápido a los rechazos con las correcciones. Google prioriza desarrolladores que corrigen issues rápidamente."
+      }
+    ]
+  },
+  "app-store": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Apple App Store tiene el proceso de revisión más estricto. La preparación adecuada es clave para evitar rechazos."
+      },
+      {
+        "type": "text",
+        "content": "Requisitos para App Store Connect:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Cuenta Apple Developer ($99/año)",
+          "App archivada y subida desde Xcode",
+          "Screenshots para todos los tamaños de pantalla requeridos",
+          "App Preview videos (opcional pero recomendado)",
+          "Descripción, keywords, categoría",
+          "Política de privacidad (obligatoria)",
+          "App Privacy details (nutrition labels)"
+        ]
+      },
+      {
+        "type": "text",
+        "content": "Tamaños de screenshots requeridos:"
+      },
+      {
+        "type": "text",
+        "content": "App Privacy \"Nutrition Labels\" - Debes declarar qué datos recopila tu app:"
+      },
+      {
+        "type": "warning",
+        "content": "Apple rechaza apps que solicitan permisos sin justificación clara. Explica cada permiso en el mensaje de solicitud."
+      },
+      {
+        "type": "text",
+        "content": "Rechazos comunes de Apple:"
+      },
+      {
+        "type": "info",
+        "content": "La revisión inicial toma 24-48 horas en promedio. Durante temporadas altas puede ser más lento."
+      },
+      {
+        "type": "tip",
+        "content": "Usa TestFlight para beta testing antes de enviar a revisión. Apple lo considera positivamente."
+      }
+    ]
+  },
+  "fintech-compliance": {
+    "blocks": [
+      {
+        "type": "text",
+        "content": "Las apps financieras (fintech) tienen requisitos adicionales de compliance tanto de las tiendas como de reguladores. Asegurar el cumplimiento es crítico."
+      },
+      {
+        "type": "text",
+        "content": "Regulaciones clave para apps fintech:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "PCI-DSS: Si manejas datos de tarjetas de crédito",
+          "KYC (Know Your Customer): Verificación de identidad",
+          "AML (Anti-Money Laundering): Prevención de lavado de dinero",
+          "GDPR/LGPD: Protección de datos personales",
+          "PSD2/Open Banking: Si operas en Europa",
+          "Regulaciones locales del país (CNBV en México, etc.)"
+        ]
+      },
+      {
+        "type": "warning",
+        "content": "Las apps financieras requieren licencias específicas en muchos países. Consulta con un abogado especializado."
+      },
+      {
+        "type": "text",
+        "content": "Requisitos de seguridad esenciales:"
+      },
+      {
+        "type": "text",
+        "content": "Implementar autenticación segura:"
+      },
+      {
+        "type": "text",
+        "content": "Checklist de compliance para apps fintech:"
+      },
+      {
+        "type": "info",
+        "content": "Las tiendas pueden solicitar documentación adicional para apps financieras: licencias, auditorías, y pruebas de compliance."
+      },
+      {
+        "type": "tip",
+        "content": "Considera usar servicios especializados como Plaid, Stripe, o providers locales que ya tienen compliance para manejar datos financieros."
+      }
+    ]
+  }
+}

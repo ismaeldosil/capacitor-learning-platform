@@ -1,13 +1,15 @@
 import { useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CheckCircle, XCircle, ArrowRight, AlertTriangle, Store } from 'lucide-react'
-import { getStoreScenarios } from '../../data/games'
+import { useTranslatedStoreScenarios } from '../../hooks/useTranslatedContent'
 
 interface StoreReviewerProps {
   onComplete: (score: number, total: number) => void
 }
 
 export function StoreReviewer({ onComplete }: StoreReviewerProps) {
-  const scenarios = getStoreScenarios()
+  const { t } = useTranslation('gamesContent')
+  const scenarios = useTranslatedStoreScenarios()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedIssues, setSelectedIssues] = useState<Set<string>>(new Set())
   const [isVerified, setIsVerified] = useState(false)
@@ -80,10 +82,10 @@ export function StoreReviewer({ onComplete }: StoreReviewerProps) {
       {/* Progress */}
       <div className="flex items-center justify-between">
         <span className="text-sm text-gray-400">
-          Escenario {currentIndex + 1} de {scenarios.length}
+          {t('ui.scenario')} {currentIndex + 1} {t('ui.of')} {scenarios.length}
         </span>
         <span className="text-sm font-medium text-green-400">
-          Puntuación: {score}/{currentIndex + (isVerified ? 1 : 0)}
+          {t('ui.score')}: {score}/{currentIndex + (isVerified ? 1 : 0)}
         </span>
       </div>
 
@@ -103,7 +105,7 @@ export function StoreReviewer({ onComplete }: StoreReviewerProps) {
           </div>
           <div>
             <h3 className="font-semibold">{currentScenario.title}</h3>
-            <p className="text-xs text-red-400">Aplicación rechazada</p>
+            <p className="text-xs text-red-400">{t('ui.applicationRejected')}</p>
           </div>
         </div>
         <p className="text-sm text-gray-300">{currentScenario.description}</p>
@@ -113,7 +115,7 @@ export function StoreReviewer({ onComplete }: StoreReviewerProps) {
       <div className="space-y-3">
         <div className="flex items-center gap-2 text-sm text-gray-400">
           <AlertTriangle className="h-4 w-4" />
-          <span>Selecciona los problemas que causarían el rechazo:</span>
+          <span>{t('ui.selectProblems')}:</span>
         </div>
 
         {currentScenario.issues.map(issue => {
@@ -185,9 +187,9 @@ export function StoreReviewer({ onComplete }: StoreReviewerProps) {
                           : ''
                   }`}
                 >
-                  {status === 'correct' && 'Correcto'}
-                  {status === 'wrong' && 'Incorrecto'}
-                  {status === 'missed' && 'No seleccionado'}
+                  {status === 'correct' && t('ui.correctAnswer')}
+                  {status === 'wrong' && t('ui.incorrect')}
+                  {status === 'missed' && t('ui.notSelected')}
                 </span>
               )}
             </button>
@@ -213,15 +215,15 @@ export function StoreReviewer({ onComplete }: StoreReviewerProps) {
             <div>
               <p className="font-medium">
                 {wrongCount === 0 && missedCount === 0
-                  ? '¡Perfecto! Identificaste todos los problemas'
-                  : `${correctCount} correctos, ${wrongCount} erróneos, ${missedCount} omitidos`}
+                  ? t('ui.perfectIdentified')
+                  : `${correctCount} ${t('ui.correctMatches')}, ${wrongCount} ${t('ui.incorrect').toLowerCase()}, ${missedCount} ${t('ui.notSelected').toLowerCase()}`}
               </p>
             </div>
           </div>
 
           {/* Explanation */}
           <div className="rounded-lg bg-gray-800 p-3">
-            <p className="text-sm font-medium text-gray-300">Explicación:</p>
+            <p className="text-sm font-medium text-gray-300">{t('ui.explanation')}:</p>
             <p className="mt-1 text-sm text-gray-400">{currentScenario.explanation}</p>
           </div>
         </div>
@@ -234,18 +236,18 @@ export function StoreReviewer({ onComplete }: StoreReviewerProps) {
             onClick={handleVerify}
             disabled={selectedIssues.size === 0}
             className="btn-primary flex items-center gap-2"
-            aria-label="Verificar selección"
+            aria-label={t('ui.verify')}
           >
-            Verificar
+            {t('ui.verify')}
             <CheckCircle className="h-4 w-4" />
           </button>
         ) : (
           <button
             onClick={handleNext}
             className="btn-primary flex items-center gap-2"
-            aria-label={currentIndex < scenarios.length - 1 ? 'Siguiente escenario' : 'Ver resultados'}
+            aria-label={currentIndex < scenarios.length - 1 ? t('ui.next') : t('ui.viewResults')}
           >
-            {currentIndex < scenarios.length - 1 ? 'Siguiente' : 'Ver Resultados'}
+            {currentIndex < scenarios.length - 1 ? t('ui.next') : t('ui.viewResults')}
             <ArrowRight className="h-4 w-4" />
           </button>
         )}
@@ -254,15 +256,15 @@ export function StoreReviewer({ onComplete }: StoreReviewerProps) {
       {/* Legend */}
       {isVerified && (
         <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
-          <span>Leyenda:</span>
+          <span>{t('ui.legend')}:</span>
           <span className="flex items-center gap-1">
-            <span className="h-3 w-3 rounded bg-green-500" /> Problema correcto
+            <span className="h-3 w-3 rounded bg-green-500" /> {t('ui.correctProblem')}
           </span>
           <span className="flex items-center gap-1">
-            <span className="h-3 w-3 rounded bg-red-500" /> Falsa alarma
+            <span className="h-3 w-3 rounded bg-red-500" /> {t('ui.falseAlarm')}
           </span>
           <span className="flex items-center gap-1">
-            <span className="h-3 w-3 rounded border-2 border-yellow-500" /> Problema omitido
+            <span className="h-3 w-3 rounded border-2 border-yellow-500" /> {t('ui.missedProblem')}
           </span>
         </div>
       )}
