@@ -6,19 +6,22 @@ import { Lesson } from './pages/Lesson'
 import { Quiz } from './pages/Quiz'
 import { Game } from './pages/Game'
 import { NotFound } from './pages/NotFound'
+import { ErrorBoundary } from './components/common'
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="module/:moduleId" element={<Module />} />
-        <Route path="lesson/:moduleId/:lessonId" element={<Lesson />} />
-        <Route path="quiz/:moduleId" element={<Quiz />} />
-        <Route path="game/:moduleId" element={<Game />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="module/:moduleId" element={<Module />} />
+          <Route path="lesson/:moduleId/:lessonId" element={<Lesson />} />
+          <Route path="quiz/:moduleId" element={<Quiz />} />
+          <Route path="game/:moduleId" element={<Game />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </ErrorBoundary>
   )
 }
 
