@@ -1,6 +1,7 @@
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
 import { MODULES } from '../data/constants'
+import { getLessonTitle, getGameTitle } from '../utils'
 import {
   ArrowLeft,
   BookOpen,
@@ -180,40 +181,4 @@ export function Module() {
       </div>
     </div>
   )
-}
-
-function getLessonTitle(lessonId: string): string {
-  const titles: Record<string, string> = {
-    'what-is-capacitor': '¿Qué es Capacitor?',
-    'architecture': 'Arquitectura WebView y Bridge',
-    'project-structure': 'Estructura de Proyecto',
-    'commands': 'Comandos Esenciales CLI',
-    'live-reload': 'Live Reload y Desarrollo',
-    'app-plugin': '@capacitor/app Plugin',
-    'push-notifications': 'Push Notifications',
-    'splash-statusbar': 'Splash Screen y Status Bar',
-    'keyboard-browser': 'Keyboard y Browser',
-    'preferences': 'Preferences (Secure Storage)',
-    'biometric': 'Biometric Authentication',
-    'web-integration': 'Web App Integration',
-    'native-features': 'Native Features',
-    'android-build': 'Android Build Process',
-    'ios-build': 'iOS Build Process',
-    'automation': 'Build Automation',
-    'testing-strategy': 'Testing Strategy',
-    'play-store': 'Play Store Submission',
-    'app-store': 'App Store Submission',
-    'fintech-compliance': 'Fintech Compliance',
-  }
-  return titles[lessonId] || lessonId
-}
-
-function getGameTitle(gameId: string): string {
-  const titles: Record<string, string> = {
-    'command-builder': 'Command Builder',
-    'plugin-matcher': 'Plugin Matcher',
-    'build-pipeline': 'Build Pipeline',
-    'store-reviewer': 'Store Reviewer',
-  }
-  return titles[gameId] || gameId
 }
