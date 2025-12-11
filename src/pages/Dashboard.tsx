@@ -1,4 +1,5 @@
 import { useUser } from '../contexts/UserContext'
+import { useTranslation } from 'react-i18next'
 import { MODULES } from '../data/constants'
 import { Link } from 'react-router-dom'
 import {
@@ -15,6 +16,8 @@ import { getModuleStatus } from '../utils'
 
 export function Dashboard() {
   const { user, currentLevel } = useUser()
+  const { t } = useTranslation('dashboard')
+  const { t: tGamification } = useTranslation('gamification')
 
   const totalLessons = MODULES.reduce((acc, m) => acc + m.lessons.length, 0)
   const progressPercent = Math.round(
@@ -26,40 +29,40 @@ export function Dashboard() {
       {/* Welcome Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold">
-          ¡Bienvenido, {user.name}! {currentLevel.icon}
+          {t('welcome', { name: user.name })} {currentLevel.icon}
         </h1>
-        <p className="mt-2 text-gray-400">
-          Continúa tu camino para convertirte en un experto de Capacitor
-        </p>
+        <p className="mt-2 text-gray-400">{t('subtitle')}</p>
       </div>
 
       {/* Stats Grid */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           icon={<Zap className="h-6 w-6 text-yellow-500" />}
-          label="XP Total"
+          label={t('stats.totalXP')}
           value={user.xp.toString()}
         />
         <StatCard
           icon={<Trophy className="h-6 w-6 text-purple-500" />}
-          label="Nivel"
+          label={t('stats.level')}
           value={currentLevel.name}
         />
         <StatCard
           icon={<Flame className="h-6 w-6 text-orange-500" />}
-          label="Racha"
-          value={`${user.streak} días`}
+          label={t('stats.streak')}
+          value={`${user.streak} ${t('stats.streak').toLowerCase() === 'streak' ? 'days' : 'días'}`}
         />
         <StatCard
           icon={<BookOpen className="h-6 w-6 text-blue-500" />}
-          label="Progreso"
+          label={t('stats.progress')}
           value={`${progressPercent}%`}
         />
       </div>
 
       {/* Overall Progress */}
       <div className="card mb-8">
-        <h2 className="mb-4 text-lg font-semibold">Progreso General</h2>
+        <h2 className="mb-4 text-lg font-semibold">
+          {t('overallProgress.title')}
+        </h2>
         <div className="h-4 overflow-hidden rounded-full bg-gray-700">
           <div
             className="h-full bg-gradient-to-r from-primary-500 to-accent-500 transition-all duration-500"
@@ -67,13 +70,16 @@ export function Dashboard() {
           />
         </div>
         <p className="mt-2 text-sm text-gray-400">
-          {user.completedLessons.length} de {totalLessons} lecciones completadas
+          {t('overallProgress.lessonsCompleted', {
+            completed: user.completedLessons.length,
+            total: totalLessons,
+          })}
         </p>
       </div>
 
       {/* Modules Grid */}
       <div className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold">Módulos del Curso</h2>
+        <h2 className="mb-4 text-lg font-semibold">{t('modules.title')}</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {MODULES.map((module) => {
             const status = getModuleStatus(
@@ -93,8 +99,8 @@ export function Dashboard() {
               <ModuleCard
                 key={module.id}
                 id={module.id}
-                title={module.title}
-                description={module.description}
+                title={tGamification(`modules.${module.id}.title`)}
+                description={tGamification(`modules.${module.id}.description`)}
                 icon={module.icon}
                 status={status}
                 progress={progress}
@@ -102,6 +108,7 @@ export function Dashboard() {
                 totalLessons={module.lessons.length}
                 requiredXP={module.requiredXP}
                 userXP={user.xp}
+                t={t}
               />
             )
           })}
@@ -111,18 +118,18 @@ export function Dashboard() {
       {/* Badges Section */}
       <div className="card">
         <h2 className="mb-4 text-lg font-semibold">
-          Logros ({user.badges.length}/8)
+          {t('achievements.title', { count: user.badges.length, total: 8 })}
         </h2>
         <div className="grid grid-cols-4 gap-4 sm:grid-cols-8">
           {[
-            { id: 'first-launch', icon: '🎯', name: 'First Launch' },
-            { id: 'speed-runner', icon: '⚡', name: 'Speed Runner' },
-            { id: 'perfect-score', icon: '💯', name: 'Perfect Score' },
-            { id: 'on-fire', icon: '🔥', name: 'On Fire' },
-            { id: 'module-master', icon: '🎓', name: 'Module Master' },
-            { id: 'capacitor-king', icon: '👑', name: 'Capacitor King' },
-            { id: 'quiz-genius', icon: '🧠', name: 'Quiz Genius' },
-            { id: 'gamer', icon: '🎮', name: 'Gamer' },
+            { id: 'first-launch', icon: '🎯' },
+            { id: 'speed-runner', icon: '⚡' },
+            { id: 'perfect-score', icon: '💯' },
+            { id: 'on-fire', icon: '🔥' },
+            { id: 'module-master', icon: '🎓' },
+            { id: 'capacitor-king', icon: '👑' },
+            { id: 'quiz-genius', icon: '🧠' },
+            { id: 'gamer', icon: '🎮' },
           ].map((badge) => {
             const isUnlocked = user.badges.includes(badge.id)
             return (
@@ -131,11 +138,11 @@ export function Dashboard() {
                 className={`flex flex-col items-center gap-1 rounded-lg p-2 ${
                   isUnlocked ? '' : 'opacity-30 grayscale'
                 }`}
-                title={badge.name}
+                title={tGamification(`badges.${badge.id}.name`)}
               >
                 <span className="text-3xl">{badge.icon}</span>
-                <span className="text-xs text-gray-400 truncate max-w-full">
-                  {badge.name}
+                <span className="max-w-full truncate text-xs text-gray-400">
+                  {tGamification(`badges.${badge.id}.name`)}
                 </span>
               </div>
             )
@@ -181,6 +188,7 @@ function ModuleCard({
   totalLessons,
   requiredXP,
   userXP,
+  t,
 }: {
   id: string
   title: string
@@ -192,6 +200,7 @@ function ModuleCard({
   totalLessons: number
   requiredXP: number
   userXP: number
+  t: (key: string, options?: Record<string, unknown>) => string
 }) {
   const isLocked = status === 'locked'
   const isCompleted = status === 'completed'
@@ -225,7 +234,10 @@ function ModuleCard({
       <div className="mt-4">
         <div className="flex justify-between text-sm">
           <span className="text-gray-400">
-            {lessonsCompleted}/{totalLessons} lecciones
+            {t('modules.lessons', {
+              completed: lessonsCompleted,
+              total: totalLessons,
+            })}
           </span>
           <span className="text-gray-400">{progress}%</span>
         </div>
@@ -244,7 +256,7 @@ function ModuleCard({
       {/* Locked Message */}
       {isLocked && (
         <p className="mt-3 text-sm text-gray-500">
-          Necesitas {requiredXP - userXP} XP más para desbloquear
+          {t('modules.unlockMessage', { xp: requiredXP - userXP })}
         </p>
       )}
 
@@ -252,7 +264,7 @@ function ModuleCard({
       {!isLocked && (
         <div className="mt-4 flex items-center justify-end text-primary-400">
           <span className="text-sm font-medium">
-            {isCompleted ? 'Revisar' : 'Continuar'}
+            {isCompleted ? t('modules.review') : t('modules.continue')}
           </span>
           <ChevronRight className="h-4 w-4" />
         </div>

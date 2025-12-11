@@ -1,6 +1,13 @@
 import '@testing-library/jest-dom'
-import { afterEach, vi } from 'vitest'
+import { afterEach, vi, beforeAll } from 'vitest'
 import { cleanup } from '@testing-library/react'
+import i18n from '../i18n'
+
+// Wait for i18n to be ready before running tests
+beforeAll(async () => {
+  // Ensure i18n is initialized with Spanish
+  await i18n.changeLanguage('es')
+})
 
 // Cleanup after each test
 afterEach(() => {

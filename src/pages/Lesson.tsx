@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES } from '../data/constants'
-import { getLessonTitle } from '../utils'
 import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react'
 import { Button } from '../components/common/Button'
 import { LessonContent } from '../components/lesson'
@@ -14,6 +14,8 @@ export function Lesson() {
   }>()
   const navigate = useNavigate()
   const { user, isLessonCompleted, completeLesson } = useUser()
+  const { t } = useTranslation('lesson')
+  const { t: tGamification } = useTranslation('gamification')
 
   const module = MODULES.find((m) => m.id === moduleId)
 
@@ -39,6 +41,8 @@ export function Lesson() {
       : null
 
   const lessonContent = LESSON_CONTENT[lessonId]
+  const lessonTitle = tGamification(`lessonTitles.${lessonId}`)
+  const moduleTitle = tGamification(`modules.${module.id}.title`)
 
   const handleComplete = () => {
     if (!isCompleted) {
@@ -61,10 +65,10 @@ export function Lesson() {
         </Link>
         <span>/</span>
         <Link to={`/module/${moduleId}`} className="hover:text-white">
-          {module.title}
+          {moduleTitle}
         </Link>
         <span>/</span>
-        <span className="text-white">{getLessonTitle(lessonId)}</span>
+        <span className="text-white">{lessonTitle}</span>
       </div>
 
       {/* Lesson Header */}
@@ -73,18 +77,19 @@ export function Lesson() {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-400">
-                Lección {lessonIndex + 1} de {module.lessons.length}
+                {t('progress', {
+                  current: lessonIndex + 1,
+                  total: module.lessons.length,
+                })}
               </span>
               {isCompleted && (
                 <span className="flex items-center gap-1 text-sm text-green-500">
                   <CheckCircle className="h-4 w-4" />
-                  Completada
+                  {t('completed')}
                 </span>
               )}
             </div>
-            <h1 className="mt-2 text-2xl font-bold">
-              {getLessonTitle(lessonId)}
-            </h1>
+            <h1 className="mt-2 text-2xl font-bold">{lessonTitle}</h1>
           </div>
           <div className="text-right">
             <span className="text-2xl font-bold text-primary-400">+10 XP</span>
@@ -108,7 +113,7 @@ export function Lesson() {
 
             <div className="my-8 rounded-lg border border-gray-700 bg-gray-800/50 p-6">
               <h3 className="mb-4 text-lg font-semibold">
-                Contenido de la lección: {getLessonTitle(lessonId)}
+                Contenido de la lección: {lessonTitle}
               </h3>
               <p className="text-gray-400">
                 Esta sección mostrará el contenido markdown de la lección con:
@@ -133,12 +138,12 @@ export function Lesson() {
             className="btn-secondary"
           >
             <ArrowLeft className="h-4 w-4" />
-            Anterior
+            {t('navigation.previous')}
           </Link>
         ) : (
           <Link to={`/module/${moduleId}`} className="btn-secondary">
             <ArrowLeft className="h-4 w-4" />
-            Volver
+            {t('navigation.back')}
           </Link>
         )}
 
@@ -146,15 +151,15 @@ export function Lesson() {
           {isCompleted ? (
             nextLesson ? (
               <>
-                Siguiente
+                {t('navigation.next')}
                 <ArrowRight className="h-4 w-4" />
               </>
             ) : (
-              'Volver al módulo'
+              t('navigation.backToModule')
             )
           ) : (
             <>
-              Completar lección
+              {t('navigation.complete')}
               <CheckCircle className="h-4 w-4" />
             </>
           )}

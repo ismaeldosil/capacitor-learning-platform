@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES } from '../data/constants'
-import { getLessonTitle, getGameTitle } from '../utils'
 import {
   ArrowLeft,
   BookOpen,
@@ -13,7 +13,10 @@ import {
 
 export function Module() {
   const { moduleId } = useParams<{ moduleId: string }>()
-  const { user, isLessonCompleted, isQuizCompleted, isGameCompleted } = useUser()
+  const { user, isLessonCompleted, isQuizCompleted, isGameCompleted } =
+    useUser()
+  const { t } = useTranslation('module')
+  const { t: tGamification } = useTranslation('gamification')
 
   const module = MODULES.find((m) => m.id === moduleId)
 
@@ -40,7 +43,7 @@ export function Module() {
         className="mb-6 inline-flex items-center gap-2 text-gray-400 hover:text-white"
       >
         <ArrowLeft className="h-4 w-4" />
-        <span>Volver al Dashboard</span>
+        <span>{t('backToDashboard')}</span>
       </Link>
 
       {/* Module Header */}
@@ -50,10 +53,14 @@ export function Module() {
             {module.icon}
           </div>
           <div>
-            <h1 className="text-2xl font-bold">{module.title}</h1>
-            <p className="mt-1 text-gray-400">{module.description}</p>
+            <h1 className="text-2xl font-bold">
+              {tGamification(`modules.${module.id}.title`)}
+            </h1>
+            <p className="mt-1 text-gray-400">
+              {tGamification(`modules.${module.id}.description`)}
+            </p>
             <p className="mt-2 text-sm text-gray-500">
-              ⏱️ Tiempo estimado: {module.estimatedTime}
+              ⏱️ {tGamification(`modules.${module.id}.estimatedTime`)}
             </p>
           </div>
         </div>
@@ -63,12 +70,12 @@ export function Module() {
       <div className="mb-8">
         <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
           <BookOpen className="h-5 w-5" />
-          Lecciones
+          {t('sections.lessons')}
         </h2>
         <div className="space-y-3">
           {module.lessons.map((lessonId, index) => {
             const completed = isLessonCompleted(lessonId)
-            const lessonTitle = getLessonTitle(lessonId)
+            const lessonTitle = tGamification(`lessonTitles.${lessonId}`)
 
             return (
               <Link
@@ -92,7 +99,9 @@ export function Module() {
                   <p className="text-sm text-gray-400">+10 XP</p>
                 </div>
                 {completed ? (
-                  <span className="text-sm text-green-500">Completada</span>
+                  <span className="text-sm text-green-500">
+                    {t('lessonStatus.completed')}
+                  </span>
                 ) : (
                   <Play className="h-5 w-5 text-primary-400" />
                 )}
@@ -106,7 +115,7 @@ export function Module() {
       <div className="mb-8">
         <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
           <Circle className="h-5 w-5" />
-          Evaluación
+          {t('sections.evaluation')}
         </h2>
         <Link
           to={allLessonsCompleted ? `/quiz/${moduleId}` : '#'}
@@ -129,15 +138,15 @@ export function Module() {
             )}
           </div>
           <div className="flex-1">
-            <h3 className="font-medium">Quiz del Módulo</h3>
+            <h3 className="font-medium">{t('quiz.title')}</h3>
             <p className="text-sm text-gray-400">
-              {allLessonsCompleted
-                ? '+25-50 XP según tu puntuación'
-                : 'Completa todas las lecciones primero'}
+              {allLessonsCompleted ? '+25-50 XP' : t('quiz.locked')}
             </p>
           </div>
           {quizDone && (
-            <span className="text-sm text-green-500">Completado</span>
+            <span className="text-sm text-green-500">
+              {t('lessonStatus.completed')}
+            </span>
           )}
         </Link>
       </div>
@@ -146,7 +155,7 @@ export function Module() {
       <div>
         <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
           <Gamepad2 className="h-5 w-5" />
-          Mini-Juego
+          {t('game.title')}
         </h2>
         <Link
           to={quizDone ? `/game/${moduleId}` : '#'}
@@ -169,13 +178,17 @@ export function Module() {
             )}
           </div>
           <div className="flex-1">
-            <h3 className="font-medium">{getGameTitle(module.gameId)}</h3>
+            <h3 className="font-medium">
+              {tGamification(`gameTitles.${module.gameId}`)}
+            </h3>
             <p className="text-sm text-gray-400">
-              {quizDone ? '+100 XP' : 'Aprueba el quiz primero'}
+              {quizDone ? '+100 XP' : t('game.locked')}
             </p>
           </div>
           {gameDone && (
-            <span className="text-sm text-green-500">Completado</span>
+            <span className="text-sm text-green-500">
+              {t('lessonStatus.completed')}
+            </span>
           )}
         </Link>
       </div>

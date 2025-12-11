@@ -1,4 +1,13 @@
-import { Trophy, Target, Zap, RotateCcw, ArrowRight, CheckCircle, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import {
+  Trophy,
+  Target,
+  Zap,
+  RotateCcw,
+  ArrowRight,
+  CheckCircle,
+  X,
+} from 'lucide-react'
 import { Button } from '../common/Button'
 import type { QuizQuestion } from '../../data/types'
 
@@ -25,6 +34,7 @@ export function QuizResult({
   onRetry,
   onContinue,
 }: QuizResultProps) {
+  const { t } = useTranslation('quiz')
   const percentage = Math.round((score / totalQuestions) * 100)
 
   return (
@@ -53,18 +63,18 @@ export function QuizResult({
 
         <h2 className="text-2xl font-bold">
           {isPerfect
-            ? '¡Puntuación Perfecta!'
+            ? t('result.perfect')
             : passed
-            ? '¡Quiz Aprobado!'
-            : 'Quiz No Aprobado'}
+              ? t('result.passed')
+              : t('result.failed')}
         </h2>
 
         <p className="mt-2 text-gray-400">
           {isPerfect
-            ? 'Has demostrado un dominio completo del tema.'
+            ? t('result.perfectMessage')
             : passed
-            ? 'Has demostrado un buen entendimiento del tema.'
-            : 'Necesitas 70% o más para aprobar. ¡Inténtalo de nuevo!'}
+              ? t('result.passedMessage')
+              : t('result.failedMessage', { score: 70 })}
         </p>
       </div>
 
@@ -72,26 +82,26 @@ export function QuizResult({
       <div className="grid grid-cols-3 gap-4">
         <div className="rounded-xl border border-gray-700 bg-gray-800 p-4 text-center">
           <p className="text-3xl font-bold text-white">{percentage}%</p>
-          <p className="text-sm text-gray-400">Puntuación</p>
+          <p className="text-sm text-gray-400">{t('result.score')}</p>
         </div>
         <div className="rounded-xl border border-gray-700 bg-gray-800 p-4 text-center">
           <p className="text-3xl font-bold text-white">
             {score}/{totalQuestions}
           </p>
-          <p className="text-sm text-gray-400">Correctas</p>
+          <p className="text-sm text-gray-400">{t('result.correct')}</p>
         </div>
         <div className="rounded-xl border border-gray-700 bg-gray-800 p-4 text-center">
           <p className="text-3xl font-bold text-yellow-500">+{xpEarned}</p>
           <p className="flex items-center justify-center gap-1 text-sm text-gray-400">
             <Zap className="h-3 w-3" />
-            XP Ganado
+            {t('result.xpEarned')}
           </p>
         </div>
       </div>
 
       {/* Question summary */}
       <div className="rounded-xl border border-gray-700 bg-gray-800 p-6">
-        <h3 className="mb-4 font-semibold">Resumen de respuestas</h3>
+        <h3 className="mb-4 font-semibold">{t('result.summary')}</h3>
         <div className="space-y-3">
           {questions.map((question, index) => {
             const userAnswer = answers[index]
@@ -113,13 +123,14 @@ export function QuizResult({
                     <X className="h-4 w-4 text-red-500" />
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-300 truncate">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm text-gray-300">
                     {index + 1}. {question.text}
                   </p>
                   {!isCorrect && (
                     <p className="mt-1 text-xs text-gray-500">
-                      Respuesta correcta: {question.options[question.correctIndex]}
+                      {t('result.correctAnswer')}{' '}
+                      {question.options[question.correctIndex]}
                     </p>
                   )}
                 </div>
@@ -134,11 +145,11 @@ export function QuizResult({
         {!passed && (
           <Button onClick={onRetry} variant="secondary">
             <RotateCcw className="h-4 w-4" />
-            Intentar de nuevo
+            {t('result.tryAgain')}
           </Button>
         )}
         <Button onClick={onContinue} variant="primary">
-          {passed ? 'Continuar' : 'Volver al módulo'}
+          {passed ? t('result.continue') : t('result.backToModule')}
           <ArrowRight className="h-4 w-4" />
         </Button>
       </div>

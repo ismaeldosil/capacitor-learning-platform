@@ -1,0 +1,34 @@
+{
+  "backToModule": "Back to module",
+  "notAvailable": {
+    "title": "Quiz in Development",
+    "message": "The quiz for this module will be available soon."
+  },
+  "intro": {
+    "subtitle": "Test your module knowledge",
+    "completed": "Quiz completed",
+    "questions": "{{count}} questions",
+    "passingScore": "{{score}}% to pass",
+    "readyImprove": "Ready to improve your score?",
+    "readyStart": "Ready for the quiz?",
+    "instructions": "This quiz has {{count}} questions. You need {{score}}% to pass and unlock the mini-game.",
+    "retry": "Retry Quiz",
+    "start": "Start Quiz"
+  },
+  "result": {
+    "perfect": "Perfect Score!",
+    "passed": "Quiz Passed!",
+    "failed": "Quiz Not Passed",
+    "perfectMessage": "You've demonstrated complete mastery of the topic.",
+    "passedMessage": "You've demonstrated a good understanding of the topic.",
+    "failedMessage": "You need {{score}}% or more to pass. Try again!",
+    "score": "Score",
+    "correct": "Correct",
+    "xpEarned": "XP Earned",
+    "summary": "Answer Summary",
+    "correctAnswer": "Correct answer:",
+    "tryAgain": "Try again",
+    "continue": "Continue",
+    "backToModule": "Back to module"
+  }
+}

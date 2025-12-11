@@ -1,0 +1,34 @@
+{
+  "appName": "Capacitor Learning",
+  "loading": "Loading...",
+  "error": "Error",
+  "retry": "Try again",
+  "back": "Back",
+  "next": "Next",
+  "previous": "Previous",
+  "continue": "Continue",
+  "start": "Start",
+  "complete": "Complete",
+  "completed": "Completed",
+  "locked": "Locked",
+  "review": "Review",
+  "cancel": "Cancel",
+  "save": "Save",
+  "close": "Close",
+  "yes": "Yes",
+  "no": "No",
+  "notFound": {
+    "title": "404",
+    "message": "The page you're looking for doesn't exist or has been moved",
+    "backToDashboard": "Back to Dashboard"
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "message": "An unexpected error occurred. Please try again.",
+    "details": "Error details",
+    "retry": "Try again"
+  },
+  "xp": "XP",
+  "level": "Level",
+  "days": "days"
+}

@@ -1,0 +1,11 @@
+{
+  "progress": "Lição {{current}} de {{total}}",
+  "completed": "Completada",
+  "navigation": {
+    "previous": "Anterior",
+    "back": "Voltar",
+    "next": "Próximo",
+    "backToModule": "Voltar ao módulo",
+    "complete": "Completar lição"
+  }
+}
