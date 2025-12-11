@@ -50,10 +50,13 @@ export default {
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'bounce-slow': 'bounce 2s infinite',
+        'bounce-subtle': 'bounceSubtle 2s ease-in-out infinite',
         'slide-up': 'slideUp 0.3s ease-out',
         'slide-down': 'slideDown 0.3s ease-out',
         'fade-in': 'fadeIn 0.2s ease-out',
         'scale-in': 'scaleIn 0.2s ease-out',
+        'glow': 'glow 2s ease-in-out infinite',
+        'shake': 'shake 0.5s ease-in-out',
       },
       keyframes: {
         slideUp: {
@@ -71,6 +74,19 @@ export default {
         scaleIn: {
           '0%': { transform: 'scale(0.95)', opacity: '0' },
           '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        bounceSubtle: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-3px)' },
+        },
+        glow: {
+          '0%, 100%': { boxShadow: '0 0 5px rgba(59, 130, 246, 0.5)' },
+          '50%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.8)' },
+        },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(-5px)' },
+          '75%': { transform: 'translateX(5px)' },
         },
       },
     },
