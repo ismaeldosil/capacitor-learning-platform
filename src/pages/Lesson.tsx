@@ -3,6 +3,8 @@ import { useUser } from '../contexts/UserContext'
 import { MODULES } from '../data/constants'
 import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react'
 import { Button } from '../components/common/Button'
+import { LessonContent } from '../components/lesson'
+import { LESSON_CONTENT } from '../data/lessons'
 
 export function Lesson() {
   const { moduleId, lessonId } = useParams<{
@@ -34,6 +36,8 @@ export function Lesson() {
     lessonIndex < module.lessons.length - 1
       ? module.lessons[lessonIndex + 1]
       : null
+
+  const lessonContent = LESSON_CONTENT[lessonId]
 
   const handleComplete = () => {
     if (!isCompleted) {
@@ -87,33 +91,37 @@ export function Lesson() {
         </div>
       </div>
 
-      {/* Lesson Content Placeholder */}
+      {/* Lesson Content */}
       <div className="card mb-8">
-        <div className="prose prose-invert max-w-none">
-          <p className="text-gray-300">
-            El contenido de esta lección se cargará desde el repositorio
-            <code className="mx-1 rounded bg-gray-700 px-2 py-1">
-              capacitor-learning-content
-            </code>
-            una vez que esté implementado el sistema de carga de contenido.
-          </p>
-
-          <div className="my-8 rounded-lg border border-gray-700 bg-gray-800/50 p-6">
-            <h3 className="mb-4 text-lg font-semibold">
-              Contenido de la lección: {getLessonTitle(lessonId)}
-            </h3>
-            <p className="text-gray-400">
-              Esta sección mostrará el contenido markdown de la lección con:
+        {lessonContent ? (
+          <LessonContent blocks={lessonContent} />
+        ) : (
+          <div className="prose prose-invert max-w-none">
+            <p className="text-gray-300">
+              El contenido de esta lección se cargará desde el repositorio
+              <code className="mx-1 rounded bg-gray-700 px-2 py-1">
+                capacitor-learning-content
+              </code>
+              una vez que esté implementado el sistema de carga de contenido.
             </p>
-            <ul className="mt-4 space-y-2 text-gray-400">
-              <li>📝 Explicaciones teóricas</li>
-              <li>💻 Bloques de código con syntax highlighting</li>
-              <li>🖼️ Diagramas y capturas de pantalla</li>
-              <li>💡 Tips y notas importantes</li>
-              <li>⚠️ Advertencias y mejores prácticas</li>
-            </ul>
+
+            <div className="my-8 rounded-lg border border-gray-700 bg-gray-800/50 p-6">
+              <h3 className="mb-4 text-lg font-semibold">
+                Contenido de la lección: {getLessonTitle(lessonId)}
+              </h3>
+              <p className="text-gray-400">
+                Esta sección mostrará el contenido markdown de la lección con:
+              </p>
+              <ul className="mt-4 space-y-2 text-gray-400">
+                <li>📝 Explicaciones teóricas</li>
+                <li>💻 Bloques de código con syntax highlighting</li>
+                <li>🖼️ Diagramas y capturas de pantalla</li>
+                <li>💡 Tips y notas importantes</li>
+                <li>⚠️ Advertencias y mejores prácticas</li>
+              </ul>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Navigation */}
