@@ -1,6 +1,6 @@
 import { useUser } from '../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
-import { MODULES } from '../data/constants'
+import { MODULES, BADGES } from '../data/constants'
 import { Link } from 'react-router-dom'
 import {
   Trophy,
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import type { ModuleStatus } from '../data/types'
 import { getModuleStatus } from '../utils'
+import { Icon } from '../components/common/Icon'
 
 export function Dashboard() {
   const { user, currentLevel } = useUser()
@@ -28,8 +29,9 @@ export function Dashboard() {
     <div className="mx-auto max-w-6xl animate-in">
       {/* Welcome Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">
-          {t('welcome', { name: user.name })} {currentLevel.icon}
+        <h1 className="flex items-center gap-3 text-3xl font-bold">
+          {t('welcome', { name: user.name })}
+          <Icon name={currentLevel.icon} className={`h-8 w-8 ${currentLevel.color}`} />
         </h1>
         <p className="mt-2 text-gray-400">{t('subtitle')}</p>
       </div>
@@ -118,29 +120,25 @@ export function Dashboard() {
       {/* Badges Section */}
       <div className="card">
         <h2 className="mb-4 text-lg font-semibold">
-          {t('achievements.title', { count: user.badges.length, total: 8 })}
+          {t('achievements.title', { count: user.badges.length, total: BADGES.length })}
         </h2>
         <div className="grid grid-cols-4 gap-4 sm:grid-cols-8">
-          {[
-            { id: 'first-launch', icon: '🎯' },
-            { id: 'speed-runner', icon: '⚡' },
-            { id: 'perfect-score', icon: '💯' },
-            { id: 'on-fire', icon: '🔥' },
-            { id: 'module-master', icon: '🎓' },
-            { id: 'capacitor-king', icon: '👑' },
-            { id: 'quiz-genius', icon: '🧠' },
-            { id: 'gamer', icon: '🎮' },
-          ].map((badge) => {
+          {BADGES.map((badge) => {
             const isUnlocked = user.badges.includes(badge.id)
             return (
               <div
                 key={badge.id}
-                className={`flex flex-col items-center gap-1 rounded-lg p-2 ${
-                  isUnlocked ? '' : 'opacity-30 grayscale'
+                className={`flex flex-col items-center gap-2 rounded-lg p-3 ${
+                  isUnlocked ? 'bg-gray-800' : 'opacity-30'
                 }`}
                 title={tGamification(`badges.${badge.id}.name`)}
               >
-                <span className="text-3xl">{badge.icon}</span>
+                <div className={`rounded-full p-2 ${isUnlocked ? 'bg-primary-500/20' : 'bg-gray-700'}`}>
+                  <Icon
+                    name={badge.icon}
+                    className={`h-6 w-6 ${isUnlocked ? 'text-primary-400' : 'text-gray-500'}`}
+                  />
+                </div>
                 <span className="max-w-full truncate text-xs text-gray-400">
                   {tGamification(`badges.${badge.id}.name`)}
                 </span>
@@ -221,8 +219,8 @@ function ModuleCard({
 
       {/* Content */}
       <div className="flex items-start gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-700 text-2xl">
-          {icon}
+        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-700">
+          <Icon name={icon} className="h-6 w-6 text-primary-400" />
         </div>
         <div className="flex-1">
           <h3 className="font-semibold">{title}</h3>

@@ -2,7 +2,7 @@ import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES } from '../data/constants'
-import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CheckCircle, FileText, Code, Image, Lightbulb, AlertTriangle } from 'lucide-react'
 import { Button } from '../components/common/Button'
 import { LessonContent } from '../components/lesson'
 import { LESSON_CONTENT } from '../data/lessons'
@@ -118,12 +118,27 @@ export function Lesson() {
               <p className="text-gray-400">
                 Esta sección mostrará el contenido markdown de la lección con:
               </p>
-              <ul className="mt-4 space-y-2 text-gray-400">
-                <li>📝 Explicaciones teóricas</li>
-                <li>💻 Bloques de código con syntax highlighting</li>
-                <li>🖼️ Diagramas y capturas de pantalla</li>
-                <li>💡 Tips y notas importantes</li>
-                <li>⚠️ Advertencias y mejores prácticas</li>
+              <ul className="mt-4 space-y-3 text-gray-400">
+                <li className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-blue-400" />
+                  Explicaciones teoricas
+                </li>
+                <li className="flex items-center gap-2">
+                  <Code className="h-4 w-4 text-green-400" />
+                  Bloques de codigo con syntax highlighting
+                </li>
+                <li className="flex items-center gap-2">
+                  <Image className="h-4 w-4 text-purple-400" />
+                  Diagramas y capturas de pantalla
+                </li>
+                <li className="flex items-center gap-2">
+                  <Lightbulb className="h-4 w-4 text-yellow-400" />
+                  Tips y notas importantes
+                </li>
+                <li className="flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-orange-400" />
+                  Advertencias y mejores practicas
+                </li>
               </ul>
             </div>
           </div>

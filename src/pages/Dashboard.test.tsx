@@ -81,11 +81,11 @@ describe('Dashboard', () => {
       expect(screen.getByText(/logros/i)).toBeInTheDocument()
     })
 
-    it('should render badge icons', () => {
+    it('should render badge names', () => {
       render(<Dashboard />)
-      expect(screen.getByText('🎯')).toBeInTheDocument()
-      expect(screen.getByText('⚡')).toBeInTheDocument()
-      expect(screen.getByText('💯')).toBeInTheDocument()
+      expect(screen.getByText(/first launch/i)).toBeInTheDocument()
+      expect(screen.getByText(/speed runner/i)).toBeInTheDocument()
+      expect(screen.getByText(/perfect score/i)).toBeInTheDocument()
     })
   })
 })

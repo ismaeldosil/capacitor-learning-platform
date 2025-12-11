@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES, XP_REWARDS } from '../data/constants'
 import { getQuizByModuleId } from '../data/quizzes'
-import { ArrowLeft, Brain } from 'lucide-react'
+import { ArrowLeft, Brain, CheckCircle, BarChart3 } from 'lucide-react'
 import { QuizQuestion, QuizProgress, QuizResult } from '../components/quiz'
 
 type QuizState = 'intro' | 'playing' | 'result'
@@ -184,10 +184,18 @@ export function Quiz() {
           <div className="flex-1">
             <h1 className="text-2xl font-bold">Quiz: {moduleTitle}</h1>
             <p className="mt-1 text-gray-400">{t('intro.subtitle')}</p>
-            <p className="mt-2 text-sm text-gray-500">
-              {quizDone
-                ? `✅ ${t('intro.completed')}`
-                : `📊 ${t('intro.questions', { count: quiz.questions.length })} • ${t('intro.passingScore', { score: quiz.passingScore })}`}
+            <p className="mt-2 flex items-center gap-1 text-sm text-gray-500">
+              {quizDone ? (
+                <>
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  {t('intro.completed')}
+                </>
+              ) : (
+                <>
+                  <BarChart3 className="h-4 w-4" />
+                  {t('intro.questions', { count: quiz.questions.length })} | {t('intro.passingScore', { score: quiz.passingScore })}
+                </>
+              )}
             </p>
           </div>
         </div>

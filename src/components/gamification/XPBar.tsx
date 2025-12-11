@@ -1,5 +1,6 @@
-import { Zap } from 'lucide-react'
+import { Zap, Trophy } from 'lucide-react'
 import type { Level } from '../../data/types'
+import { Icon } from '../common/Icon'
 
 interface XPBarProps {
   currentXP: number
@@ -51,7 +52,7 @@ export function XPBar({
             <div
               className={`flex items-center justify-center rounded-lg bg-gray-700 p-1.5 ${currentLevel.color}`}
             >
-              <span className="text-lg">{currentLevel.icon}</span>
+              <Icon name={currentLevel.icon} className="h-5 w-5" />
             </div>
             <div>
               <p className={`font-semibold ${styles.text}`}>{currentLevel.name}</p>
@@ -94,8 +95,9 @@ export function XPBar({
       )}
 
       {showDetails && !nextLevel && (
-        <p className={`text-yellow-500 font-medium ${size === 'lg' ? 'text-sm' : 'text-xs'}`}>
-          ¡Nivel máximo alcanzado! 🏆
+        <p className={`flex items-center gap-1 text-yellow-500 font-medium ${size === 'lg' ? 'text-sm' : 'text-xs'}`}>
+          <Trophy className="h-4 w-4" />
+          Nivel maximo alcanzado
         </p>
       )}
     </div>

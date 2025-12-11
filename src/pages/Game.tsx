@@ -3,7 +3,7 @@ import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES, XP_REWARDS } from '../data/constants'
-import { ArrowLeft, Trophy, RotateCcw, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Trophy, RotateCcw, CheckCircle, Wrench, Plug, Hammer, Search } from 'lucide-react'
 import {
   CommandBuilder,
   PluginMatcher,
@@ -89,14 +89,12 @@ export function Game() {
   }
   const gameKey = gameTypeMap[gameTypeKey] || 'commandBuilder'
 
-  const gameIcons: Record<string, string> = {
-    'command-builder': '🔧',
-    'plugin-matcher': '🔌',
-    'build-pipeline': '🔨',
-    'store-reviewer': '🔍',
-  }
-
-  const gameIcon = gameIcons[module.gameId] || '🎮'
+  const GameIcon = {
+    'command-builder': Wrench,
+    'plugin-matcher': Plug,
+    'build-pipeline': Hammer,
+    'store-reviewer': Search,
+  }[module.gameId] || Wrench
   const gameTitle = tGamification(`gameTitles.${module.gameId}`)
 
   const renderGame = () => {
@@ -132,18 +130,23 @@ export function Game() {
       {/* Game Header */}
       <div className="card mb-8">
         <div className="flex items-start gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-orange-600 text-3xl">
-            {gameIcon}
+          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-orange-600">
+            <GameIcon className="h-8 w-8 text-white" />
           </div>
           <div className="flex-1">
             <h1 className="text-2xl font-bold">{gameTitle}</h1>
             <p className="mt-1 text-gray-400">
               {t(`types.${gameKey}.description`)}
             </p>
-            <p className="mt-2 text-sm text-gray-500">
-              {gameDone
-                ? `✅ ${t('intro.completed')}`
-                : t('intro.xpReward', { xp: XP_REWARDS.GAME_COMPLETE })}
+            <p className="mt-2 flex items-center gap-1 text-sm text-gray-500">
+              {gameDone ? (
+                <>
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  {t('intro.completed')}
+                </>
+              ) : (
+                t('intro.xpReward', { xp: XP_REWARDS.GAME_COMPLETE })
+              )}
             </p>
           </div>
         </div>
@@ -153,8 +156,8 @@ export function Game() {
       {gameState === 'intro' && (
         <div className="card">
           <div className="py-12 text-center">
-            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-orange-600/20 text-5xl">
-              {gameIcon}
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-orange-600/20">
+              <GameIcon className="h-12 w-12 text-orange-400" />
             </div>
             <h2 className="mb-2 text-xl font-semibold">
               {gameDone ? t('intro.alreadyCompleted') : t('intro.readyPlay')}
