@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CheckCircle, XCircle, Lightbulb, RotateCcw, ArrowRight } from 'lucide-react'
-import { getCommandChallenges, type CommandPart } from '../../data/games'
+import { useTranslatedCommandChallenges } from '../../hooks/useTranslatedContent'
+import { type CommandPart } from '../../data/games'
 
 interface CommandBuilderProps {
   onComplete: (score: number, total: number) => void
@@ -16,7 +18,8 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export function CommandBuilder({ onComplete }: CommandBuilderProps) {
-  const challenges = getCommandChallenges()
+  const { t } = useTranslation('gamesContent')
+  const challenges = useTranslatedCommandChallenges()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [arrangedParts, setArrangedParts] = useState<CommandPart[]>([])
   const [availableParts, setAvailableParts] = useState<CommandPart[]>(() =>
@@ -118,10 +121,10 @@ export function CommandBuilder({ onComplete }: CommandBuilderProps) {
       {/* Progress */}
       <div className="flex items-center justify-between">
         <span className="text-sm text-gray-400">
-          Desafío {currentIndex + 1} de {challenges.length}
+          {t('ui.challenge')} {currentIndex + 1} {t('ui.of')} {challenges.length}
         </span>
         <span className="text-sm font-medium text-green-400">
-          Puntuación: {score}/{currentIndex + (isVerified ? 1 : 0)}
+          {t('ui.score')}: {score}/{currentIndex + (isVerified ? 1 : 0)}
         </span>
       </div>
 
@@ -153,10 +156,10 @@ export function CommandBuilder({ onComplete }: CommandBuilderProps) {
           role="region"
           aria-label="Zona de comando"
         >
-          <div className="mb-2 text-xs text-gray-500">Tu comando:</div>
+          <div className="mb-2 text-xs text-gray-500">{t('ui.yourCommand')}:</div>
           <div className="flex flex-wrap gap-2">
             {arrangedParts.length === 0 ? (
-              <span className="text-gray-500">Arrastra las partes aquí o haz clic en ellas</span>
+              <span className="text-gray-500">{t('ui.dragPartsHere')}</span>
             ) : (
               arrangedParts.map((part, index) => (
                 <button
@@ -185,10 +188,10 @@ export function CommandBuilder({ onComplete }: CommandBuilderProps) {
           role="region"
           aria-label="Partes disponibles"
         >
-          <div className="mb-2 text-xs text-gray-500">Partes disponibles:</div>
+          <div className="mb-2 text-xs text-gray-500">{t('ui.availableParts')}:</div>
           <div className="flex flex-wrap gap-2">
             {availableParts.length === 0 ? (
-              <span className="text-gray-500">Todas las partes han sido usadas</span>
+              <span className="text-gray-500">{t('ui.allPartsUsed')}</span>
             ) : (
               availableParts.map(part => (
                 <button
@@ -237,11 +240,11 @@ export function CommandBuilder({ onComplete }: CommandBuilderProps) {
             )}
             <div>
               <p className={`font-medium ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
-                {isCorrect ? '¡Correcto!' : 'Incorrecto'}
+                {isCorrect ? t('ui.correct') : t('ui.incorrect')}
               </p>
               {!isCorrect && (
                 <p className="mt-1 text-sm text-gray-400">
-                  Comando correcto:{' '}
+                  {t('ui.correctCommand')}:{' '}
                   <code className="rounded bg-gray-700 px-2 py-0.5 font-mono text-white">
                     {currentChallenge.parts
                       .sort((a, b) => {
@@ -267,19 +270,19 @@ export function CommandBuilder({ onComplete }: CommandBuilderProps) {
               <button
                 onClick={handleReset}
                 className="btn-secondary flex items-center gap-2"
-                aria-label="Reiniciar"
+                aria-label={t('ui.reset')}
               >
                 <RotateCcw className="h-4 w-4" />
-                Reiniciar
+                {t('ui.reset')}
               </button>
               <button
                 onClick={() => setShowHint(true)}
                 disabled={showHint}
                 className="btn-secondary flex items-center gap-2"
-                aria-label="Ver pista"
+                aria-label={t('ui.hint')}
               >
                 <Lightbulb className="h-4 w-4" />
-                Pista
+                {t('ui.hint')}
               </button>
             </>
           )}
@@ -290,18 +293,18 @@ export function CommandBuilder({ onComplete }: CommandBuilderProps) {
             onClick={handleVerify}
             disabled={arrangedParts.length === 0}
             className="btn-primary flex items-center gap-2"
-            aria-label="Verificar respuesta"
+            aria-label={t('ui.verify')}
           >
-            Verificar
+            {t('ui.verify')}
             <CheckCircle className="h-4 w-4" />
           </button>
         ) : (
           <button
             onClick={handleNext}
             className="btn-primary flex items-center gap-2"
-            aria-label={currentIndex < challenges.length - 1 ? 'Siguiente desafío' : 'Ver resultados'}
+            aria-label={currentIndex < challenges.length - 1 ? t('ui.next') : t('ui.viewResults')}
           >
-            {currentIndex < challenges.length - 1 ? 'Siguiente' : 'Ver Resultados'}
+            {currentIndex < challenges.length - 1 ? t('ui.next') : t('ui.viewResults')}
             <ArrowRight className="h-4 w-4" />
           </button>
         )}
@@ -309,18 +312,18 @@ export function CommandBuilder({ onComplete }: CommandBuilderProps) {
 
       {/* Legend */}
       <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
-        <span>Leyenda:</span>
+        <span>{t('ui.legend')}:</span>
         <span className="flex items-center gap-1">
-          <span className="h-3 w-3 rounded bg-blue-600" /> Comando base
+          <span className="h-3 w-3 rounded bg-blue-600" /> {t('ui.baseCommand')}
         </span>
         <span className="flex items-center gap-1">
-          <span className="h-3 w-3 rounded bg-purple-600" /> Flag
+          <span className="h-3 w-3 rounded bg-purple-600" /> {t('ui.flag')}
         </span>
         <span className="flex items-center gap-1">
-          <span className="h-3 w-3 rounded bg-green-600" /> Argumento
+          <span className="h-3 w-3 rounded bg-green-600" /> {t('ui.argument')}
         </span>
         <span className="flex items-center gap-1">
-          <span className="h-3 w-3 rounded bg-orange-600" /> Plataforma
+          <span className="h-3 w-3 rounded bg-orange-600" /> {t('ui.platform')}
         </span>
       </div>
     </div>

@@ -10,6 +10,9 @@ import lessonEs from './locales/es/lesson.json'
 import quizEs from './locales/es/quiz.json'
 import gameEs from './locales/es/game.json'
 import gamificationEs from './locales/es/gamification.json'
+import lessonsContentEs from './locales/es/content/lessons.json'
+import quizzesContentEs from './locales/es/content/quizzes.json'
+import gamesContentEs from './locales/es/content/games.json'
 
 import commonEn from './locales/en/common.json'
 import dashboardEn from './locales/en/dashboard.json'
@@ -18,6 +21,9 @@ import lessonEn from './locales/en/lesson.json'
 import quizEn from './locales/en/quiz.json'
 import gameEn from './locales/en/game.json'
 import gamificationEn from './locales/en/gamification.json'
+import lessonsContentEn from './locales/en/content/lessons.json'
+import quizzesContentEn from './locales/en/content/quizzes.json'
+import gamesContentEn from './locales/en/content/games.json'
 
 import commonPt from './locales/pt/common.json'
 import dashboardPt from './locales/pt/dashboard.json'
@@ -26,6 +32,9 @@ import lessonPt from './locales/pt/lesson.json'
 import quizPt from './locales/pt/quiz.json'
 import gamePt from './locales/pt/game.json'
 import gamificationPt from './locales/pt/gamification.json'
+import lessonsContentPt from './locales/pt/content/lessons.json'
+import quizzesContentPt from './locales/pt/content/quizzes.json'
+import gamesContentPt from './locales/pt/content/games.json'
 
 // Supported languages
 export const SUPPORTED_LANGUAGES = ['es', 'en', 'pt'] as const
@@ -55,6 +64,9 @@ const resources = {
     quiz: quizEs,
     game: gameEs,
     gamification: gamificationEs,
+    lessonsContent: lessonsContentEs,
+    quizzesContent: quizzesContentEs,
+    gamesContent: gamesContentEs,
   },
   en: {
     common: commonEn,
@@ -64,6 +76,9 @@ const resources = {
     quiz: quizEn,
     game: gameEn,
     gamification: gamificationEn,
+    lessonsContent: lessonsContentEn,
+    quizzesContent: quizzesContentEn,
+    gamesContent: gamesContentEn,
   },
   pt: {
     common: commonPt,
@@ -73,6 +88,9 @@ const resources = {
     quiz: quizPt,
     game: gamePt,
     gamification: gamificationPt,
+    lessonsContent: lessonsContentPt,
+    quizzesContent: quizzesContentPt,
+    gamesContent: gamesContentPt,
   },
 }
 
@@ -93,6 +111,9 @@ i18n
       'quiz',
       'game',
       'gamification',
+      'lessonsContent',
+      'quizzesContent',
+      'gamesContent',
     ],
     defaultNS: 'common',
 

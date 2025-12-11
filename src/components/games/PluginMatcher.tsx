@@ -1,6 +1,8 @@
 import { useState, useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CheckCircle, XCircle, Lightbulb, RotateCcw, Plug } from 'lucide-react'
-import { getPluginPairs, type PluginPair } from '../../data/games'
+import { useTranslatedPluginPairs } from '../../hooks/useTranslatedContent'
+import { type PluginPair } from '../../data/games'
 
 interface PluginMatcherProps {
   onComplete: (score: number, total: number) => void
@@ -21,7 +23,8 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export function PluginMatcher({ onComplete }: PluginMatcherProps) {
-  const allPairs = getPluginPairs()
+  const { t } = useTranslation('gamesContent')
+  const allPairs = useTranslatedPluginPairs()
   const [pairs] = useState<PluginPair[]>(() => shuffleArray([...allPairs]).slice(0, 6))
   const [selectedUseCase, setSelectedUseCase] = useState<string | null>(null)
   const [matches, setMatches] = useState<Match[]>([])
@@ -97,11 +100,11 @@ export function PluginMatcher({ onComplete }: PluginMatcherProps) {
       {/* Progress */}
       <div className="flex items-center justify-between">
         <span className="text-sm text-gray-400">
-          Emparejados: {matches.length} de {pairs.length}
+          {t('ui.matched')}: {matches.length} {t('ui.of')} {pairs.length}
         </span>
         {isComplete && (
           <span className="text-sm font-medium text-green-400">
-            Puntuación: {score}/{pairs.length}
+            {t('ui.score')}: {score}/{pairs.length}
           </span>
         )}
       </div>
@@ -119,8 +122,8 @@ export function PluginMatcher({ onComplete }: PluginMatcherProps) {
         <Plug className="mx-auto mb-2 h-8 w-8 text-blue-400" />
         <p className="text-sm text-gray-400">
           {selectedUseCase
-            ? 'Ahora selecciona el plugin que corresponde'
-            : 'Selecciona un caso de uso para empezar'}
+            ? t('ui.nowSelectPlugin')
+            : t('ui.selectUseCaseToStart')}
         </p>
       </div>
 
@@ -128,7 +131,7 @@ export function PluginMatcher({ onComplete }: PluginMatcherProps) {
       <div className="grid gap-6 md:grid-cols-2">
         {/* Use Cases */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-gray-400">Casos de Uso</h3>
+          <h3 className="text-sm font-semibold text-gray-400">{t('ui.useCases')}</h3>
           {pairs.map(pair => {
             const isMatched = matchedUseCases.has(pair.id)
             const isSelected = selectedUseCase === pair.id
@@ -157,12 +160,12 @@ export function PluginMatcher({ onComplete }: PluginMatcherProps) {
                   <p className="text-sm">{pair.useCase}</p>
                   {isMatched && matchedPluginName && (
                     <p className="mt-2 text-xs text-gray-400">
-                      Seleccionado: <span className="text-blue-400">{matchedPluginName}</span>
+                      {t('ui.selected')}: <span className="text-blue-400">{matchedPluginName}</span>
                     </p>
                   )}
                   {isComplete && !result && (
                     <p className="mt-2 text-xs text-red-400">
-                      Correcto: {pair.pluginName}
+                      {t('ui.correctAnswer')}: {pair.pluginName}
                     </p>
                   )}
                 </button>
@@ -179,10 +182,10 @@ export function PluginMatcher({ onComplete }: PluginMatcherProps) {
                       <button
                         onClick={() => handleShowHint(pair.id)}
                         className="flex items-center gap-1 text-xs text-gray-500 hover:text-yellow-400"
-                        aria-label={`Ver pista para: ${pair.useCase}`}
+                        aria-label={`${t('ui.showHint')}: ${pair.useCase}`}
                       >
                         <Lightbulb className="h-3 w-3" />
-                        Ver pista
+                        {t('ui.showHint')}
                       </button>
                     )}
                   </div>
@@ -194,7 +197,7 @@ export function PluginMatcher({ onComplete }: PluginMatcherProps) {
 
         {/* Plugins */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-gray-400">Plugins</h3>
+          <h3 className="text-sm font-semibold text-gray-400">{t('ui.plugins')}</h3>
           {shuffledPlugins.map(({ name, plugin }) => {
             const isMatched = matchedPlugins.has(name)
 
@@ -240,13 +243,13 @@ export function PluginMatcher({ onComplete }: PluginMatcherProps) {
             <div>
               <p className="font-medium">
                 {score === pairs.length
-                  ? '¡Perfecto! Todos los emparejamientos correctos'
-                  : `${score} de ${pairs.length} correctos`}
+                  ? t('ui.perfectMatch')
+                  : `${score} ${t('ui.of')} ${pairs.length} ${t('ui.correctMatches')}`}
               </p>
               <p className="text-sm text-gray-400">
                 {score === pairs.length
-                  ? 'Dominas los plugins de Capacitor'
-                  : 'Revisa las respuestas incorrectas arriba'}
+                  ? t('ui.youMasterPlugins')
+                  : t('ui.reviewIncorrect')}
               </p>
             </div>
           </div>
@@ -258,10 +261,10 @@ export function PluginMatcher({ onComplete }: PluginMatcherProps) {
         <button
           onClick={handleReset}
           className="btn-secondary flex items-center gap-2"
-          aria-label="Reiniciar juego"
+          aria-label={t('ui.reset')}
         >
           <RotateCcw className="h-4 w-4" />
-          Reiniciar
+          {t('ui.reset')}
         </button>
 
         {!isComplete ? (
@@ -269,18 +272,18 @@ export function PluginMatcher({ onComplete }: PluginMatcherProps) {
             onClick={handleVerify}
             disabled={matches.length < pairs.length}
             className="btn-primary flex items-center gap-2"
-            aria-label="Verificar emparejamientos"
+            aria-label={t('ui.verify')}
           >
-            Verificar
+            {t('ui.verify')}
             <CheckCircle className="h-4 w-4" />
           </button>
         ) : (
           <button
             onClick={() => onComplete(score, pairs.length)}
             className="btn-primary flex items-center gap-2"
-            aria-label="Ver resultados finales"
+            aria-label={t('ui.viewResults')}
           >
-            Ver Resultados
+            {t('ui.viewResults')}
           </button>
         )}
       </div>
