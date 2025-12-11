@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import type { ModuleStatus } from '../data/types'
 import { getModuleStatus } from '../utils'
+import { AdBanner } from '../components/ads'
 
 export function Dashboard() {
   const { user, currentLevel } = useUser()
@@ -107,6 +108,13 @@ export function Dashboard() {
           })}
         </div>
       </div>
+
+      {/* Ad Banner */}
+      <AdBanner
+        slot="dashboard-footer"
+        format="horizontal"
+        className="mb-8"
+      />
 
       {/* Badges Section */}
       <div className="card">
