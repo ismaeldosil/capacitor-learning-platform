@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
 import { MODULES } from '../data/constants'
-import { getLessonTitle } from '../utils'
+import { getLessonTitle, trackLessonComplete } from '../utils'
 import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react'
 import { Button } from '../components/common/Button'
 import { LessonContent } from '../components/lesson'
@@ -41,8 +41,9 @@ export function Lesson() {
   const lessonContent = LESSON_CONTENT[lessonId]
 
   const handleComplete = () => {
-    if (!isCompleted) {
+    if (!isCompleted && moduleId) {
       completeLesson(lessonId)
+      trackLessonComplete(moduleId, lessonId)
     }
 
     if (nextLesson) {

@@ -5,6 +5,7 @@ import { MODULES, XP_REWARDS } from '../data/constants'
 import { ArrowLeft, Trophy, RotateCcw, CheckCircle } from 'lucide-react'
 import { CommandBuilder, PluginMatcher, BuildPipeline, StoreReviewer } from '../components/games'
 import type { GameType } from '../data/types'
+import { trackGameStart, trackGameComplete } from '../utils'
 
 const gameInfo: Record<
   string,
@@ -62,14 +63,22 @@ export function Game() {
   const handleStartGame = useCallback(() => {
     setGameState('playing')
     setResult(null)
-  }, [])
+    if (module) {
+      trackGameStart(module.gameId)
+    }
+  }, [module])
 
   const handleGameComplete = useCallback((score: number, total: number) => {
     const passed = score >= total * 0.7 // 70% to pass
     const xpEarned = passed ? XP_REWARDS.GAME_COMPLETE : 0
 
-    if (passed && module) {
-      completeGame(module.gameId)
+    if (module) {
+      // Track game completion
+      trackGameComplete(module.gameId, Math.round((score / total) * 100))
+
+      if (passed) {
+        completeGame(module.gameId)
+      }
     }
 
     setResult({ score, total, passed, xpEarned })

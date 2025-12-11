@@ -3,11 +3,19 @@ import {
   useContext,
   useCallback,
   useMemo,
+  useRef,
   type ReactNode,
 } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { STORAGE_KEYS, XP_REWARDS, LEVELS } from '../data/constants'
 import type { User } from '../data/types'
+import {
+  trackLevelUp,
+  trackBadgeEarned,
+  trackXPGained,
+  trackStreakMilestone,
+  setUserProperties,
+} from '../utils/analytics'
 
 // Initial user state
 const createInitialUser = (): User => ({
@@ -89,12 +97,31 @@ export function UserProvider({ children }: UserProviderProps) {
     return Math.min(100, Math.round((progress / levelRange) * 100))
   }, [user.xp, currentLevel, nextLevel])
 
+  // Track previous level for level up detection
+  const prevLevelRef = useRef(user.level)
+
   // Add XP
   const addXP = useCallback(
-    (amount: number) => {
+    (amount: number, source?: string) => {
       setUser((prev) => {
         const newXP = prev.xp + amount
         const newLevel = calculateLevel(newXP)
+
+        // Track XP gained
+        trackXPGained(amount, source || 'unknown')
+
+        // Check for level up
+        if (newLevel.level > prevLevelRef.current) {
+          trackLevelUp(newLevel.level, newLevel.name)
+          prevLevelRef.current = newLevel.level
+        }
+
+        // Update user properties for segmentation
+        setUserProperties({
+          userLevel: newLevel.level,
+          totalXP: newXP,
+        })
+
         return {
           ...prev,
           xp: newXP,
@@ -199,11 +226,15 @@ export function UserProvider({ children }: UserProviderProps) {
 
   // Unlock badge
   const unlockBadge = useCallback(
-    (badgeId: string) => {
+    (badgeId: string, badgeName?: string) => {
       setUser((prev) => {
         if (prev.badges.includes(badgeId)) {
           return prev
         }
+
+        // Track badge earned
+        trackBadgeEarned(badgeId, badgeName || badgeId)
+
         return {
           ...prev,
           badges: [...prev.badges, badgeId],
@@ -242,8 +273,10 @@ export function UserProvider({ children }: UserProviderProps) {
         newStreak = user.streak + 1
         if (newStreak >= 7) {
           bonusXP = XP_REWARDS.STREAK_BONUS * 2
+          trackStreakMilestone(newStreak)
         } else if (newStreak >= 3) {
           bonusXP = XP_REWARDS.STREAK_BONUS
+          trackStreakMilestone(newStreak)
         }
       } else {
         newStreak = 1

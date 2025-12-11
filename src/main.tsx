@@ -3,7 +3,11 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { UserProvider } from './contexts/UserContext'
+import { initializeAnalytics } from './utils/analytics'
 import './styles/globals.css'
+
+// Initialize analytics (only if consent given)
+initializeAnalytics()
 
 const rootElement = document.getElementById('root')
 

@@ -5,6 +5,7 @@ import { MODULES, XP_REWARDS } from '../data/constants'
 import { getQuizByModuleId } from '../data/quizzes'
 import { ArrowLeft, Brain } from 'lucide-react'
 import { QuizQuestion, QuizProgress, QuizResult } from '../components/quiz'
+import { trackQuizStart, trackQuizComplete } from '../utils'
 
 type QuizState = 'intro' | 'playing' | 'result'
 
@@ -71,6 +72,7 @@ export function Quiz() {
     setCurrentQuestionIndex(0)
     setScore(0)
     setQuizState('playing')
+    trackQuizStart(quiz.id)
   }, [quiz])
 
   const handleRetry = useCallback(() => {
@@ -81,6 +83,10 @@ export function Quiz() {
     if (!quiz || !module) return
 
     const didPass = (score / quiz.questions.length) * 100 >= quiz.passingScore
+    const perfectScore = score === quiz.questions.length
+
+    // Track quiz completion
+    trackQuizComplete(quiz.id, score, perfectScore, didPass)
 
     if (didPass && !isQuizCompleted(quiz.id)) {
       completeQuiz(quiz.id, score, quiz.questions.length)
