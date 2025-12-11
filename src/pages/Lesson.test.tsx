@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { screen, fireEvent } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { renderWithRoute } from '../test/test-utils'
 import { Lesson } from './Lesson'
 
