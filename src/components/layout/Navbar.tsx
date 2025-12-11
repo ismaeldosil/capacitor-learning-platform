@@ -1,8 +1,11 @@
 import { useUser } from '../../contexts/UserContext'
+import { useTranslation } from 'react-i18next'
 import { Flame, Zap } from 'lucide-react'
+import { LanguageSwitcher } from '../common/LanguageSwitcher'
 
 export function Navbar() {
   const { user, currentLevel, xpProgress, nextLevel } = useUser()
+  const { t } = useTranslation('gamification')
 
   return (
     <header className="sticky top-0 z-10 border-b border-gray-700 bg-gray-800/95 backdrop-blur">
@@ -53,10 +56,13 @@ export function Navbar() {
             </div>
             {nextLevel && (
               <p className="mt-1 text-xs text-gray-400">
-                {nextLevel.minXP - user.xp} XP to {nextLevel.name}
+                {t('xpToNext', { xp: nextLevel.minXP - user.xp, level: nextLevel.name })}
               </p>
             )}
           </div>
+
+          {/* Language Switcher */}
+          <LanguageSwitcher />
         </div>
       </div>
     </header>

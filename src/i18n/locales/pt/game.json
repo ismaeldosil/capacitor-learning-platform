@@ -1,0 +1,36 @@
+{
+  "backToModule": "Voltar ao módulo",
+  "notAvailable": {
+    "title": "Jogo não disponível"
+  },
+  "intro": {
+    "completed": "Jogo completado",
+    "xpReward": "+{{xp}} XP ao completar",
+    "readyPlay": "Pronto para jogar?",
+    "alreadyCompleted": "Jogo Completado!",
+    "playAgain": "Jogar novamente",
+    "start": "Começar jogo"
+  },
+  "types": {
+    "commandBuilder": {
+      "name": "Command Builder",
+      "description": "Construa comandos de Capacitor CLI arrastando e soltando as partes corretas",
+      "instructions": "Arraste e solte as partes do comando na ordem correta para construir comandos válidos de Capacitor CLI."
+    },
+    "pluginMatcher": {
+      "name": "Plugin Matcher",
+      "description": "Conecte casos de uso com o plugin de Capacitor correto",
+      "instructions": "Combine cada caso de uso com o plugin que o resolve. Mostre seu conhecimento de plugins!"
+    },
+    "buildPipeline": {
+      "name": "Build Pipeline",
+      "description": "Ordene os passos do processo de build corretamente",
+      "instructions": "Arraste os passos na ordem correta para completar o processo de build."
+    },
+    "storeReviewer": {
+      "name": "Store Reviewer",
+      "description": "Identifique erros em configurações de app stores",
+      "instructions": "Leia cada cenário e selecione os problemas que causariam rejeição nas lojas."
+    }
+  }
+}

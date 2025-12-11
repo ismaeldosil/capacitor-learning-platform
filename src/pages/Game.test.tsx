@@ -70,7 +70,7 @@ describe('Game', () => {
         },
       })
 
-      expect(screen.getByText(/command builder/i)).toBeInTheDocument()
+      expect(screen.getByText(/constructor de comandos/i)).toBeInTheDocument()
       expect(screen.getByText(/¿listo para jugar\?/i)).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /comenzar juego/i })).toBeInTheDocument()
     })
@@ -305,7 +305,7 @@ describe('Game', () => {
         },
       })
 
-      expect(screen.getByText(/command builder/i)).toBeInTheDocument()
+      expect(screen.getByText(/constructor de comandos/i)).toBeInTheDocument()
       expect(screen.getByText(/construye comandos de capacitor cli/i)).toBeInTheDocument()
     })
 
