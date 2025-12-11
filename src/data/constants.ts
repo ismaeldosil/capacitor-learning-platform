@@ -180,7 +180,7 @@ export const MODULES: Module[] = [
     title: 'Testing + App Store Preparation',
     description: 'Preparar y publicar en las tiendas de apps',
     icon: '🏪',
-    requiredXP: 600,
+    requiredXP: 450,
     lessons: [
       'testing-strategy',
       'play-store',
