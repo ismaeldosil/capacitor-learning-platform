@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom'
 import { UserProvider } from '../contexts/UserContext'
 
 interface WrapperProps {
@@ -22,5 +22,27 @@ function customRender(
   return render(ui, { wrapper: AllProviders, ...options })
 }
 
+interface RenderWithRouteOptions extends Omit<RenderOptions, 'wrapper'> {
+  route?: string
+  path?: string
+}
+
+function renderWithRoute(
+  ui: ReactElement,
+  { route = '/', path = '/', ...options }: RenderWithRouteOptions = {}
+) {
+  return render(
+    <MemoryRouter initialEntries={[route]}>
+      <UserProvider>
+        <Routes>
+          <Route path={path} element={ui} />
+          <Route path="/" element={<div>Home</div>} />
+        </Routes>
+      </UserProvider>
+    </MemoryRouter>,
+    options
+  )
+}
+
 export * from '@testing-library/react'
-export { customRender as render }
+export { customRender as render, renderWithRoute }
