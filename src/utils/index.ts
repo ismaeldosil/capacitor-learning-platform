@@ -1,2 +1,8 @@
 // Utils barrel file
-export {}
+export {
+  getModuleStatus,
+  getModuleProgress,
+  getCompletedLessonsCount,
+  getLessonTitle,
+  getGameTitle,
+} from './module-utils'

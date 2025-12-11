@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { Home, Lock, CheckCircle, Circle } from 'lucide-react'
 import { useUser } from '../../contexts/UserContext'
 import { MODULES } from '../../data/constants'
-import type { ModuleStatus } from '../../data/types'
+import { getModuleStatus } from '../../utils'
 
 const moduleIcons: Record<string, string> = {
   'module-1': '🚀',
@@ -11,41 +11,17 @@ const moduleIcons: Record<string, string> = {
   'module-4': '🏪',
 }
 
-function getModuleStatus(
-  moduleId: string,
-  userXP: number,
-  completedLessons: string[],
-  completedQuizzes: string[]
-): ModuleStatus {
-  const module = MODULES.find((m) => m.id === moduleId)
-  if (!module) return 'locked'
-
-  if (userXP < module.requiredXP) return 'locked'
-
-  const allLessonsCompleted = module.lessons.every((lessonId) =>
-    completedLessons.includes(lessonId)
-  )
-  const quizCompleted = completedQuizzes.some((q) => q.startsWith(module.quizId))
-
-  if (allLessonsCompleted && quizCompleted) return 'completed'
-
-  const anyProgress =
-    module.lessons.some((lessonId) => completedLessons.includes(lessonId)) ||
-    quizCompleted
-
-  if (anyProgress) return 'in_progress'
-
-  return 'available'
-}
-
 export function Sidebar() {
   const { user } = useUser()
 
   return (
-    <aside className="hidden w-64 flex-shrink-0 border-r border-gray-700 bg-gray-800 lg:block">
+    <aside
+      className="hidden w-64 flex-shrink-0 border-r border-gray-700 bg-gray-800 lg:block"
+      aria-label="Navegación principal"
+    >
       <div className="flex h-full flex-col">
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 p-4">
+        <nav className="flex-1 space-y-1 p-4" aria-label="Menú de módulos">
           {/* Dashboard Link */}
           <NavLink
             to="/"
