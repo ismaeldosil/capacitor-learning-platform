@@ -1,0 +1,6 @@
+export { Dashboard } from './Dashboard'
+export { Module } from './Module'
+export { Lesson } from './Lesson'
+export { Quiz } from './Quiz'
+export { Game } from './Game'
+export { NotFound } from './NotFound'
