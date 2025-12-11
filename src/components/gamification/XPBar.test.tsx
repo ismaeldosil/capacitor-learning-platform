@@ -7,6 +7,7 @@ const mockCurrentLevel: Level = {
   level: 2,
   name: 'Plugin Explorer',
   minXP: 101,
+  maxXP: 300,
   icon: '🔌',
   color: 'text-blue-500',
 }
@@ -15,6 +16,7 @@ const mockNextLevel: Level = {
   level: 3,
   name: 'Build Master',
   minXP: 301,
+  maxXP: 600,
   icon: '🏗️',
   color: 'text-purple-500',
 }

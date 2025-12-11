@@ -7,6 +7,7 @@ const mockLevel: Level = {
   level: 3,
   name: 'Build Master',
   minXP: 301,
+  maxXP: 600,
   icon: '🏗️',
   color: 'text-purple-500',
 }
