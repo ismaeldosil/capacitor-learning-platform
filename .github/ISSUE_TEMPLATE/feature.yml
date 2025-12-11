@@ -1,0 +1,106 @@
+name: Feature
+description: Nueva funcionalidad para la plataforma
+title: "[Feature]: "
+labels: ["type: feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Nueva Feature
+        Usa este template para solicitar una nueva funcionalidad.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descripción
+      description: Describe la feature que necesitas
+      placeholder: "Necesito implementar..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de Aceptación
+      description: Lista de criterios que deben cumplirse
+      placeholder: |
+        - [ ] Criterio 1
+        - [ ] Criterio 2
+        - [ ] Criterio 3
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Componente
+      description: ¿Qué parte del sistema afecta?
+      options:
+        - Dashboard
+        - Lecciones
+        - Quiz
+        - Mini-juegos
+        - Gamificación (XP/Badges)
+        - Navegación
+        - Storage/Persistencia
+        - Otro
+    validations:
+      required: true
+
+  - type: dropdown
+    id: primary-agent
+    attributes:
+      label: Agente Principal Sugerido
+      description: ¿Qué agente debería liderar esta tarea?
+      options:
+        - frontend-developer
+        - ui-designer
+        - animation-specialist
+        - state-management-expert
+        - mini-games-developer
+        - xp-levels-specialist
+        - badges-achievements-developer
+        - quiz-specialist
+        - localStorage-specialist
+        - navigation-architect
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridad
+      options:
+        - critical
+        - high
+        - medium
+        - low
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Complejidad Estimada
+      options:
+        - S (1-2 horas)
+        - M (medio día)
+        - L (1-2 días)
+        - XL (3+ días)
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencias
+      description: ¿Depende de otros tickets o los bloquea?
+      placeholder: |
+        Bloqueado por: #123
+        Bloquea: #456
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notas Adicionales
+      description: Cualquier información extra relevante

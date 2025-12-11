@@ -1,0 +1,91 @@
+name: Mini-Juego
+description: Desarrollo de un mini-juego educativo
+title: "[Game]: "
+labels: ["type: game", "agent: gamification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Mini-Juego Educativo
+        Usa este template para features relacionadas con los mini-juegos.
+
+  - type: dropdown
+    id: game
+    attributes:
+      label: Mini-Juego
+      description: ¿Cuál mini-juego?
+      options:
+        - Command Builder (Módulo 1)
+        - Plugin Matcher (Módulo 2)
+        - Build Pipeline (Módulo 3)
+        - Store Reviewer (Módulo 4)
+        - Nuevo juego
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descripción
+      description: Describe lo que necesitas implementar
+      placeholder: "Implementar la mecánica de..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: mechanics
+    attributes:
+      label: Mecánicas del Juego
+      description: Describe las mecánicas específicas
+      placeholder: |
+        - Drag & drop de elementos
+        - Timer opcional
+        - Sistema de puntuación
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de Aceptación
+      placeholder: |
+        - [ ] Mecánica principal funcional
+        - [ ] Feedback visual/animaciones
+        - [ ] Integración con sistema XP
+        - [ ] Accesible por teclado
+        - [ ] Tests unitarios
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridad
+      options:
+        - critical
+        - high
+        - medium
+        - low
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Complejidad Estimada
+      options:
+        - M (medio día)
+        - L (1-2 días)
+        - XL (3+ días)
+    validations:
+      required: true
+
+  - type: textarea
+    id: agents
+    attributes:
+      label: Agentes Involucrados
+      description: Agentes que participarán en esta tarea
+      value: |
+        **Primary:** mini-games-developer
+        **Secondary:** animation-specialist, xp-levels-specialist
+        **Reviewers:** code-reviewer, tester, accessibility-checker

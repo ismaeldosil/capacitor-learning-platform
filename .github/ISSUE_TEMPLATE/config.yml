@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentación de Agentes
+    url: https://github.com/ismaeldosil/capacitor-learning-docs
+    about: Consulta el sistema de agentes y guías de desarrollo
+  - name: Contenido Educativo
+    url: https://github.com/ismaeldosil/capacitor-learning-content
+    about: Issues relacionados con contenido van en el repo de content
