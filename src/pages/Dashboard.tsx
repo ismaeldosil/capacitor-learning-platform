@@ -11,32 +11,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import type { ModuleStatus } from '../data/types'
-
-function getModuleStatus(
-  moduleId: string,
-  userXP: number,
-  completedLessons: string[],
-  completedQuizzes: string[]
-): ModuleStatus {
-  const module = MODULES.find((m) => m.id === moduleId)
-  if (!module) return 'locked'
-
-  if (userXP < module.requiredXP) return 'locked'
-
-  const allLessonsCompleted = module.lessons.every((lessonId) =>
-    completedLessons.includes(lessonId)
-  )
-  const quizCompleted = completedQuizzes.some((q) => q.startsWith(module.quizId))
-
-  if (allLessonsCompleted && quizCompleted) return 'completed'
-
-  const anyProgress =
-    module.lessons.some((lessonId) => completedLessons.includes(lessonId))
-
-  if (anyProgress) return 'in_progress'
-
-  return 'available'
-}
+import { getModuleStatus } from '../utils'
 
 export function Dashboard() {
   const { user, currentLevel } = useUser()
