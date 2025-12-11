@@ -1,0 +1,237 @@
+{
+  "command-builder": {
+    "title": "Constructor de Comandos",
+    "description": "Construye comandos de Capacitor CLI arrastrando las partes en el orden correcto",
+    "instructions": "Arrastra y suelta las partes del comando en el orden correcto para completar cada desafío.",
+    "challenges": [
+      {
+        "id": "cmd-1",
+        "instruction": "Crea un nuevo proyecto Capacitor con nombre \"mi-app\"",
+        "description": "Usa el comando npx para inicializar un proyecto",
+        "hint": "El comando base es npx @capacitor/cli create"
+      },
+      {
+        "id": "cmd-2",
+        "instruction": "Añade la plataforma Android al proyecto",
+        "description": "Usa npm para instalar la plataforma nativa",
+        "hint": "Usa npm install para añadir dependencias"
+      },
+      {
+        "id": "cmd-3",
+        "instruction": "Sincroniza el proyecto web con las plataformas nativas",
+        "description": "Copia los assets web y actualiza plugins",
+        "hint": "cap sync es el comando para sincronizar"
+      },
+      {
+        "id": "cmd-4",
+        "instruction": "Abre el proyecto Android en Android Studio",
+        "description": "Lanza el IDE nativo para desarrollo",
+        "hint": "Usa cap open seguido de la plataforma"
+      },
+      {
+        "id": "cmd-5",
+        "instruction": "Ejecuta la app en un dispositivo Android conectado",
+        "description": "Compila y ejecuta en modo desarrollo",
+        "hint": "cap run con --target device ejecuta en un dispositivo físico"
+      }
+    ]
+  },
+  "plugin-matcher": {
+    "title": "Plugin Matcher",
+    "description": "Conecta cada caso de uso con el plugin de Capacitor correcto",
+    "instructions": "Empareja cada caso de uso con el plugin que lo resuelve. Usa las pistas si necesitas ayuda.",
+    "pairs": [
+      {
+        "id": "pair-1",
+        "useCase": "Mostrar Face ID o huella dactilar para autenticación",
+        "hint": "Autenticación biométrica nativa"
+      },
+      {
+        "id": "pair-2",
+        "useCase": "Guardar preferencias del usuario de forma persistente",
+        "hint": "Key-value storage persistente"
+      },
+      {
+        "id": "pair-3",
+        "useCase": "Enviar notificaciones push al dispositivo",
+        "hint": "Notificaciones remotas via Firebase/APNs"
+      },
+      {
+        "id": "pair-4",
+        "useCase": "Mostrar una splash screen mientras carga la app",
+        "hint": "Pantalla de carga inicial"
+      },
+      {
+        "id": "pair-5",
+        "useCase": "Cambiar el color de la barra de estado del dispositivo",
+        "hint": "Control de la barra superior del sistema"
+      },
+      {
+        "id": "pair-6",
+        "useCase": "Detectar cuando el teclado virtual se muestra u oculta",
+        "hint": "Eventos del teclado virtual"
+      },
+      {
+        "id": "pair-7",
+        "useCase": "Abrir una URL en el navegador del sistema",
+        "hint": "Navegador in-app o externo"
+      },
+      {
+        "id": "pair-8",
+        "useCase": "Obtener información sobre el dispositivo y la app",
+        "hint": "Metadata y lifecycle de la aplicación"
+      }
+    ]
+  },
+  "build-pipeline": {
+    "title": "Build Pipeline",
+    "description": "Ordena los pasos del proceso de build para Android e iOS",
+    "instructions": "Arrastra los pasos en el orden correcto para completar el pipeline de build.",
+    "challenges": {
+      "android": {
+        "steps": [
+          { "id": "s1", "name": "npm run build", "description": "Compilar la app web" },
+          { "id": "s2", "name": "npx cap sync android", "description": "Sincronizar con Android" },
+          { "id": "s3", "name": "Abrir Android Studio", "description": "Cargar proyecto nativo" },
+          { "id": "s4", "name": "Build > Generate Signed Bundle", "description": "Generar AAB firmado" },
+          { "id": "s5", "name": "Seleccionar keystore", "description": "Usar certificado de firma" },
+          { "id": "s6", "name": "Build release", "description": "Compilar versión de producción" }
+        ]
+      },
+      "ios": {
+        "steps": [
+          { "id": "s1", "name": "npm run build", "description": "Compilar la app web" },
+          { "id": "s2", "name": "npx cap sync ios", "description": "Sincronizar con iOS" },
+          { "id": "s3", "name": "Abrir Xcode", "description": "Cargar proyecto nativo" },
+          { "id": "s4", "name": "Seleccionar Team", "description": "Configurar signing team" },
+          { "id": "s5", "name": "Product > Archive", "description": "Crear archivo para distribución" },
+          { "id": "s6", "name": "Distribute App", "description": "Subir a App Store Connect" }
+        ]
+      }
+    }
+  },
+  "store-reviewer": {
+    "title": "Store Reviewer",
+    "description": "Identifica los problemas que causarían el rechazo de una app",
+    "instructions": "Lee cada escenario y selecciona los issues que podrían causar un rechazo en las tiendas.",
+    "scenarios": [
+      {
+        "id": "scenario-1",
+        "title": "App de Finanzas - Rechazo Play Store",
+        "description": "Tu app de banca fue rechazada. Revisa los siguientes elementos y marca los que podrían causar el rechazo.",
+        "issues": [
+          "Falta política de privacidad en la app",
+          "Permisos de cámara sin justificación",
+          "Icono de la app con resolución correcta",
+          "No declara uso de datos financieros",
+          "Descripción clara de funcionalidades"
+        ],
+        "explanation": "Apps financieras requieren política de privacidad, justificación de permisos y declaración de datos sensibles."
+      },
+      {
+        "id": "scenario-2",
+        "title": "App Social - Rechazo App Store",
+        "description": "Tu red social fue rechazada por Apple. Identifica los problemas.",
+        "issues": [
+          "Botón de eliminar cuenta no visible",
+          "Screenshots de alta calidad",
+          "Login con Apple no implementado",
+          "Contenido generado por usuarios sin moderación",
+          "Soporte para iPad incluido"
+        ],
+        "explanation": "Apple requiere: opción de eliminar cuenta, Sign in with Apple si hay login social, y moderación de UGC."
+      },
+      {
+        "id": "scenario-3",
+        "title": "App de Salud - Cumplimiento",
+        "description": "Estás preparando una app de seguimiento de salud. ¿Qué necesitas antes de publicar?",
+        "issues": [
+          "Consentimiento explícito para datos de salud",
+          "Animaciones fluidas en toda la app",
+          "Encriptación de datos sensibles",
+          "Aviso de que no reemplaza consejo médico",
+          "Múltiples idiomas soportados"
+        ],
+        "explanation": "Apps de salud necesitan consentimiento HIPAA/GDPR, encriptación y disclaimers médicos."
+      },
+      {
+        "id": "scenario-4",
+        "title": "App con Compras In-App - Configuración",
+        "description": "Tu app tiene suscripciones premium. Verifica la configuración.",
+        "issues": [
+          "Botón de restaurar compras visible",
+          "Términos de suscripción claros antes de compra",
+          "Enlace a términos de servicio",
+          "Precio mostrado en formato local",
+          "Opción de tema oscuro"
+        ],
+        "explanation": "Las tiendas requieren: restaurar compras, términos claros, ToS y precios localizados para IAP."
+      }
+    ]
+  },
+  "ui": {
+    "startGame": "Comenzar Juego",
+    "playAgain": "Jugar de Nuevo",
+    "next": "Siguiente",
+    "submit": "Enviar",
+    "verify": "Verificar",
+    "hint": "Pista",
+    "showHint": "Ver pista",
+    "correct": "¡Correcto!",
+    "incorrect": "Incorrecto",
+    "completed": "¡Juego Completado!",
+    "score": "Puntuación",
+    "challenge": "Desafío",
+    "of": "de",
+    "dragAndDrop": "Arrastra y suelta",
+    "selectIssues": "Selecciona los problemas",
+    "matchPlugins": "Empareja los plugins",
+    "orderSteps": "Ordena los pasos",
+    "xpReward": "+100 XP al completar",
+    "readyToPlay": "¿Listo para jugar?",
+    "gameCompleted": "Juego Completado",
+    "yourCommand": "Tu comando",
+    "dragPartsHere": "Arrastra las partes aquí o haz clic en ellas",
+    "availableParts": "Partes disponibles",
+    "allPartsUsed": "Todas las partes han sido usadas",
+    "correctCommand": "Comando correcto",
+    "reset": "Reiniciar",
+    "viewResults": "Ver Resultados",
+    "legend": "Leyenda",
+    "baseCommand": "Comando base",
+    "flag": "Flag",
+    "argument": "Argumento",
+    "platform": "Plataforma",
+    "matched": "Emparejados",
+    "useCases": "Casos de Uso",
+    "plugins": "Plugins",
+    "nowSelectPlugin": "Ahora selecciona el plugin que corresponde",
+    "selectUseCaseToStart": "Selecciona un caso de uso para empezar",
+    "perfectMatch": "¡Perfecto! Todos los emparejamientos correctos",
+    "correctMatches": "correctos",
+    "reviewIncorrect": "Revisa las respuestas incorrectas arriba",
+    "youMasterPlugins": "Dominas los plugins de Capacitor",
+    "selected": "Seleccionado",
+    "correctAnswer": "Correcto",
+    "pipeline": "Pipeline",
+    "yourPipeline": "Tu Pipeline",
+    "dragStepsHere": "Arrastra los pasos aquí en el orden correcto",
+    "allStepsAssigned": "Todos los pasos han sido asignados",
+    "availableSteps": "Pasos disponibles",
+    "pipelineFor": "Build Pipeline para",
+    "orderStepsCorrectly": "Ordena los pasos del proceso de build en el orden correcto",
+    "pipelineCorrect": "¡Pipeline correcto!",
+    "incorrectOrder": "Orden incorrecto",
+    "correctOrder": "Orden correcto",
+    "scenario": "Escenario",
+    "applicationRejected": "Aplicación rechazada",
+    "selectProblems": "Selecciona los problemas que causarían el rechazo",
+    "perfectIdentified": "¡Perfecto! Identificaste todos los problemas",
+    "correctMissedWrong": "correctos, erróneos, omitidos",
+    "explanation": "Explicación",
+    "correctProblem": "Problema correcto",
+    "falseAlarm": "Falsa alarma",
+    "missedProblem": "Problema omitido",
+    "notSelected": "No seleccionado"
+  }
+}

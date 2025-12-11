@@ -3,7 +3,7 @@ import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES, XP_REWARDS } from '../data/constants'
-import { getQuizByModuleId } from '../data/quizzes'
+import { useTranslatedQuiz } from '../hooks/useTranslatedContent'
 import { ArrowLeft, Brain, CheckCircle, BarChart3 } from 'lucide-react'
 import { QuizQuestion, QuizProgress, QuizResult } from '../components/quiz'
 
@@ -22,7 +22,7 @@ export function Quiz() {
   const [score, setScore] = useState(0)
 
   const module = MODULES.find((m) => m.id === moduleId)
-  const quiz = module ? getQuizByModuleId(module.id) : undefined
+  const quiz = useTranslatedQuiz(moduleId || '')
 
   const handleSelectAnswer = useCallback(
     (index: number) => {

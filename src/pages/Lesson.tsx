@@ -5,7 +5,7 @@ import { MODULES } from '../data/constants'
 import { ArrowLeft, ArrowRight, CheckCircle, FileText, Code, Image, Lightbulb, AlertTriangle } from 'lucide-react'
 import { Button } from '../components/common/Button'
 import { LessonContent } from '../components/lesson'
-import { LESSON_CONTENT } from '../data/lessons'
+import { useTranslatedLessonContent } from '../hooks/useTranslatedContent'
 
 export function Lesson() {
   const { moduleId, lessonId } = useParams<{
@@ -40,7 +40,7 @@ export function Lesson() {
       ? module.lessons[lessonIndex + 1]
       : null
 
-  const lessonContent = LESSON_CONTENT[lessonId]
+  const lessonContent = useTranslatedLessonContent(lessonId)
   const lessonTitle = tGamification(`lessonTitles.${lessonId}`)
   const moduleTitle = tGamification(`modules.${module.id}.title`)
 
@@ -99,7 +99,7 @@ export function Lesson() {
 
       {/* Lesson Content */}
       <div className="card mb-8">
-        {lessonContent ? (
+        {lessonContent.length > 0 ? (
           <LessonContent blocks={lessonContent} />
         ) : (
           <div className="prose prose-invert max-w-none">

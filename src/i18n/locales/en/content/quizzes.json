@@ -1,0 +1,458 @@
+{
+  "quiz-module-1": {
+    "questions": [
+      {
+        "id": "q1-1",
+        "text": "What is Capacitor?",
+        "options": [
+          "A CSS framework for mobile applications",
+          "A native runtime that allows running web apps as native apps",
+          "A programming language for iOS",
+          "A database for mobile applications"
+        ],
+        "explanation": "Capacitor is a modern native runtime that allows running web applications natively on iOS, Android, and the Web."
+      },
+      {
+        "id": "q1-2",
+        "text": "What is the command to sync your web app with native projects?",
+        "options": [
+          "npx cap build",
+          "npx cap run",
+          "npx cap sync",
+          "npx cap update"
+        ],
+        "explanation": "The command \"npx cap sync\" copies your web build to native projects and updates Capacitor plugins."
+      },
+      {
+        "id": "q1-3",
+        "text": "What WebView does Capacitor use on iOS?",
+        "options": [
+          "UIWebView",
+          "WKWebView",
+          "Safari WebView",
+          "Chrome WebView"
+        ],
+        "explanation": "On iOS, Capacitor uses WKWebView, which is Apple's modern and high-performance WebView."
+      },
+      {
+        "id": "q1-4",
+        "text": "What is the main Capacitor configuration file?",
+        "options": [
+          "package.json",
+          "config.xml",
+          "capacitor.config.ts",
+          "ionic.config.json"
+        ],
+        "explanation": "The capacitor.config.ts (or .json) file contains all your Capacitor project configuration."
+      },
+      {
+        "id": "q1-5",
+        "text": "What does the command \"npx cap open android\" do?",
+        "options": [
+          "Compiles the app for Android",
+          "Runs the app in an Android emulator",
+          "Opens the project in Android Studio",
+          "Publishes the app to Play Store"
+        ],
+        "explanation": "The command \"npx cap open\" opens the native project in the corresponding IDE (Android Studio for Android, Xcode for iOS)."
+      },
+      {
+        "id": "q1-6",
+        "text": "What directory contains your web app in the Android project?",
+        "options": [
+          "android/app/src/main/res/",
+          "android/app/src/main/assets/www/",
+          "android/www/",
+          "android/public/"
+        ],
+        "explanation": "Your compiled web app is copied to android/app/src/main/assets/www/ when you run cap sync or cap copy."
+      },
+      {
+        "id": "q1-7",
+        "text": "What do you need to configure to use Live Reload on a device?",
+        "options": [
+          "Just start the development server",
+          "Configure server.url with your local IP in capacitor.config.ts",
+          "Install a special hot reload plugin",
+          "Connect the device via USB only"
+        ],
+        "explanation": "For Live Reload, you must configure server.url with your local IP so the device can connect to your development server."
+      },
+      {
+        "id": "q1-8",
+        "text": "What is the difference between \"npx cap copy\" and \"npx cap sync\"?",
+        "options": [
+          "They are exactly the same",
+          "copy only copies web files, sync also updates native plugins",
+          "sync is faster than copy",
+          "copy updates plugins, sync only copies files"
+        ],
+        "explanation": "\"copy\" only copies your web build to native projects. \"sync\" runs copy and also updates Capacitor native plugins."
+      },
+      {
+        "id": "q1-9",
+        "text": "What web frameworks is Capacitor compatible with?",
+        "options": [
+          "Only Ionic Framework",
+          "Only React and Angular",
+          "Any framework that generates static files",
+          "Only frameworks that support SSR"
+        ],
+        "explanation": "Capacitor is framework agnostic. It works with React, Vue, Angular, Svelte, or any web project that generates static files."
+      },
+      {
+        "id": "q1-10",
+        "text": "What is the \"Bridge\" in Capacitor's architecture?",
+        "options": [
+          "A visual interface component",
+          "The communication system between JavaScript and native code",
+          "A debugging tool",
+          "The TypeScript compiler"
+        ],
+        "explanation": "The Bridge is the communication system that allows your JavaScript code to call native APIs and receive responses from native code."
+      }
+    ]
+  },
+  "quiz-module-2": {
+    "questions": [
+      {
+        "id": "q2-1",
+        "text": "What plugin is used to handle the app lifecycle?",
+        "options": [
+          "@capacitor/lifecycle",
+          "@capacitor/app",
+          "@capacitor/core",
+          "@capacitor/status"
+        ],
+        "explanation": "The @capacitor/app plugin provides methods to handle the application lifecycle, like detecting when it goes to background."
+      },
+      {
+        "id": "q2-2",
+        "text": "What is the correct method to listen when the app goes to background?",
+        "options": [
+          "App.onPause()",
+          "App.addListener(\"appStateChange\", ...)",
+          "App.background()",
+          "App.onBackground()"
+        ],
+        "explanation": "You use App.addListener(\"appStateChange\", callback) to listen to app state changes, including when it goes to background."
+      },
+      {
+        "id": "q2-3",
+        "text": "What plugin is used for secure storage of small data?",
+        "options": [
+          "@capacitor/storage",
+          "@capacitor/preferences",
+          "@capacitor/secure-storage",
+          "@capacitor/keychain"
+        ],
+        "explanation": "@capacitor/preferences is the official plugin for storing key-value data persistently and securely."
+      },
+      {
+        "id": "q2-4",
+        "text": "What does PushNotifications.requestPermissions() return?",
+        "options": [
+          "A boolean",
+          "An object with the \"receive\" property",
+          "A string with the token",
+          "An array of permissions"
+        ],
+        "explanation": "requestPermissions() returns a PermissionStatus object with the \"receive\" property indicating if permissions were granted."
+      },
+      {
+        "id": "q2-5",
+        "text": "What is the function of SplashScreen in Capacitor?",
+        "options": [
+          "Show ads at startup",
+          "Show a loading screen while the app initializes",
+          "Protect the app with password",
+          "Show the main menu"
+        ],
+        "explanation": "The SplashScreen shows a startup image while your web application loads, improving user experience."
+      },
+      {
+        "id": "q2-6",
+        "text": "What Keyboard plugin method hides the virtual keyboard?",
+        "options": [
+          "Keyboard.close()",
+          "Keyboard.dismiss()",
+          "Keyboard.hide()",
+          "Keyboard.remove()"
+        ],
+        "explanation": "Keyboard.hide() programmatically hides the virtual keyboard when no longer needed."
+      },
+      {
+        "id": "q2-7",
+        "text": "What Keyboard plugin event fires BEFORE the keyboard appears?",
+        "options": [
+          "keyboardWillShow",
+          "keyboardDidShow",
+          "keyboardOpening",
+          "keyboardVisible"
+        ],
+        "explanation": "The keyboardWillShow event fires before the keyboard animation, allowing you to adjust the layout in advance."
+      },
+      {
+        "id": "q2-8",
+        "text": "What is the advantage of using the Browser plugin over window.open()?",
+        "options": [
+          "It's faster",
+          "Allows customizing the toolbar and keeps the user in the app",
+          "Doesn't require internet connection",
+          "Supports more languages"
+        ],
+        "explanation": "The Browser plugin opens URLs in an in-app browser with customizable toolbar, keeping the user inside your application."
+      },
+      {
+        "id": "q2-9",
+        "text": "What NativeBiometric method verifies user identity?",
+        "options": [
+          "NativeBiometric.authenticate()",
+          "NativeBiometric.verifyIdentity()",
+          "NativeBiometric.checkBiometric()",
+          "NativeBiometric.scanFinger()"
+        ],
+        "explanation": "verifyIdentity() requests biometric authentication from the user showing the system prompt."
+      },
+      {
+        "id": "q2-10",
+        "text": "Where does NativeBiometric store credentials securely?",
+        "options": [
+          "Browser localStorage",
+          "In a JSON file",
+          "Keychain (iOS) or Keystore (Android)",
+          "Unencrypted SharedPreferences"
+        ],
+        "explanation": "NativeBiometric uses iOS Keychain and Android Keystore, which are hardware-level encrypted storage."
+      }
+    ]
+  },
+  "quiz-module-3": {
+    "questions": [
+      {
+        "id": "q3-1",
+        "text": "What Capacitor method tells you if the app is running on a native device?",
+        "options": [
+          "Capacitor.isDevice()",
+          "Capacitor.isNativePlatform()",
+          "Capacitor.isMobile()",
+          "Capacitor.checkNative()"
+        ],
+        "explanation": "Capacitor.isNativePlatform() returns true if the app is running on iOS or Android, and false if on web."
+      },
+      {
+        "id": "q3-2",
+        "text": "What is the correct webDir directory for a Vite project?",
+        "options": [
+          "build",
+          "www",
+          "dist",
+          "public"
+        ],
+        "explanation": "Vite generates the production build in the \"dist\" directory by default."
+      },
+      {
+        "id": "q3-3",
+        "text": "What App plugin event is used to handle deep links?",
+        "options": [
+          "appDeepLink",
+          "appUrlOpen",
+          "appLinkReceived",
+          "appNavigate"
+        ],
+        "explanation": "The appUrlOpen event fires when the app is opened via a custom URL scheme or deep link."
+      },
+      {
+        "id": "q3-4",
+        "text": "What CameraResultType returns a URL usable directly in an <img> tag?",
+        "options": [
+          "CameraResultType.Base64",
+          "CameraResultType.Uri",
+          "CameraResultType.DataUrl",
+          "CameraResultType.Path"
+        ],
+        "explanation": "CameraResultType.Uri returns a webPath that can be used directly as an image src."
+      },
+      {
+        "id": "q3-5",
+        "text": "What app format does Google Play require for new publications?",
+        "options": [
+          "APK",
+          "AAB (Android App Bundle)",
+          "IPA",
+          "ZIP"
+        ],
+        "explanation": "Google Play requires Android App Bundle (AAB) for new apps, as it allows optimizing download size."
+      },
+      {
+        "id": "q3-6",
+        "text": "What command generates a keystore to sign Android apps?",
+        "options": [
+          "npm run keytool",
+          "keytool -genkey",
+          "gradle signKey",
+          "android-keygen"
+        ],
+        "explanation": "The keytool -genkey command (part of JDK) generates a keystore with keys to sign your app."
+      },
+      {
+        "id": "q3-7",
+        "text": "Why is it important to NEVER lose your release keystore?",
+        "options": [
+          "You'll have to reinstall Android Studio",
+          "You won't be able to update your app on Google Play",
+          "The app will stop working",
+          "You'll lose the source code"
+        ],
+        "explanation": "Without the original keystore, you can't sign updates with the same signature, preventing you from updating the published app."
+      },
+      {
+        "id": "q3-8",
+        "text": "What tool automates the build and deploy process for iOS?",
+        "options": [
+          "Gradle",
+          "Fastlane",
+          "Xcode CLI",
+          "npm deploy"
+        ],
+        "explanation": "Fastlane automates common tasks like builds, signing, screenshots, and upload to App Store/TestFlight."
+      },
+      {
+        "id": "q3-9",
+        "text": "What Xcode option is used to create the file for App Store?",
+        "options": [
+          "Build > Run",
+          "Product > Archive",
+          "File > Export",
+          "Debug > Release"
+        ],
+        "explanation": "Product > Archive compiles the app in release mode and creates an archive that can be uploaded to App Store Connect."
+      },
+      {
+        "id": "q3-10",
+        "text": "In what file is release signing configured for Android?",
+        "options": [
+          "AndroidManifest.xml",
+          "capacitor.config.ts",
+          "android/app/build.gradle",
+          "settings.gradle"
+        ],
+        "explanation": "The signingConfigs configuration for release is defined in the app module's build.gradle file."
+      }
+    ]
+  },
+  "quiz-module-4": {
+    "questions": [
+      {
+        "id": "q4-1",
+        "text": "What type of test verifies complete user flows from start to finish?",
+        "options": [
+          "Unit Tests",
+          "Integration Tests",
+          "E2E Tests",
+          "Snapshot Tests"
+        ],
+        "explanation": "E2E (End-to-End) Tests simulate real user interactions through the entire application."
+      },
+      {
+        "id": "q4-2",
+        "text": "How do you test components that use Capacitor plugins in unit tests?",
+        "options": [
+          "Run them in an emulator",
+          "Use mocks of the plugins",
+          "They can't be tested",
+          "Connect a real device"
+        ],
+        "explanation": "You create mocks of Capacitor plugins that simulate responses, allowing fast and isolated tests."
+      },
+      {
+        "id": "q4-3",
+        "text": "How much does a Google Play Developer account cost?",
+        "options": [
+          "$25/year",
+          "$99/year",
+          "$25 one-time",
+          "$99 one-time"
+        ],
+        "explanation": "Google Play Developer requires a one-time payment of $25 USD to publish apps."
+      },
+      {
+        "id": "q4-4",
+        "text": "How much does an Apple Developer account cost?",
+        "options": [
+          "$25/year",
+          "$99/year",
+          "$25 one-time",
+          "$99 one-time"
+        ],
+        "explanation": "Apple Developer Program requires an annual subscription of $99 USD."
+      },
+      {
+        "id": "q4-5",
+        "text": "What are \"Nutrition Labels\" in App Store Connect?",
+        "options": [
+          "Nutritional information about the app",
+          "Declaration of what data your app collects",
+          "Category labels",
+          "Developer information"
+        ],
+        "explanation": "\"Nutrition Labels\" (App Privacy) are mandatory declarations about what data your app collects and how it uses it."
+      },
+      {
+        "id": "q4-6",
+        "text": "What is a common reason for rejection in both stores?",
+        "options": [
+          "Using bright colors",
+          "Missing privacy policy",
+          "App too small",
+          "Using many images"
+        ],
+        "explanation": "Both stores require a publicly accessible privacy policy, especially if you collect user data."
+      },
+      {
+        "id": "q4-7",
+        "text": "What is KYC in the context of fintech apps?",
+        "options": [
+          "Keep Your Credentials",
+          "Know Your Customer",
+          "Key Yield Calculation",
+          "Knowledge Your Code"
+        ],
+        "explanation": "KYC (Know Your Customer) is the identity verification process required by financial regulations."
+      },
+      {
+        "id": "q4-8",
+        "text": "What regulation applies if your app handles credit card data?",
+        "options": [
+          "GDPR",
+          "PCI-DSS",
+          "HIPAA",
+          "SOX"
+        ],
+        "explanation": "PCI-DSS is the security standard for handling payment card data."
+      },
+      {
+        "id": "q4-9",
+        "text": "Why should session timeout be implemented in fintech apps?",
+        "options": [
+          "To save battery",
+          "For security, to protect the account if the device is left unattended",
+          "To reduce data usage",
+          "It's a design requirement"
+        ],
+        "explanation": "Session timeout protects the user's account if they leave the device unattended or lose it."
+      },
+      {
+        "id": "q4-10",
+        "text": "What is certificate pinning and why is it important in financial apps?",
+        "options": [
+          "Fixing the expected SSL certificate to prevent MITM attacks",
+          "Creating user certificates",
+          "Encrypting local data",
+          "Validating user identity"
+        ],
+        "explanation": "Certificate pinning verifies that the server is the expected one, preventing man-in-the-middle attacks where someone intercepts traffic."
+      }
+    ]
+  }
+}
