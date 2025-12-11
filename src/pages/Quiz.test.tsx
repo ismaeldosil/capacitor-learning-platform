@@ -335,7 +335,7 @@ describe('Quiz', () => {
 
         // Select first option
         const options = screen.getAllByRole('option')
-        await user.click(options[0])
+        await user.click(options[0]!)
 
         await user.click(screen.getByRole('button', { name: /verificar respuesta/i }))
 
@@ -352,7 +352,7 @@ describe('Quiz', () => {
 
       // Select answer and verify
       const options = screen.getAllByRole('option')
-      await user.click(options[0])
+      await user.click(options[0]!)
       await user.click(screen.getByRole('button', { name: /verificar respuesta/i }))
 
       // Should show "Ver resultados" instead of "Siguiente pregunta"
@@ -385,7 +385,7 @@ describe('Quiz', () => {
         })
 
         const options = screen.getAllByRole('option')
-        await user.click(options[0])
+        await user.click(options[0]!)
 
         await user.click(screen.getByRole('button', { name: /verificar respuesta/i }))
 
@@ -434,7 +434,7 @@ describe('Quiz', () => {
         })
 
         const options = screen.getAllByRole('option')
-        await user.click(options[0])
+        await user.click(options[0]!)
 
         await user.click(screen.getByRole('button', { name: /verificar respuesta/i }))
 
@@ -482,7 +482,7 @@ describe('Quiz', () => {
         })
 
         const options = screen.getAllByRole('option')
-        await user.click(options[0])
+        await user.click(options[0]!)
 
         await user.click(screen.getByRole('button', { name: /verificar respuesta/i }))
 
@@ -532,7 +532,7 @@ describe('Quiz', () => {
         })
 
         const options = screen.getAllByRole('option')
-        await user.click(options[0])
+        await user.click(options[0]!)
 
         await user.click(screen.getByRole('button', { name: /verificar respuesta/i }))
 
@@ -582,7 +582,7 @@ describe('Quiz', () => {
         })
 
         const options = screen.getAllByRole('option')
-        await user.click(options[0])
+        await user.click(options[0]!)
 
         await user.click(screen.getByRole('button', { name: /verificar respuesta/i }))
 
