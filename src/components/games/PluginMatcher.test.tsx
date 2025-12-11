@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { PluginMatcher } from './PluginMatcher'
 
@@ -61,7 +61,7 @@ describe('PluginMatcher', () => {
       // Find hint button
       const hintButtons = screen.getAllByRole('button', { name: /ver pista/i })
       if (hintButtons.length > 0) {
-        fireEvent.click(hintButtons[0])
+        fireEvent.click(hintButtons[0]!)
         // Hint text should be visible after clicking
         const hintTexts = screen.queryAllByText(/biométrica|storage|notificaciones|splash|barra|teclado|navegador|metadata/i)
         expect(hintTexts.length).toBeGreaterThanOrEqual(1)
