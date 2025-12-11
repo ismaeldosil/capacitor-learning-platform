@@ -1,0 +1,25 @@
+{
+  "welcome": "¡Bienvenido, {{name}}!",
+  "welcomeIcon": "{{icon}}",
+  "subtitle": "Continúa tu camino para convertirte en un experto de Capacitor",
+  "stats": {
+    "totalXP": "XP Total",
+    "level": "Nivel",
+    "streak": "Racha",
+    "progress": "Progreso"
+  },
+  "overallProgress": {
+    "title": "Progreso General",
+    "lessonsCompleted": "{{completed}} de {{total}} lecciones completadas"
+  },
+  "modules": {
+    "title": "Módulos del Curso",
+    "lessons": "{{completed}}/{{total}} lecciones",
+    "unlockMessage": "Necesitas {{xp}} XP más para desbloquear",
+    "review": "Revisar",
+    "continue": "Continuar"
+  },
+  "achievements": {
+    "title": "Logros ({{count}}/{{total}})"
+  }
+}

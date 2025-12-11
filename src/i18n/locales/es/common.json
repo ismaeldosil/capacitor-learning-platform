@@ -1,0 +1,34 @@
+{
+  "appName": "Capacitor Learning",
+  "loading": "Cargando...",
+  "error": "Error",
+  "retry": "Intentar de nuevo",
+  "back": "Volver",
+  "next": "Siguiente",
+  "previous": "Anterior",
+  "continue": "Continuar",
+  "start": "Comenzar",
+  "complete": "Completar",
+  "completed": "Completada",
+  "locked": "Bloqueado",
+  "review": "Revisar",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  "close": "Cerrar",
+  "yes": "Sí",
+  "no": "No",
+  "notFound": {
+    "title": "404",
+    "message": "La página que buscas no existe o ha sido movida",
+    "backToDashboard": "Volver al Dashboard"
+  },
+  "errorBoundary": {
+    "title": "Algo salió mal",
+    "message": "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+    "details": "Detalles del error",
+    "retry": "Intentar de nuevo"
+  },
+  "xp": "XP",
+  "level": "Nivel",
+  "days": "días"
+}

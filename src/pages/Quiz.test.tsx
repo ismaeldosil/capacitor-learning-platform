@@ -115,7 +115,7 @@ describe('Quiz', () => {
         },
       })
 
-      expect(screen.getByText(/\+25 XP ganados anteriormente/i)).toBeInTheDocument()
+      expect(screen.getByText(/\+25 XP/i)).toBeInTheDocument()
     })
   })
 

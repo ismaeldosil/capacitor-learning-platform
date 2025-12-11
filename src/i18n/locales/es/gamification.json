@@ -1,0 +1,94 @@
+{
+  "xpToNext": "{{xp}} XP para {{level}}",
+  "levels": {
+    "capacitor-rookie": "Capacitor Rookie",
+    "plugin-explorer": "Plugin Explorer",
+    "build-master": "Build Master",
+    "store-publisher": "Store Publisher",
+    "capacitor-expert": "Capacitor Expert"
+  },
+  "badges": {
+    "first-launch": {
+      "name": "First Launch",
+      "description": "Completar tu primera lección"
+    },
+    "speed-runner": {
+      "name": "Speed Runner",
+      "description": "Completar un módulo en menos de 1 hora"
+    },
+    "perfect-score": {
+      "name": "Perfect Score",
+      "description": "Obtener 100% en un quiz"
+    },
+    "on-fire": {
+      "name": "On Fire",
+      "description": "Mantener una racha de 3 días"
+    },
+    "module-master": {
+      "name": "Module Master",
+      "description": "Completar el primer módulo"
+    },
+    "capacitor-king": {
+      "name": "Capacitor King",
+      "description": "Completar todos los módulos"
+    },
+    "quiz-genius": {
+      "name": "Quiz Genius",
+      "description": "Obtener 100% en 5 quizzes"
+    },
+    "gamer": {
+      "name": "Gamer",
+      "description": "Completar todos los mini-juegos"
+    }
+  },
+  "modules": {
+    "module-1": {
+      "title": "Setup + Fundamentos Capacitor",
+      "description": "Configurar el environment y entender la arquitectura",
+      "estimatedTime": "2 horas"
+    },
+    "module-2": {
+      "title": "Plugins Core + Web-to-Native Bridge",
+      "description": "Dominar los plugins principales de Capacitor",
+      "estimatedTime": "3 horas"
+    },
+    "module-3": {
+      "title": "Desarrollo + Build Processes",
+      "description": "Compilar y desplegar para Android e iOS",
+      "estimatedTime": "3 horas"
+    },
+    "module-4": {
+      "title": "Testing + App Store Preparation",
+      "description": "Preparar y publicar en las tiendas de apps",
+      "estimatedTime": "2.5 horas"
+    }
+  },
+  "lessonTitles": {
+    "what-is-capacitor": "¿Qué es Capacitor?",
+    "architecture": "Arquitectura",
+    "project-structure": "Estructura del Proyecto",
+    "commands": "Comandos CLI",
+    "live-reload": "Live Reload",
+    "app-plugin": "App Plugin",
+    "push-notifications": "Push Notifications",
+    "splash-statusbar": "Splash & Status Bar",
+    "keyboard-browser": "Keyboard & Browser",
+    "preferences": "Preferences",
+    "biometric": "Autenticación Biométrica",
+    "web-integration": "Integración Web",
+    "native-features": "Features Nativos",
+    "android-build": "Build Android",
+    "ios-build": "Build iOS",
+    "automation": "Automatización CI/CD",
+    "testing-strategy": "Estrategia de Testing",
+    "play-store": "Google Play Store",
+    "app-store": "App Store",
+    "fintech-compliance": "Compliance Fintech"
+  },
+  "gameTitles": {
+    "command-builder": "Constructor de Comandos",
+    "plugin-matcher": "Plugin Matcher",
+    "build-pipeline": "Build Pipeline",
+    "store-reviewer": "Store Reviewer"
+  }
+}
