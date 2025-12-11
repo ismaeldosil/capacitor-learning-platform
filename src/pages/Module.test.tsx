@@ -39,7 +39,7 @@ describe('Module', () => {
         path: '/module/:moduleId',
       })
       expect(screen.getByText('¿Qué es Capacitor?')).toBeInTheDocument()
-      expect(screen.getByText('Arquitectura WebView y Bridge')).toBeInTheDocument()
+      expect(screen.getByText('Arquitectura')).toBeInTheDocument()
     })
 
     it('should render quiz section', () => {
