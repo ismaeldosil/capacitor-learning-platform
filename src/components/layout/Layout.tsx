@@ -2,9 +2,12 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Navbar } from './Navbar'
 import { Sidebar } from './Sidebar'
+import { LevelUpPopup } from '../gamification/LevelUpPopup'
+import { useUser } from '../../contexts/UserContext'
 
 export function Layout() {
   const { pathname } = useLocation()
+  const { levelUpNotification, clearLevelUpNotification } = useUser()
 
   // Scroll to top on navigation
   useEffect(() => {
@@ -20,6 +23,12 @@ export function Layout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Level Up Notification */}
+      <LevelUpPopup
+        level={levelUpNotification}
+        onClose={clearLevelUpNotification}
+      />
     </div>
   )
 }

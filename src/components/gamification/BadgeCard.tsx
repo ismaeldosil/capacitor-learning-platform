@@ -43,9 +43,9 @@ export function BadgeCard({
       disabled={!onClick}
       className={`
         group flex flex-col items-center gap-2 p-2 rounded-xl transition-all duration-300
-        ${onClick ? 'cursor-pointer hover:scale-105' : 'cursor-default'}
-        ${isUnlocked ? 'hover:bg-gray-700/50' : ''}
+        ${onClick ? 'cursor-pointer hover:scale-105 hover:bg-gray-700/50' : 'cursor-default'}
       `}
+      title={isUnlocked ? badge.name : `${badge.name} - Click para ver cómo desbloquearlo`}
     >
       {/* Badge Icon */}
       <div

@@ -47,6 +47,23 @@ export interface StoreScenario {
   explanation: string
 }
 
+export interface ArchitectureComponent {
+  id: string
+  name: string
+  description: string
+  layer: 'presentation' | 'domain' | 'data' | 'infrastructure'
+}
+
+export interface ArchitectureChallenge {
+  id: string
+  title: string
+  scenario: string
+  components: ArchitectureComponent[]
+  connections: { from: string; to: string; label: string }[]
+  correctLayers: Record<string, 'presentation' | 'domain' | 'data' | 'infrastructure'>
+  hint: string
+}
+
 export interface Game {
   id: GameType
   moduleId: string
@@ -292,6 +309,125 @@ export const STORE_SCENARIOS: StoreScenario[] = [
   },
 ]
 
+// Architecture Planner Game Data (Module 5)
+export const ARCHITECTURE_CHALLENGES: ArchitectureChallenge[] = [
+  {
+    id: 'arch-1',
+    title: 'Feature-Based Structure',
+    scenario: 'Estás diseñando la arquitectura para una feature de autenticación. Clasifica cada componente en su capa correcta.',
+    components: [
+      { id: 'c1', name: 'LoginForm.tsx', description: 'Componente visual del formulario de login', layer: 'presentation' },
+      { id: 'c2', name: 'useAuth.ts', description: 'Hook que expone estado y acciones de autenticación', layer: 'presentation' },
+      { id: 'c3', name: 'authService.ts', description: 'Servicio que hace llamadas a la API', layer: 'data' },
+      { id: 'c4', name: 'validateCredentials.ts', description: 'Función que valida formato de email/password', layer: 'domain' },
+      { id: 'c5', name: 'authStore.ts', description: 'Store de Zustand con estado global de auth', layer: 'domain' },
+      { id: 'c6', name: 'apiClient.ts', description: 'Cliente HTTP configurado con interceptores', layer: 'infrastructure' },
+    ],
+    connections: [
+      { from: 'c1', to: 'c2', label: 'usa' },
+      { from: 'c2', to: 'c5', label: 'accede' },
+      { from: 'c2', to: 'c3', label: 'llama' },
+      { from: 'c3', to: 'c6', label: 'usa' },
+      { from: 'c4', to: 'c2', label: 'valida' },
+    ],
+    correctLayers: {
+      c1: 'presentation',
+      c2: 'presentation',
+      c3: 'data',
+      c4: 'domain',
+      c5: 'domain',
+      c6: 'infrastructure',
+    },
+    hint: 'Presentation = UI/Hooks, Domain = Lógica de negocio/State, Data = API calls, Infrastructure = Configuración base',
+  },
+  {
+    id: 'arch-2',
+    title: 'Monorepo Structure',
+    scenario: 'Organiza los packages de un monorepo Turborepo para una app Capacitor con web y admin.',
+    components: [
+      { id: 'c1', name: 'apps/mobile', description: 'App Capacitor principal', layer: 'presentation' },
+      { id: 'c2', name: 'apps/web', description: 'Aplicación web Next.js', layer: 'presentation' },
+      { id: 'c3', name: 'packages/ui', description: 'Componentes compartidos React', layer: 'presentation' },
+      { id: 'c4', name: 'packages/api-client', description: 'Cliente API tipado compartido', layer: 'data' },
+      { id: 'c5', name: 'packages/types', description: 'Tipos TypeScript compartidos', layer: 'domain' },
+      { id: 'c6', name: 'packages/utils', description: 'Utilidades de validación y formateo', layer: 'domain' },
+    ],
+    connections: [
+      { from: 'c1', to: 'c3', label: 'importa' },
+      { from: 'c2', to: 'c3', label: 'importa' },
+      { from: 'c1', to: 'c4', label: 'usa' },
+      { from: 'c2', to: 'c4', label: 'usa' },
+      { from: 'c4', to: 'c5', label: 'implementa' },
+    ],
+    correctLayers: {
+      c1: 'presentation',
+      c2: 'presentation',
+      c3: 'presentation',
+      c4: 'data',
+      c5: 'domain',
+      c6: 'domain',
+    },
+    hint: 'Apps son presentation, packages/ui también. api-client es data, types y utils son domain.',
+  },
+  {
+    id: 'arch-3',
+    title: 'State Management',
+    scenario: 'Diseña la arquitectura de estado para una app de e-commerce. Decide qué va en TanStack Query vs Zustand.',
+    components: [
+      { id: 'c1', name: 'useProducts', description: 'Hook para obtener lista de productos', layer: 'data' },
+      { id: 'c2', name: 'useCartStore', description: 'Store del carrito de compras', layer: 'domain' },
+      { id: 'c3', name: 'ProductList.tsx', description: 'Componente que muestra productos', layer: 'presentation' },
+      { id: 'c4', name: 'useCreateOrder', description: 'Mutation para crear una orden', layer: 'data' },
+      { id: 'c5', name: 'useUIStore', description: 'Store para estado de UI (sidebar, modals)', layer: 'presentation' },
+      { id: 'c6', name: 'productsApi.ts', description: 'Funciones que llaman a la API REST', layer: 'infrastructure' },
+    ],
+    connections: [
+      { from: 'c3', to: 'c1', label: 'usa' },
+      { from: 'c1', to: 'c6', label: 'queryFn' },
+      { from: 'c3', to: 'c2', label: 'addToCart' },
+      { from: 'c4', to: 'c2', label: 'lee items' },
+    ],
+    correctLayers: {
+      c1: 'data',
+      c2: 'domain',
+      c3: 'presentation',
+      c4: 'data',
+      c5: 'presentation',
+      c6: 'infrastructure',
+    },
+    hint: 'TanStack Query (data) para server state, Zustand (domain) para client state, UI state puede ser presentation.',
+  },
+  {
+    id: 'arch-4',
+    title: 'Native Bridge Architecture',
+    scenario: 'Organiza los componentes de un plugin Capacitor personalizado de seguridad.',
+    components: [
+      { id: 'c1', name: 'definitions.ts', description: 'Interfaz TypeScript del plugin', layer: 'domain' },
+      { id: 'c2', name: 'index.ts', description: 'Registro del plugin con registerPlugin', layer: 'infrastructure' },
+      { id: 'c3', name: 'web.ts', description: 'Implementación web (fallback)', layer: 'data' },
+      { id: 'c4', name: 'SecurityPlugin.swift', description: 'Implementación nativa iOS', layer: 'data' },
+      { id: 'c5', name: 'useSecurity.ts', description: 'Hook React para usar el plugin', layer: 'presentation' },
+      { id: 'c6', name: 'SecurityScreen.tsx', description: 'UI que muestra estado de seguridad', layer: 'presentation' },
+    ],
+    connections: [
+      { from: 'c2', to: 'c1', label: 'implementa' },
+      { from: 'c3', to: 'c1', label: 'implementa' },
+      { from: 'c4', to: 'c1', label: 'implementa' },
+      { from: 'c5', to: 'c2', label: 'usa' },
+      { from: 'c6', to: 'c5', label: 'usa' },
+    ],
+    correctLayers: {
+      c1: 'domain',
+      c2: 'infrastructure',
+      c3: 'data',
+      c4: 'data',
+      c5: 'presentation',
+      c6: 'presentation',
+    },
+    hint: 'Definitions son domain (contratos), implementaciones son data, registro es infrastructure.',
+  },
+]
+
 // Game Definitions
 export const GAMES: Game[] = [
   {
@@ -326,6 +462,14 @@ export const GAMES: Game[] = [
     instructions: 'Lee cada escenario y selecciona los issues que podrían causar un rechazo en las tiendas.',
     xpReward: 100,
   },
+  {
+    id: 'architecture-planner',
+    moduleId: 'module-5',
+    title: 'Architecture Planner',
+    description: 'Diseña arquitecturas escalables clasificando componentes en sus capas correctas',
+    instructions: 'Arrastra cada componente a su capa arquitectónica correcta: Presentation, Domain, Data o Infrastructure.',
+    xpReward: 100,
+  },
 ]
 
 // Helper Functions
@@ -351,4 +495,8 @@ export function getBuildChallenges(): BuildChallenge[] {
 
 export function getStoreScenarios(): StoreScenario[] {
   return STORE_SCENARIOS
+}
+
+export function getArchitectureChallenges(): ArchitectureChallenge[] {
+  return ARCHITECTURE_CHALLENGES
 }

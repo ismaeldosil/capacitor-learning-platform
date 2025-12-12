@@ -1,6 +1,6 @@
 import { useUser } from '../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
-import { MODULES, BADGES } from '../data/constants'
+import { MODULES } from '../data/constants'
 import { Link } from 'react-router-dom'
 import {
   Trophy,
@@ -14,6 +14,7 @@ import {
 import type { ModuleStatus } from '../data/types'
 import { getModuleStatus } from '../utils'
 import { Icon } from '../components/common/Icon'
+import { BadgeGrid } from '../components/gamification/BadgeGrid'
 
 export function Dashboard() {
   const { user, currentLevel } = useUser()
@@ -117,35 +118,14 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* Badges Section */}
+      {/* Badges Section - Clickable with unlock instructions */}
       <div className="card">
-        <h2 className="mb-4 text-lg font-semibold">
-          {t('achievements.title', { count: user.badges.length, total: BADGES.length })}
-        </h2>
-        <div className="grid grid-cols-4 gap-4 sm:grid-cols-8">
-          {BADGES.map((badge) => {
-            const isUnlocked = user.badges.includes(badge.id)
-            return (
-              <div
-                key={badge.id}
-                className={`flex flex-col items-center gap-2 rounded-lg p-3 ${
-                  isUnlocked ? 'bg-gray-800' : 'opacity-30'
-                }`}
-                title={tGamification(`badges.${badge.id}.name`)}
-              >
-                <div className={`rounded-full p-2 ${isUnlocked ? 'bg-primary-500/20' : 'bg-gray-700'}`}>
-                  <Icon
-                    name={badge.icon}
-                    className={`h-6 w-6 ${isUnlocked ? 'text-primary-400' : 'text-gray-500'}`}
-                  />
-                </div>
-                <span className="max-w-full truncate text-xs text-gray-400">
-                  {tGamification(`badges.${badge.id}.name`)}
-                </span>
-              </div>
-            )
-          })}
-        </div>
+        <BadgeGrid
+          userBadges={user.badges}
+          columns={8}
+          size="sm"
+          showProgress={true}
+        />
       </div>
     </div>
   )

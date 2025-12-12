@@ -2,6 +2,7 @@ import { useUser } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
 import { Flame, Zap } from 'lucide-react'
 import { LanguageSwitcher } from '../common/LanguageSwitcher'
+import { CapacitorLogo } from '../common/CapacitorLogo'
 import { Icon } from '../common/Icon'
 
 export function Navbar() {
@@ -14,7 +15,7 @@ export function Navbar() {
         {/* Logo */}
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600">
-            <Zap className="h-6 w-6 text-white" />
+            <CapacitorLogo size={24} className="text-white" />
           </div>
           <span className="hidden text-lg font-bold sm:block">
             Capacitor Learning
