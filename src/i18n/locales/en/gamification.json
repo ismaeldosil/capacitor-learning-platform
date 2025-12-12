@@ -1,5 +1,10 @@
 {
   "xpToNext": "{{xp}} XP to {{level}}",
+  "levelUp": {
+    "title": "Level Up!",
+    "newLevel": "Level {{level}}: {{name}}",
+    "congratulations": "Congratulations on your progress!"
+  },
   "levels": {
     "capacitor-rookie": "Capacitor Rookie",
     "plugin-explorer": "Plugin Explorer",
@@ -10,36 +15,50 @@
   "badges": {
     "first-launch": {
       "name": "First Launch",
-      "description": "Complete your first lesson"
+      "description": "Complete your first lesson",
+      "howToUnlock": "Complete any lesson in the course to earn this achievement. It's your first step in the Capacitor journey!"
     },
     "speed-runner": {
       "name": "Speed Runner",
-      "description": "Complete a module in less than 1 hour"
+      "description": "Complete a module in less than 1 hour",
+      "howToUnlock": "Complete all lessons, the quiz, and the mini-game of Module 1 in less than 60 minutes."
     },
     "perfect-score": {
       "name": "Perfect Score",
-      "description": "Get 100% on a quiz"
+      "description": "Get 100% on a quiz",
+      "howToUnlock": "Answer all questions correctly on any quiz. Demonstrate your mastery of the topic!"
     },
     "on-fire": {
       "name": "On Fire",
-      "description": "Maintain a 3-day streak"
+      "description": "Maintain a 3-day streak",
+      "howToUnlock": "Study for 3 consecutive days. Consistency is key to learning."
     },
     "module-master": {
       "name": "Module Master",
-      "description": "Complete the first module"
+      "description": "Complete the first module",
+      "howToUnlock": "Complete all lessons, pass the quiz, and finish the mini-game of Module 1: Setup + Fundamentals."
     },
     "capacitor-king": {
       "name": "Capacitor King",
-      "description": "Complete all modules"
+      "description": "Complete all modules",
+      "howToUnlock": "Complete all 4 course modules with all their lessons, quizzes, and mini-games. You'll become a Capacitor expert!"
     },
     "quiz-genius": {
       "name": "Quiz Genius",
-      "description": "Get 100% on 5 quizzes"
+      "description": "Get 100% on 5 quizzes",
+      "howToUnlock": "Get a perfect score on 5 different quizzes. Study well before each assessment."
     },
     "gamer": {
       "name": "Gamer",
-      "description": "Complete all mini-games"
+      "description": "Complete all mini-games",
+      "howToUnlock": "Complete all 4 mini-games: Command Builder, Plugin Matcher, Build Pipeline, and Store Reviewer."
     }
+  },
+  "badgeDialog": {
+    "howToUnlock": "How to unlock?",
+    "unlocked": "Unlocked",
+    "locked": "Locked",
+    "xpReward": "+{{xp}} XP reward"
   },
   "modules": {
     "module-1": {

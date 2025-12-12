@@ -1,5 +1,10 @@
 {
   "xpToNext": "{{xp}} XP para {{level}}",
+  "levelUp": {
+    "title": "¡Subiste de Nivel!",
+    "newLevel": "Nivel {{level}}: {{name}}",
+    "congratulations": "¡Felicidades por tu progreso!"
+  },
   "levels": {
     "capacitor-rookie": "Capacitor Rookie",
     "plugin-explorer": "Plugin Explorer",
@@ -10,36 +15,50 @@
   "badges": {
     "first-launch": {
       "name": "First Launch",
-      "description": "Completar tu primera lección"
+      "description": "Completar tu primera lección",
+      "howToUnlock": "Completa cualquier lección del curso para obtener este logro. ¡Es tu primer paso en el viaje de Capacitor!"
     },
     "speed-runner": {
       "name": "Speed Runner",
-      "description": "Completar un módulo en menos de 1 hora"
+      "description": "Completar un módulo en menos de 1 hora",
+      "howToUnlock": "Completa todas las lecciones, el quiz y el mini-juego del Módulo 1 en menos de 60 minutos."
     },
     "perfect-score": {
       "name": "Perfect Score",
-      "description": "Obtener 100% en un quiz"
+      "description": "Obtener 100% en un quiz",
+      "howToUnlock": "Responde correctamente todas las preguntas de cualquier quiz. ¡Demuestra tu dominio del tema!"
     },
     "on-fire": {
       "name": "On Fire",
-      "description": "Mantener una racha de 3 días"
+      "description": "Mantener una racha de 3 días",
+      "howToUnlock": "Estudia durante 3 días consecutivos. La constancia es clave para el aprendizaje."
     },
     "module-master": {
       "name": "Module Master",
-      "description": "Completar el primer módulo"
+      "description": "Completar el primer módulo",
+      "howToUnlock": "Completa todas las lecciones, aprueba el quiz y termina el mini-juego del Módulo 1: Setup + Fundamentos."
     },
     "capacitor-king": {
       "name": "Capacitor King",
-      "description": "Completar todos los módulos"
+      "description": "Completar todos los módulos",
+      "howToUnlock": "Completa los 4 módulos del curso con todas sus lecciones, quizzes y mini-juegos. ¡Serás un experto en Capacitor!"
     },
     "quiz-genius": {
       "name": "Quiz Genius",
-      "description": "Obtener 100% en 5 quizzes"
+      "description": "Obtener 100% en 5 quizzes",
+      "howToUnlock": "Obtén puntuación perfecta en 5 quizzes diferentes. Estudia bien antes de cada evaluación."
     },
     "gamer": {
       "name": "Gamer",
-      "description": "Completar todos los mini-juegos"
+      "description": "Completar todos los mini-juegos",
+      "howToUnlock": "Completa los 4 mini-juegos: Constructor de Comandos, Plugin Matcher, Build Pipeline y Store Reviewer."
     }
+  },
+  "badgeDialog": {
+    "howToUnlock": "¿Cómo desbloquear?",
+    "unlocked": "Desbloqueado",
+    "locked": "Bloqueado",
+    "xpReward": "+{{xp}} XP de recompensa"
   },
   "modules": {
     "module-1": {

@@ -5,6 +5,7 @@ import {
   useMemo,
   useEffect,
   useRef,
+  useState,
   type ReactNode,
 } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
@@ -110,6 +111,9 @@ interface UserContextType {
   currentLevel: typeof LEVELS[number]
   nextLevel: typeof LEVELS[number] | null
   xpProgress: number
+  // Level Up notification
+  levelUpNotification: typeof LEVELS[number] | null
+  clearLevelUpNotification: () => void
   // Progress
   completeLesson: (lessonId: string) => void
   completeQuiz: (quizId: string, score: number, total: number) => void
@@ -139,6 +143,14 @@ export function UserProvider({ children }: UserProviderProps) {
     STORAGE_KEYS.USER,
     createInitialUser()
   )
+
+  // Level up notification state
+  const [levelUpNotification, setLevelUpNotification] = useState<typeof LEVELS[number] | null>(null)
+  const previousLevelRef = useRef<number>(user.level)
+
+  const clearLevelUpNotification = useCallback(() => {
+    setLevelUpNotification(null)
+  }, [])
 
   // Calculate level from XP
   const calculateLevel = useCallback((xp: number) => {
@@ -401,6 +413,18 @@ export function UserProvider({ children }: UserProviderProps) {
     }
   }, [syncBadges])
 
+  // Detect level changes and trigger notification
+  useEffect(() => {
+    if (user.level > previousLevelRef.current) {
+      // Level increased - show notification
+      const newLevel = LEVELS.find((l) => l.level === user.level)
+      if (newLevel) {
+        setLevelUpNotification(newLevel)
+      }
+    }
+    previousLevelRef.current = user.level
+  }, [user.level])
+
   const value = useMemo(
     () => ({
       user,
@@ -408,6 +432,8 @@ export function UserProvider({ children }: UserProviderProps) {
       currentLevel,
       nextLevel,
       xpProgress,
+      levelUpNotification,
+      clearLevelUpNotification,
       completeLesson,
       completeQuiz,
       completeGame,
@@ -426,6 +452,8 @@ export function UserProvider({ children }: UserProviderProps) {
       currentLevel,
       nextLevel,
       xpProgress,
+      levelUpNotification,
+      clearLevelUpNotification,
       completeLesson,
       completeQuiz,
       completeGame,

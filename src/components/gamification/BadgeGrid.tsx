@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BADGES } from '../../data/constants'
 import type { Badge } from '../../data/types'
 import { BadgeCard } from './BadgeCard'
 import { Modal } from '../common/Modal'
+import { Icon } from '../common/Icon'
+import { CheckCircle, Lock, Lightbulb, Gift } from 'lucide-react'
 
 interface BadgeGridProps {
   userBadges: string[]
@@ -18,6 +21,7 @@ export function BadgeGrid({
   showProgress = true,
 }: BadgeGridProps) {
   const [selectedBadge, setSelectedBadge] = useState<Badge | null>(null)
+  const { t } = useTranslation('gamification')
 
   const unlockedCount = userBadges.length
   const totalCount = BADGES.length
@@ -28,6 +32,8 @@ export function BadgeGrid({
     6: 'grid-cols-3 sm:grid-cols-6',
     8: 'grid-cols-4 sm:grid-cols-8',
   }
+
+  const isSelectedUnlocked = selectedBadge ? userBadges.includes(selectedBadge.id) : false
 
   return (
     <div className="space-y-4">
@@ -66,35 +72,68 @@ export function BadgeGrid({
       <Modal
         isOpen={selectedBadge !== null}
         onClose={() => setSelectedBadge(null)}
-        title={selectedBadge?.name}
+        title={selectedBadge ? t(`badges.${selectedBadge.id}.name`) : ''}
         size="sm"
       >
         {selectedBadge && (
-          <div className="text-center">
-            <div
-              className={`mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-xl ${
-                userBadges.includes(selectedBadge.id)
-                  ? 'bg-gradient-to-br from-primary-500/20 to-accent-500/20'
-                  : 'bg-gray-800 grayscale opacity-50'
-              }`}
-            >
-              <span className="text-5xl">{selectedBadge.icon}</span>
+          <div className="space-y-6">
+            {/* Badge Icon */}
+            <div className="text-center">
+              <div
+                className={`mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-xl border-2 transition-all ${
+                  isSelectedUnlocked
+                    ? 'bg-gradient-to-br from-primary-500/20 to-accent-500/20 border-primary-500/50'
+                    : 'bg-gray-800 border-gray-700 grayscale opacity-60'
+                }`}
+              >
+                <Icon
+                  name={selectedBadge.icon}
+                  className={`h-12 w-12 ${isSelectedUnlocked ? 'text-primary-400' : 'text-gray-500'}`}
+                />
+              </div>
+
+              <p className="text-gray-300">{t(`badges.${selectedBadge.id}.description`)}</p>
             </div>
 
-            <p className="mb-4 text-gray-300">{selectedBadge.description}</p>
+            {/* Status Badge */}
+            <div className="flex justify-center">
+              {isSelectedUnlocked ? (
+                <div className="inline-flex items-center gap-2 rounded-full bg-green-500/20 px-4 py-2 text-green-400">
+                  <CheckCircle className="h-4 w-4" />
+                  <span>{t('badgeDialog.unlocked')}</span>
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-2 rounded-full bg-gray-700 px-4 py-2 text-gray-400">
+                  <Lock className="h-4 w-4" />
+                  <span>{t('badgeDialog.locked')}</span>
+                </div>
+              )}
+            </div>
 
-            {userBadges.includes(selectedBadge.id) ? (
-              <div className="inline-flex items-center gap-2 rounded-full bg-green-500/20 px-4 py-2 text-green-400">
-                <span>✓</span>
-                <span>Desbloqueado</span>
-                {selectedBadge.xpBonus > 0 && (
-                  <span className="font-bold">+{selectedBadge.xpBonus} XP</span>
-                )}
+            {/* How to Unlock Section */}
+            {!isSelectedUnlocked && (
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
+                <div className="flex items-start gap-3">
+                  <Lightbulb className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-400" />
+                  <div>
+                    <h4 className="mb-1 font-semibold text-amber-400">
+                      {t('badgeDialog.howToUnlock')}
+                    </h4>
+                    <p className="text-sm text-amber-200/80">
+                      {t(`badges.${selectedBadge.id}.howToUnlock`)}
+                    </p>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <div className="inline-flex items-center gap-2 rounded-full bg-gray-700 px-4 py-2 text-gray-400">
-                <span>🔒</span>
-                <span>Bloqueado</span>
+            )}
+
+            {/* XP Reward */}
+            {selectedBadge.xpBonus > 0 && (
+              <div className="flex items-center justify-center gap-2 rounded-lg bg-yellow-500/10 py-3 text-yellow-400">
+                <Gift className="h-5 w-5" />
+                <span className="font-semibold">
+                  {t('badgeDialog.xpReward', { xp: selectedBadge.xpBonus })}
+                </span>
               </div>
             )}
           </div>
