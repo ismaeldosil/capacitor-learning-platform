@@ -64,6 +64,24 @@ export interface ArchitectureChallenge {
   hint: string
 }
 
+export interface SecurityVulnerability {
+  id: string
+  code: string
+  description: string
+  isVulnerable: boolean
+  category: 'storage' | 'auth' | 'network' | 'crypto' | 'platform'
+}
+
+export interface SecurityAuditScenario {
+  id: string
+  title: string
+  description: string
+  codeSnippet: string
+  language: string
+  vulnerabilities: SecurityVulnerability[]
+  explanation: string
+}
+
 export interface Game {
   id: GameType
   moduleId: string
@@ -428,6 +446,279 @@ export const ARCHITECTURE_CHALLENGES: ArchitectureChallenge[] = [
   },
 ]
 
+// Security Audit Game Data (Module 6)
+export const SECURITY_AUDIT_SCENARIOS: SecurityAuditScenario[] = [
+  {
+    id: 'sec-1',
+    title: 'Almacenamiento de Tokens',
+    description: 'Revisa este código de gestión de tokens y encuentra las vulnerabilidades de seguridad.',
+    codeSnippet: `// auth.service.ts
+async function saveTokens(accessToken: string, refreshToken: string) {
+  // Guardar tokens para persistencia
+  localStorage.setItem('access_token', accessToken);
+  localStorage.setItem('refresh_token', refreshToken);
+
+  console.log('Tokens saved:', { accessToken, refreshToken });
+}
+
+async function getAccessToken(): string | null {
+  return localStorage.getItem('access_token');
+}`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v1-1',
+        code: 'localStorage.setItem',
+        description: 'Usar localStorage para almacenar tokens (datos en texto plano)',
+        isVulnerable: true,
+        category: 'storage',
+      },
+      {
+        id: 'v1-2',
+        code: 'console.log tokens',
+        description: 'Loguear tokens sensibles en la consola',
+        isVulnerable: true,
+        category: 'storage',
+      },
+      {
+        id: 'v1-3',
+        code: 'async function',
+        description: 'Usar funciones async para operaciones de storage',
+        isVulnerable: false,
+        category: 'platform',
+      },
+    ],
+    explanation: 'Los tokens NUNCA deben almacenarse en localStorage (texto plano) ni loguearse. Usa Keychain (iOS) o EncryptedSharedPreferences (Android) via @capacitor-community/secure-storage.',
+  },
+  {
+    id: 'sec-2',
+    title: 'Autenticación OAuth',
+    description: 'Analiza esta implementación de OAuth y detecta los problemas de seguridad.',
+    codeSnippet: `// oauth.config.ts
+const oauthConfig = {
+  clientId: 'my-app-client',
+  clientSecret: 'super-secret-key-123', // Para autenticación
+  redirectUrl: 'http://localhost:3000/callback',
+  scope: 'openid profile email',
+  responseType: 'token', // Implicit flow para simplicidad
+};
+
+async function authenticate() {
+  const authUrl = buildAuthUrl(oauthConfig);
+  window.location.href = authUrl;
+}`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v2-1',
+        code: 'clientSecret hardcoded',
+        description: 'Client secret hardcodeado en el código fuente',
+        isVulnerable: true,
+        category: 'auth',
+      },
+      {
+        id: 'v2-2',
+        code: 'responseType: token',
+        description: 'Usar implicit flow (token) en lugar de PKCE',
+        isVulnerable: true,
+        category: 'auth',
+      },
+      {
+        id: 'v2-3',
+        code: 'http://localhost',
+        description: 'Redirect URL usando HTTP en lugar de esquema custom',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v2-4',
+        code: 'openid profile email',
+        description: 'Solicitar scopes de OpenID Connect',
+        isVulnerable: false,
+        category: 'auth',
+      },
+    ],
+    explanation: 'En apps móviles: nunca incluyas client_secret (son públicas), usa PKCE en lugar de implicit flow, y configura un esquema custom (com.myapp://) como redirect URL.',
+  },
+  {
+    id: 'sec-3',
+    title: 'Comunicación de Red',
+    description: 'Revisa esta configuración de API client y encuentra problemas de seguridad.',
+    codeSnippet: `// api.client.ts
+const API_BASE = 'http://api.example.com/v1';
+
+async function fetchData(endpoint: string, token: string) {
+  const response = await fetch(\`\${API_BASE}\${endpoint}\`, {
+    headers: {
+      'Authorization': \`Bearer \${token}\`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(\`Error: \${response.status} - \${await response.text()}\`);
+  }
+
+  return response.json();
+}`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v3-1',
+        code: 'http://api',
+        description: 'Usar HTTP en lugar de HTTPS para la API',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v3-2',
+        code: 'Sin SSL Pinning',
+        description: 'No implementar SSL Pinning para prevenir MITM',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v3-3',
+        code: 'Bearer token en header',
+        description: 'Enviar token de autorización en header Authorization',
+        isVulnerable: false,
+        category: 'auth',
+      },
+      {
+        id: 'v3-4',
+        code: 'Exponer response.text() en error',
+        description: 'Exponer detalles del error del servidor al cliente',
+        isVulnerable: true,
+        category: 'platform',
+      },
+    ],
+    explanation: 'Siempre usa HTTPS, implementa SSL Pinning para prevenir ataques MITM, y no expongas mensajes de error detallados del servidor que podrían revelar información sensible.',
+  },
+  {
+    id: 'sec-4',
+    title: 'Configuración de WebView',
+    description: 'Analiza esta configuración de Capacitor y detecta los riesgos de seguridad.',
+    codeSnippet: `// capacitor.config.ts
+const config = {
+  appId: 'com.myapp.prod',
+  appName: 'My App',
+  webDir: 'dist',
+  server: {
+    cleartext: true,
+    allowNavigation: ['*'],
+  },
+  android: {
+    allowMixedContent: true,
+    webContentsDebuggingEnabled: true,
+  },
+  ios: {
+    allowsLinkPreview: true,
+  },
+};`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v4-1',
+        code: 'cleartext: true',
+        description: 'Permitir tráfico HTTP sin cifrar (cleartext)',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v4-2',
+        code: 'allowNavigation: [\'*\']',
+        description: 'Permitir navegación a cualquier dominio',
+        isVulnerable: true,
+        category: 'platform',
+      },
+      {
+        id: 'v4-3',
+        code: 'webContentsDebuggingEnabled: true',
+        description: 'Debugging habilitado en producción',
+        isVulnerable: true,
+        category: 'platform',
+      },
+      {
+        id: 'v4-4',
+        code: 'allowMixedContent: true',
+        description: 'Permitir contenido mixto HTTP/HTTPS',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v4-5',
+        code: 'allowsLinkPreview: true',
+        description: 'Permitir preview de links en iOS',
+        isVulnerable: false,
+        category: 'platform',
+      },
+    ],
+    explanation: 'En producción: deshabilita cleartext y mixed content, restringe allowNavigation a dominios específicos, y NUNCA habilites webContentsDebuggingEnabled.',
+  },
+  {
+    id: 'sec-5',
+    title: 'Validación de Integridad',
+    description: 'Revisa este código de verificación de seguridad del dispositivo.',
+    codeSnippet: `// security.check.ts
+async function initializeApp() {
+  // Verificar integridad
+  const isSecure = Math.random() > 0.5; // Simulación
+
+  if (!isSecure) {
+    console.warn('Device may be compromised');
+    // Continuar de todas formas
+  }
+
+  // Cargar datos sensibles
+  const apiKey = 'sk-live-abc123xyz789';
+  setupAPI(apiKey);
+}
+
+function setupAPI(key: string) {
+  window.API_KEY = key; // Para acceso global
+}`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v5-1',
+        code: 'Math.random() para seguridad',
+        description: 'Usar Math.random() para decisiones de seguridad',
+        isVulnerable: true,
+        category: 'crypto',
+      },
+      {
+        id: 'v5-2',
+        code: 'API key hardcodeada',
+        description: 'API key sensible hardcodeada en el código',
+        isVulnerable: true,
+        category: 'storage',
+      },
+      {
+        id: 'v5-3',
+        code: 'window.API_KEY',
+        description: 'Exponer API key en el objeto global window',
+        isVulnerable: true,
+        category: 'platform',
+      },
+      {
+        id: 'v5-4',
+        code: 'Continuar sin bloquear',
+        description: 'No bloquear la app cuando se detecta dispositivo comprometido',
+        isVulnerable: true,
+        category: 'platform',
+      },
+      {
+        id: 'v5-5',
+        code: 'console.warn',
+        description: 'Usar console.warn para alertas de seguridad',
+        isVulnerable: false,
+        category: 'platform',
+      },
+    ],
+    explanation: 'Usa detección real de root/jailbreak, nunca hardcodees API keys, no las expongas en window, y bloquea o degrada funcionalidad cuando se detecten dispositivos comprometidos.',
+  },
+]
+
 // Game Definitions
 export const GAMES: Game[] = [
   {
@@ -470,6 +761,14 @@ export const GAMES: Game[] = [
     instructions: 'Arrastra cada componente a su capa arquitectónica correcta: Presentation, Domain, Data o Infrastructure.',
     xpReward: 100,
   },
+  {
+    id: 'security-audit',
+    moduleId: 'module-6',
+    title: 'Security Audit',
+    description: 'Identifica vulnerabilidades de seguridad en código de apps móviles',
+    instructions: 'Revisa cada snippet de código y selecciona las prácticas que representan vulnerabilidades de seguridad.',
+    xpReward: 100,
+  },
 ]
 
 // Helper Functions
@@ -499,4 +798,8 @@ export function getStoreScenarios(): StoreScenario[] {
 
 export function getArchitectureChallenges(): ArchitectureChallenge[] {
   return ARCHITECTURE_CHALLENGES
+}
+
+export function getSecurityAuditScenarios(): SecurityAuditScenario[] {
+  return SECURITY_AUDIT_SCENARIOS
 }

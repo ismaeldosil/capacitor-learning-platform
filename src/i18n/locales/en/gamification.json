@@ -85,6 +85,11 @@
       "title": "Advanced Architecture",
       "description": "Scalable architecture patterns for enterprise Capacitor apps",
       "estimatedTime": "3 hours"
+    },
+    "module-6": {
+      "title": "Mobile App Security",
+      "description": "Implement secure authentication, protected storage, and OWASP compliance",
+      "estimatedTime": "3 hours"
     }
   },
   "lessonTitles": {
@@ -113,13 +118,20 @@
     "tanstack-query": "TanStack Query",
     "zustand": "Zustand",
     "native-bridge-patterns": "Native Bridge Patterns",
-    "performance-optimization": "Performance Optimization"
+    "performance-optimization": "Performance Optimization",
+    "biometric-authentication": "Biometric Authentication",
+    "oauth-pkce": "OAuth 2.0 with PKCE",
+    "secure-storage": "Secure Storage",
+    "ssl-pinning": "SSL Pinning",
+    "app-hardening": "App Hardening",
+    "owasp-compliance": "OWASP Compliance"
   },
   "gameTitles": {
     "command-builder": "Command Builder",
     "plugin-matcher": "Plugin Matcher",
     "build-pipeline": "Build Pipeline",
     "store-reviewer": "Store Reviewer",
-    "architecture-planner": "Architecture Planner"
+    "architecture-planner": "Architecture Planner",
+    "security-audit": "Security Audit"
   }
 }

@@ -691,6 +691,145 @@ export const QUIZZES: Quiz[] = [
       },
     ],
   },
+  // Quiz Module 6: Seguridad en Apps Móviles
+  {
+    id: 'quiz-module-6',
+    moduleId: 'module-6',
+    passingScore: 70,
+    xpReward: 25,
+    questions: [
+      {
+        id: 'q6-1',
+        text: '¿Cuál es la principal ventaja de usar autenticación biométrica en apps móviles?',
+        options: [
+          'Reemplaza completamente la necesidad de contraseñas',
+          'Es más barata de implementar',
+          'Mejora la UX al ser más rápida y segura que teclear contraseñas',
+          'No requiere ninguna configuración especial',
+        ],
+        correctIndex: 2,
+        explanation:
+          'La biometría mejora la experiencia de usuario al ser más rápida y conveniente, además de ser más segura que contraseñas que pueden ser robadas o adivinadas. Sin embargo, siempre debe tener un fallback.',
+      },
+      {
+        id: 'q6-2',
+        text: '¿Qué problema resuelve PKCE en el flujo OAuth 2.0?',
+        options: [
+          'Hace que el login sea más rápido',
+          'Protege contra interceptación del authorization code en apps públicas',
+          'Elimina la necesidad de refresh tokens',
+          'Permite usar OAuth sin internet',
+        ],
+        correctIndex: 1,
+        explanation:
+          'PKCE (Proof Key for Code Exchange) añade un desafío criptográfico que previene ataques donde un atacante intercepta el authorization code antes de que la app legítima pueda canjearlo.',
+      },
+      {
+        id: 'q6-3',
+        text: '¿Por qué NO se debe usar localStorage para almacenar tokens de acceso en apps Capacitor?',
+        options: [
+          'Porque localStorage es muy lento',
+          'Porque localStorage tiene límite de tamaño',
+          'Porque los datos se almacenan en texto plano sin cifrado',
+          'Porque no funciona en iOS',
+        ],
+        correctIndex: 2,
+        explanation:
+          'localStorage almacena datos en texto plano, fácilmente accesibles mediante ingeniería inversa o en dispositivos rooteados. Los tokens deben almacenarse en Keychain (iOS) o EncryptedSharedPreferences (Android).',
+      },
+      {
+        id: 'q6-4',
+        text: '¿Qué es SSL Pinning y por qué es importante?',
+        options: [
+          'Un método para comprimir datos SSL',
+          'Verificar que el certificado del servidor coincide con uno conocido, previniendo ataques MITM',
+          'Una forma de acelerar conexiones HTTPS',
+          'Un tipo de autenticación de dos factores',
+        ],
+        correctIndex: 1,
+        explanation:
+          'SSL Pinning verifica que el certificado del servidor coincide con uno pre-definido ("pineado") en la app, evitando que atacantes intercepten el tráfico usando certificados falsos de CAs comprometidas.',
+      },
+      {
+        id: 'q6-5',
+        text: '¿Por qué es importante incluir un pin de backup en SSL Pinning?',
+        options: [
+          'Para tener mejor rendimiento',
+          'Porque iOS lo requiere',
+          'Para evitar que la app deje de funcionar cuando el certificado expire o cambie',
+          'Para poder usar múltiples servidores',
+        ],
+        correctIndex: 2,
+        explanation:
+          'Si el único certificado pineado expira o cambia sin un backup, la app rechazará todas las conexiones. El pin de backup del nuevo certificado permite rotación segura.',
+      },
+      {
+        id: 'q6-6',
+        text: '¿Qué técnica de hardening dificulta la ingeniería inversa del código JavaScript en apps Capacitor?',
+        options: [
+          'Minificación únicamente',
+          'Obfuscación de código con herramientas como javascript-obfuscator',
+          'Compresión gzip',
+          'Usar TypeScript',
+        ],
+        correctIndex: 1,
+        explanation:
+          'La obfuscación transforma el código para hacerlo difícil de entender: renombra variables, aplana el flujo de control, inyecta código muerto, cifra strings, etc. La minificación solo reduce el tamaño.',
+      },
+      {
+        id: 'q6-7',
+        text: '¿Qué debe hacer una app de alta seguridad cuando detecta que el dispositivo está rooteado/jailbroken?',
+        options: [
+          'Ignorarlo porque no afecta la seguridad',
+          'Mostrar una advertencia pero continuar funcionando',
+          'Bloquear el acceso o degradar funcionalidad sensible según el nivel de riesgo',
+          'Borrar todos los datos inmediatamente',
+        ],
+        correctIndex: 2,
+        explanation:
+          'Apps de alta seguridad (fintech, salud) deben evaluar el riesgo y responder apropiadamente: bloquear acceso, deshabilitar funciones sensibles, o al menos advertir al usuario según la política de seguridad.',
+      },
+      {
+        id: 'q6-8',
+        text: 'Según OWASP Mobile Top 10, ¿cuál es la vulnerabilidad M2?',
+        options: [
+          'Uso impropio de la plataforma',
+          'Almacenamiento inseguro de datos',
+          'Comunicación insegura',
+          'Autenticación insegura',
+        ],
+        correctIndex: 1,
+        explanation:
+          'M2 (Insecure Data Storage) se refiere a almacenar datos sensibles de forma insegura, como guardar tokens en localStorage o logs que contienen información personal.',
+      },
+      {
+        id: 'q6-9',
+        text: '¿Qué configuración de WebView es crítica deshabilitar en producción en Android?',
+        options: [
+          'JavaScript',
+          'Cookies',
+          'webContentsDebuggingEnabled',
+          'Mixed content',
+        ],
+        correctIndex: 2,
+        explanation:
+          'webContentsDebuggingEnabled permite inspeccionar el WebView con Chrome DevTools. En producción debe estar en false para prevenir que atacantes inspeccionen y manipulen el contenido de la app.',
+      },
+      {
+        id: 'q6-10',
+        text: '¿Qué herramienta se recomienda para detectar vulnerabilidades en dependencias npm?',
+        options: [
+          'ESLint',
+          'Prettier',
+          'npm audit o Snyk',
+          'TypeScript',
+        ],
+        correctIndex: 2,
+        explanation:
+          'npm audit (integrado) y Snyk analizan las dependencias del proyecto y reportan vulnerabilidades conocidas con sus niveles de severidad y recomendaciones de actualización.',
+      },
+    ],
+  },
 ]
 
 export function getQuizByModuleId(moduleId: string): Quiz | undefined {

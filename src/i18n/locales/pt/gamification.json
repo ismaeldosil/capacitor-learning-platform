@@ -85,6 +85,11 @@
       "title": "Arquitetura Avançada",
       "description": "Padrões de arquitetura escalável para apps Capacitor empresariais",
       "estimatedTime": "3 horas"
+    },
+    "module-6": {
+      "title": "Segurança em Apps Móveis",
+      "description": "Implementar autenticação segura, armazenamento protegido e conformidade OWASP",
+      "estimatedTime": "3 horas"
     }
   },
   "lessonTitles": {
@@ -113,13 +118,20 @@
     "tanstack-query": "TanStack Query",
     "zustand": "Zustand",
     "native-bridge-patterns": "Padrões do Native Bridge",
-    "performance-optimization": "Otimização de Performance"
+    "performance-optimization": "Otimização de Performance",
+    "biometric-authentication": "Autenticação Biométrica",
+    "oauth-pkce": "OAuth 2.0 com PKCE",
+    "secure-storage": "Armazenamento Seguro",
+    "ssl-pinning": "SSL Pinning",
+    "app-hardening": "Hardening de Apps",
+    "owasp-compliance": "Conformidade OWASP"
   },
   "gameTitles": {
     "command-builder": "Constructor de Comandos",
     "plugin-matcher": "Plugin Matcher",
     "build-pipeline": "Build Pipeline",
     "store-reviewer": "Store Reviewer",
-    "architecture-planner": "Planejador de Arquitetura"
+    "architecture-planner": "Planejador de Arquitetura",
+    "security-audit": "Auditoria de Segurança"
   }
 }

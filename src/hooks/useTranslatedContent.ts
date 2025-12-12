@@ -8,6 +8,7 @@ import {
   BUILD_CHALLENGES as BUILD_CHALLENGES_STATIC,
   STORE_SCENARIOS as STORE_SCENARIOS_STATIC,
   ARCHITECTURE_CHALLENGES as ARCHITECTURE_CHALLENGES_STATIC,
+  SECURITY_AUDIT_SCENARIOS as SECURITY_AUDIT_SCENARIOS_STATIC,
 } from '../data/games'
 import type { Quiz } from '../data/types'
 
@@ -330,6 +331,52 @@ export function useTranslatedArchitectureChallenges() {
         return {
           ...comp,
           description: translatedComp.description || comp.description,
+        }
+      }),
+    }
+  })
+}
+
+// Hook to get translated security audit scenarios
+export function useTranslatedSecurityAuditScenarios() {
+  const { t } = useTranslation('gamesContent')
+
+  const translatedScenarios = t('security-audit.scenarios', {
+    returnObjects: true,
+    defaultValue: null,
+  }) as
+    | Array<{
+        id: string
+        title: string
+        description: string
+        explanation: string
+        vulnerabilities: Array<{
+          id: string
+          description: string
+        }>
+      }>
+    | null
+
+  if (!translatedScenarios || !Array.isArray(translatedScenarios)) {
+    return SECURITY_AUDIT_SCENARIOS_STATIC
+  }
+
+  return SECURITY_AUDIT_SCENARIOS_STATIC.map((scenario, index) => {
+    const translated = translatedScenarios[index]
+    if (!translated) return scenario
+
+    return {
+      ...scenario,
+      title: translated.title || scenario.title,
+      description: translated.description || scenario.description,
+      explanation: translated.explanation || scenario.explanation,
+      vulnerabilities: scenario.vulnerabilities.map((vuln, vulnIndex) => {
+        const translatedVuln = translated.vulnerabilities?.[vulnIndex]
+        if (!translatedVuln) return vuln
+
+        return {
+          ...vuln,
+          description: translatedVuln.description || vuln.description,
         }
       }),
     }
