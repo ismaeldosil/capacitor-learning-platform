@@ -32,7 +32,7 @@ src/
 │   ├── dashboard/     # ModuleCard, StatsPanel, BadgeGrid
 │   ├── lesson/        # LessonContent, CodeBlock
 │   ├── quiz/          # QuizQuestion, QuizResult, AnswerOption
-│   ├── games/         # CommandBuilder, PluginMatcher, BuildPipeline, StoreReviewer, ArchitecturePlanner
+│   ├── games/         # CommandBuilder, PluginMatcher, BuildPipeline, StoreReviewer, ArchitecturePlanner, SecurityAudit
 │   └── gamification/  # XPBar, LevelBadge, StreakCounter, BadgeCard, LevelUpPopup, AchievementPopup
 ├── contexts/          # UserContext
 ├── hooks/             # useLocalStorage, useXP, useProgress, useStreak, useBadges, useTranslatedContent
@@ -57,8 +57,9 @@ src/
 | 3 | Build Processes | 5 | Build Pipeline | 300 |
 | 4 | App Store Prep | 4 | Store Reviewer | 450 |
 | 5 | Arquitectura Avanzada | 6 | Architecture Planner | 600 |
+| 6 | Seguridad en Apps Móviles | 6 | Security Audit | 800 |
 
-**Total:** 26 lecciones, 5 quizzes, 5 mini-juegos
+**Total:** 32 lecciones, 6 quizzes, 6 mini-juegos
 
 ## Reglas
 
@@ -110,6 +111,7 @@ npm run typecheck    # TypeScript check
 | build-pipeline | BuildPipeline | Ordenar pasos del build process |
 | store-reviewer | StoreReviewer | Identificar errores de app store |
 | architecture-planner | ArchitecturePlanner | Clasificar componentes en capas |
+| security-audit | SecurityAudit | Identificar vulnerabilidades en código |
 
 ## CI/CD
 
