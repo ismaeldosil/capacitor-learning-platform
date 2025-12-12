@@ -209,6 +209,24 @@ export const MODULES: Module[] = [
     gameId: 'architecture-planner',
     estimatedTime: '3 horas',
   },
+  {
+    id: 'module-6',
+    title: 'Seguridad en Apps Móviles',
+    description: 'Implementar autenticación segura, almacenamiento protegido y cumplimiento OWASP',
+    icon: 'shield',
+    requiredXP: 800,
+    lessons: [
+      'biometric-authentication',
+      'oauth-pkce',
+      'secure-storage',
+      'ssl-pinning',
+      'app-hardening',
+      'owasp-compliance',
+    ],
+    quizId: 'quiz-module-6',
+    gameId: 'security-audit',
+    estimatedTime: '3 horas',
+  },
 ]
 
 // Quiz Config

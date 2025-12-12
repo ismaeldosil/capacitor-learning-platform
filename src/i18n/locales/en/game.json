@@ -36,6 +36,11 @@
       "name": "Architecture Planner",
       "description": "Design scalable architectures by classifying components into layers",
       "instructions": "Drag each component to its correct architectural layer: Presentation, Domain, Data or Infrastructure."
+    },
+    "securityAudit": {
+      "name": "Security Audit",
+      "description": "Identify security vulnerabilities in mobile app code",
+      "instructions": "Review each code snippet and select the practices that represent security vulnerabilities."
     }
   }
 }

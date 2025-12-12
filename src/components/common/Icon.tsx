@@ -4,6 +4,7 @@ import {
   Hammer,
   Store,
   Layers,
+  Shield,
   Sprout,
   Crown,
   Target,
@@ -24,6 +25,7 @@ const iconMap: Record<string, LucideIcon> = {
   hammer: Hammer,
   store: Store,
   layers: Layers,
+  shield: Shield,
   // Levels
   sprout: Sprout,
   crown: Crown,
