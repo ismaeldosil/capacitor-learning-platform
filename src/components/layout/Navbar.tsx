@@ -1,11 +1,15 @@
 import { useUser } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
-import { Flame, Zap } from 'lucide-react'
+import { Flame, Zap, Search, Command } from 'lucide-react'
 import { LanguageSwitcher } from '../common/LanguageSwitcher'
 import { CapacitorLogo } from '../common/CapacitorLogo'
 import { Icon } from '../common/Icon'
 
-export function Navbar() {
+interface NavbarProps {
+  onSearchClick?: () => void
+}
+
+export function Navbar({ onSearchClick }: NavbarProps) {
   const { user, currentLevel, xpProgress, nextLevel } = useUser()
   const { t } = useTranslation('gamification')
 
@@ -22,8 +26,30 @@ export function Navbar() {
           </span>
         </div>
 
+        {/* Search Button */}
+        <button
+          onClick={onSearchClick}
+          className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-700/50 border border-gray-600 text-gray-400 hover:text-white hover:border-gray-500 hover:bg-gray-700 transition-colors"
+          aria-label="Buscar conceptos"
+        >
+          <Search className="h-4 w-4" />
+          <span className="text-sm">Buscar conceptos...</span>
+          <kbd className="hidden lg:flex items-center gap-0.5 ml-2 px-1.5 py-0.5 text-xs bg-gray-800 rounded border border-gray-600">
+            <Command className="h-3 w-3" />K
+          </kbd>
+        </button>
+
         {/* Stats */}
         <div className="flex items-center gap-6">
+          {/* Mobile Search Button */}
+          <button
+            onClick={onSearchClick}
+            className="md:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+            aria-label="Buscar conceptos"
+          >
+            <Search className="h-5 w-5" />
+          </button>
+
           {/* Streak */}
           <div className="flex items-center gap-2">
             <Flame
@@ -49,7 +75,7 @@ export function Navbar() {
           </div>
 
           {/* XP Progress Bar */}
-          <div className="hidden w-32 md:block">
+          <div className="hidden w-32 lg:block">
             <div className="h-2 overflow-hidden rounded-full bg-gray-700">
               <div
                 className="h-full bg-gradient-to-r from-primary-500 to-accent-500 transition-all duration-500"
