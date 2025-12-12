@@ -36,6 +36,11 @@
       "name": "Architecture Planner",
       "description": "Projete arquiteturas escaláveis classificando componentes em camadas",
       "instructions": "Arraste cada componente para sua camada arquitetônica correta: Presentation, Domain, Data ou Infrastructure."
+    },
+    "securityAudit": {
+      "name": "Security Audit",
+      "description": "Identifique vulnerabilidades de segurança em código de apps móveis",
+      "instructions": "Revise cada trecho de código e selecione as práticas que representam vulnerabilidades de segurança."
     }
   }
 }

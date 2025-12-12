@@ -71,7 +71,7 @@ export interface QuizResult {
 }
 
 // Game Types
-export type GameType = 'command-builder' | 'plugin-matcher' | 'build-pipeline' | 'store-reviewer' | 'architecture-planner'
+export type GameType = 'command-builder' | 'plugin-matcher' | 'build-pipeline' | 'store-reviewer' | 'architecture-planner' | 'security-audit'
 
 export interface GameResult {
   gameId: string

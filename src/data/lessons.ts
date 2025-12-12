@@ -3642,4 +3642,1576 @@ export function reportWebVitals() {
       content: 'El mayor impacto en rendimiento suele venir de: bundle size, cantidad de re-renders, y operaciones síncronas bloqueantes.',
     },
   ],
+
+  // ===== MODULE 6: SEGURIDAD EN APPS MÓVILES =====
+
+  'biometric-authentication': [
+    {
+      type: 'text',
+      content: 'La **autenticación biométrica** permite a los usuarios autenticarse usando características físicas únicas como huellas digitales, reconocimiento facial o iris. En Capacitor, el plugin **@capacitor-community/biometric-auth** y el plugin oficial **@capacitor/identity-vault** proporcionan acceso a estas APIs nativas.',
+    },
+    {
+      type: 'info',
+      content: 'La biometría no reemplaza las contraseñas, sino que las complementa. Siempre debes tener un método de autenticación alternativo.',
+    },
+    {
+      type: 'text',
+      content: '## Configuración del Plugin Biométrico\n\nPrimero, instalamos el plugin de autenticación biométrica:',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `# Instalar el plugin de biometría
+npm install @capacitor-community/biometric-auth
+
+# Sincronizar con los proyectos nativos
+npx cap sync`,
+    },
+    {
+      type: 'text',
+      content: '## Configuración para iOS\n\nEn iOS, necesitas agregar la descripción de uso en `Info.plist`:',
+    },
+    {
+      type: 'code',
+      language: 'xml',
+      filename: 'ios/App/App/Info.plist',
+      code: `<key>NSFaceIDUsageDescription</key>
+<string>Usamos Face ID para autenticarte de forma segura</string>`,
+    },
+    {
+      type: 'text',
+      content: '## Verificar Disponibilidad\n\nAntes de usar biometría, verifica si el dispositivo la soporta:',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/biometric.service.ts',
+      code: `import { BiometricAuth, BiometryType } from '@capacitor-community/biometric-auth';
+
+export class BiometricService {
+  private available = false;
+  private biometryType: BiometryType = BiometryType.none;
+
+  async checkAvailability(): Promise<{
+    available: boolean;
+    type: string;
+    reason?: string;
+  }> {
+    try {
+      const result = await BiometricAuth.checkBiometry();
+
+      this.available = result.isAvailable;
+      this.biometryType = result.biometryType;
+
+      return {
+        available: result.isAvailable,
+        type: this.getBiometryTypeName(result.biometryType),
+        reason: result.reason,
+      };
+    } catch (error) {
+      console.error('Error checking biometry:', error);
+      return { available: false, type: 'none', reason: 'Error checking' };
+    }
+  }
+
+  private getBiometryTypeName(type: BiometryType): string {
+    switch (type) {
+      case BiometryType.touchId:
+        return 'Touch ID';
+      case BiometryType.faceId:
+        return 'Face ID';
+      case BiometryType.fingerprintAuthentication:
+        return 'Fingerprint';
+      case BiometryType.faceAuthentication:
+        return 'Face Recognition';
+      case BiometryType.irisAuthentication:
+        return 'Iris';
+      default:
+        return 'None';
+    }
+  }
+}`,
+      highlightLines: [8, 9, 10, 11, 12, 13, 14, 15],
+    },
+    {
+      type: 'text',
+      content: '## Autenticar al Usuario\n\nUna vez verificada la disponibilidad, puedes solicitar autenticación:',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/biometric.service.ts',
+      code: `async authenticate(reason: string = 'Confirma tu identidad'): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  if (!this.available) {
+    return { success: false, error: 'Biometría no disponible' };
+  }
+
+  try {
+    await BiometricAuth.authenticate({
+      reason,
+      cancelTitle: 'Cancelar',
+      allowDeviceCredential: true, // Permite PIN/patrón como fallback
+      iosFallbackTitle: 'Usar contraseña',
+      androidTitle: 'Autenticación biométrica',
+      androidSubtitle: 'Confirma tu identidad',
+      androidConfirmationRequired: true,
+    });
+
+    return { success: true };
+  } catch (error: any) {
+    // Manejar errores específicos
+    if (error.code === 'userCancel') {
+      return { success: false, error: 'Autenticación cancelada' };
+    }
+    if (error.code === 'biometryLockout') {
+      return { success: false, error: 'Demasiados intentos fallidos' };
+    }
+    return { success: false, error: error.message };
+  }
+}`,
+      highlightLines: [9, 10, 11, 12, 13, 14, 15, 16, 17, 22, 23, 24, 25, 26, 27],
+    },
+    {
+      type: 'text',
+      content: '## Hook de React para Biometría',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/hooks/useBiometric.ts',
+      code: `import { useState, useEffect, useCallback } from 'react';
+import { BiometricService } from '../services/biometric.service';
+
+const biometricService = new BiometricService();
+
+export function useBiometric() {
+  const [isAvailable, setIsAvailable] = useState(false);
+  const [biometryType, setBiometryType] = useState<string>('none');
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  useEffect(() => {
+    checkBiometry();
+  }, []);
+
+  const checkBiometry = async () => {
+    const result = await biometricService.checkAvailability();
+    setIsAvailable(result.available);
+    setBiometryType(result.type);
+  };
+
+  const authenticate = useCallback(async (reason?: string) => {
+    if (!isAvailable) return { success: false, error: 'No disponible' };
+
+    setIsAuthenticating(true);
+    try {
+      const result = await biometricService.authenticate(reason);
+      return result;
+    } finally {
+      setIsAuthenticating(false);
+    }
+  }, [isAvailable]);
+
+  return {
+    isAvailable,
+    biometryType,
+    isAuthenticating,
+    authenticate,
+    checkBiometry,
+  };
+}`,
+      highlightLines: [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+    },
+    {
+      type: 'text',
+      content: '## Ejemplo de Uso en Componente',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/components/BiometricLogin.tsx',
+      code: `import { useBiometric } from '../hooks/useBiometric';
+import { useAuth } from '../hooks/useAuth';
+
+export function BiometricLogin() {
+  const { isAvailable, biometryType, isAuthenticating, authenticate } = useBiometric();
+  const { loginWithBiometric } = useAuth();
+
+  const handleBiometricLogin = async () => {
+    const result = await authenticate('Inicia sesión con ' + biometryType);
+
+    if (result.success) {
+      // Recuperar credenciales almacenadas de forma segura
+      await loginWithBiometric();
+    } else {
+      // Mostrar error o fallback a login tradicional
+      console.error(result.error);
+    }
+  };
+
+  if (!isAvailable) {
+    return null; // No mostrar botón si no está disponible
+  }
+
+  return (
+    <button
+      onClick={handleBiometricLogin}
+      disabled={isAuthenticating}
+      className="biometric-button"
+    >
+      {isAuthenticating ? 'Autenticando...' : \`Usar \${biometryType}\`}
+    </button>
+  );
+}`,
+      highlightLines: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+    },
+    {
+      type: 'warning',
+      content: 'Nunca almacenes tokens de sesión o credenciales en localStorage cuando uses biometría. Usa el Secure Storage del dispositivo.',
+    },
+    {
+      type: 'tip',
+      content: 'Configura allowDeviceCredential: true para permitir PIN/patrón como alternativa. Esto mejora la UX cuando la biometría falla.',
+    },
+  ],
+
+  'oauth-pkce': [
+    {
+      type: 'text',
+      content: '**OAuth 2.0 con PKCE** (Proof Key for Code Exchange) es el estándar de seguridad recomendado para autenticación en aplicaciones móviles. PKCE protege contra ataques de interceptación de código de autorización, especialmente críticos en apps nativas.',
+    },
+    {
+      type: 'info',
+      content: 'PKCE fue diseñado específicamente para apps públicas (móviles y SPAs) que no pueden almacenar un client_secret de forma segura.',
+    },
+    {
+      type: 'text',
+      content: '## ¿Por qué PKCE?\n\nEn una app móvil, el flujo OAuth tradicional tiene un problema: cualquier app maliciosa puede interceptar el redirect URI y robar el código de autorización. PKCE resuelve esto añadiendo un desafío criptográfico.',
+    },
+    {
+      type: 'code',
+      language: 'text',
+      code: `Flujo OAuth 2.0 + PKCE:
+
+1. App genera: code_verifier (string aleatorio)
+2. App calcula: code_challenge = SHA256(code_verifier)
+3. App → Auth Server: authorization request + code_challenge
+4. Usuario se autentica en Auth Server
+5. Auth Server → App: authorization_code (via redirect)
+6. App → Auth Server: code + code_verifier
+7. Auth Server verifica: SHA256(code_verifier) === code_challenge
+8. Auth Server → App: access_token + refresh_token`,
+    },
+    {
+      type: 'text',
+      content: '## Implementación con capacitor-oauth2',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `npm install @byteowls/capacitor-oauth2`,
+    },
+    {
+      type: 'text',
+      content: '## Servicio de Autenticación OAuth',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/oauth.service.ts',
+      code: `import { OAuth2Client } from '@byteowls/capacitor-oauth2';
+import { Capacitor } from '@capacitor/core';
+
+interface OAuthConfig {
+  authorizationBaseUrl: string;
+  tokenUrl: string;
+  clientId: string;
+  redirectUrl: string;
+  scope: string;
+}
+
+const config: OAuthConfig = {
+  authorizationBaseUrl: 'https://auth.example.com/authorize',
+  tokenUrl: 'https://auth.example.com/oauth/token',
+  clientId: import.meta.env.VITE_OAUTH_CLIENT_ID,
+  redirectUrl: Capacitor.isNativePlatform()
+    ? 'com.myapp://oauth/callback'
+    : \`\${window.location.origin}/oauth/callback\`,
+  scope: 'openid profile email offline_access',
+};
+
+export class OAuthService {
+  async login(): Promise<{ accessToken: string; refreshToken?: string }> {
+    try {
+      const response = await OAuth2Client.authenticate({
+        appId: config.clientId,
+        authorizationBaseUrl: config.authorizationBaseUrl,
+        accessTokenEndpoint: config.tokenUrl,
+        scope: config.scope,
+        redirectUrl: config.redirectUrl,
+        responseType: 'code',
+        pkceEnabled: true, // ¡Crucial! Habilita PKCE
+        web: {
+          redirectUrl: config.redirectUrl,
+          windowOptions: 'height=600,width=400',
+        },
+        android: {
+          redirectUrl: config.redirectUrl,
+          handleResultOnNewIntent: true,
+          handleResultOnActivityResult: true,
+        },
+        ios: {
+          redirectUrl: config.redirectUrl,
+          siwaUseScope: true,
+        },
+      });
+
+      return {
+        accessToken: response.access_token,
+        refreshToken: response.refresh_token,
+      };
+    } catch (error: any) {
+      if (error.message?.includes('cancelled')) {
+        throw new Error('Login cancelado por el usuario');
+      }
+      throw error;
+    }
+  }
+
+  async logout(): Promise<void> {
+    try {
+      await OAuth2Client.logout({
+        appId: config.clientId,
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }
+}`,
+      highlightLines: [15, 16, 17, 30, 31, 32],
+    },
+    {
+      type: 'text',
+      content: '## Configuración de Deep Links\n\nPara que el redirect funcione en apps nativas, configura deep links:',
+    },
+    {
+      type: 'code',
+      language: 'xml',
+      filename: 'android/app/src/main/AndroidManifest.xml',
+      code: `<activity
+    android:name=".MainActivity"
+    android:exported="true">
+
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data
+            android:scheme="com.myapp"
+            android:host="oauth"
+            android:pathPrefix="/callback" />
+    </intent-filter>
+</activity>`,
+      highlightLines: [9, 10, 11, 12],
+    },
+    {
+      type: 'code',
+      language: 'swift',
+      filename: 'ios/App/App/Info.plist',
+      code: `<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleURLName</key>
+        <string>com.myapp</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>com.myapp</string>
+        </array>
+    </dict>
+</array>`,
+    },
+    {
+      type: 'text',
+      content: '## Refresh Token Flow',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/oauth.service.ts',
+      code: `async refreshToken(refreshToken: string): Promise<{
+  accessToken: string;
+  refreshToken?: string;
+}> {
+  const response = await fetch(config.tokenUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      grant_type: 'refresh_token',
+      client_id: config.clientId,
+      refresh_token: refreshToken,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Token refresh failed');
+  }
+
+  const data = await response.json();
+  return {
+    accessToken: data.access_token,
+    refreshToken: data.refresh_token || refreshToken,
+  };
+}`,
+      highlightLines: [10, 11, 12, 13],
+    },
+    {
+      type: 'text',
+      content: '## Hook useAuth con OAuth PKCE',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/hooks/useAuth.ts',
+      code: `import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { OAuthService } from '../services/oauth.service';
+import { SecureStorage } from '../services/secure-storage.service';
+
+interface AuthState {
+  isAuthenticated: boolean;
+  accessToken: string | null;
+  user: User | null;
+  login: () => Promise<void>;
+  logout: () => Promise<void>;
+  refreshSession: () => Promise<void>;
+}
+
+const oauthService = new OAuthService();
+
+export const useAuth = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      isAuthenticated: false,
+      accessToken: null,
+      user: null,
+
+      login: async () => {
+        const tokens = await oauthService.login();
+
+        // Almacenar refresh token de forma segura
+        await SecureStorage.set('refresh_token', tokens.refreshToken);
+
+        // Obtener info del usuario
+        const user = await fetchUserInfo(tokens.accessToken);
+
+        set({
+          isAuthenticated: true,
+          accessToken: tokens.accessToken,
+          user,
+        });
+      },
+
+      logout: async () => {
+        await oauthService.logout();
+        await SecureStorage.remove('refresh_token');
+        set({ isAuthenticated: false, accessToken: null, user: null });
+      },
+
+      refreshSession: async () => {
+        const refreshToken = await SecureStorage.get('refresh_token');
+        if (!refreshToken) throw new Error('No refresh token');
+
+        const tokens = await oauthService.refreshToken(refreshToken);
+        await SecureStorage.set('refresh_token', tokens.refreshToken);
+
+        set({ accessToken: tokens.accessToken });
+      },
+    }),
+    {
+      name: 'auth-storage',
+      partialize: (state) => ({ isAuthenticated: state.isAuthenticated }),
+    }
+  )
+);`,
+      highlightLines: [24, 25, 26, 27, 28, 29, 44, 45, 46, 47, 48, 49, 50],
+    },
+    {
+      type: 'warning',
+      content: 'Nunca almacenes el refresh_token en localStorage o AsyncStorage. Usa siempre Secure Storage nativo (Keychain en iOS, EncryptedSharedPreferences en Android).',
+    },
+    {
+      type: 'tip',
+      content: 'Configura tiempos de expiración cortos para access_tokens (15 min) y usa refresh_tokens con rotación automática para máxima seguridad.',
+    },
+  ],
+
+  'secure-storage': [
+    {
+      type: 'text',
+      content: 'El **almacenamiento seguro** en apps móviles es fundamental para proteger datos sensibles como tokens, credenciales y información personal. En Capacitor, el plugin **@capacitor/preferences** NO es seguro para datos sensibles - necesitas usar almacenamiento cifrado nativo.',
+    },
+    {
+      type: 'warning',
+      content: 'localStorage, sessionStorage y @capacitor/preferences almacenan datos en texto plano. NUNCA uses estos para tokens, contraseñas o datos sensibles.',
+    },
+    {
+      type: 'text',
+      content: '## Opciones de Almacenamiento Seguro\n\n| Solución | iOS | Android | Características |\n|----------|-----|---------|----------------|\n| @capacitor-community/secure-storage | Keychain | EncryptedSharedPreferences | Básico, gratuito |\n| @ionic-enterprise/identity-vault | Keychain | Android Keystore | Avanzado, biometría integrada |\n| Implementación custom | Keychain Services | Android Keystore | Control total |',
+    },
+    {
+      type: 'text',
+      content: '## Usando @capacitor-community/secure-storage',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `npm install @capacitor-community/secure-storage-plugin
+npx cap sync`,
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/secure-storage.service.ts',
+      code: `import { SecureStoragePlugin } from '@capacitor-community/secure-storage-plugin';
+
+export class SecureStorage {
+  private static readonly PREFIX = 'app_secure_';
+
+  /**
+   * Almacena un valor de forma segura
+   */
+  static async set(key: string, value: string): Promise<void> {
+    try {
+      await SecureStoragePlugin.set({
+        key: this.PREFIX + key,
+        value,
+      });
+    } catch (error) {
+      console.error('SecureStorage set error:', error);
+      throw new Error('Failed to store secure data');
+    }
+  }
+
+  /**
+   * Recupera un valor almacenado
+   */
+  static async get(key: string): Promise<string | null> {
+    try {
+      const result = await SecureStoragePlugin.get({
+        key: this.PREFIX + key,
+      });
+      return result.value;
+    } catch (error) {
+      // El plugin lanza error si la key no existe
+      return null;
+    }
+  }
+
+  /**
+   * Elimina un valor
+   */
+  static async remove(key: string): Promise<void> {
+    try {
+      await SecureStoragePlugin.remove({
+        key: this.PREFIX + key,
+      });
+    } catch (error) {
+      // Ignorar si no existe
+    }
+  }
+
+  /**
+   * Elimina todos los valores de la app
+   */
+  static async clear(): Promise<void> {
+    try {
+      await SecureStoragePlugin.clear();
+    } catch (error) {
+      console.error('SecureStorage clear error:', error);
+    }
+  }
+
+  /**
+   * Almacena un objeto JSON
+   */
+  static async setObject<T>(key: string, value: T): Promise<void> {
+    await this.set(key, JSON.stringify(value));
+  }
+
+  /**
+   * Recupera un objeto JSON
+   */
+  static async getObject<T>(key: string): Promise<T | null> {
+    const value = await this.get(key);
+    if (!value) return null;
+    try {
+      return JSON.parse(value) as T;
+    } catch {
+      return null;
+    }
+  }
+}`,
+      highlightLines: [10, 11, 12, 13, 25, 26, 27, 58, 59, 65, 66, 67, 68, 69, 70],
+    },
+    {
+      type: 'text',
+      content: '## Gestión Segura de Tokens',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/token.service.ts',
+      code: `import { SecureStorage } from './secure-storage.service';
+
+interface TokenData {
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: number;
+}
+
+export class TokenService {
+  private static readonly TOKEN_KEY = 'auth_tokens';
+  private static tokenCache: TokenData | null = null;
+
+  static async saveTokens(
+    accessToken: string,
+    refreshToken: string,
+    expiresIn: number
+  ): Promise<void> {
+    const tokenData: TokenData = {
+      accessToken,
+      refreshToken,
+      expiresAt: Date.now() + expiresIn * 1000,
+    };
+
+    await SecureStorage.setObject(this.TOKEN_KEY, tokenData);
+    this.tokenCache = tokenData;
+  }
+
+  static async getAccessToken(): Promise<string | null> {
+    // Primero verificar cache en memoria
+    if (this.tokenCache && !this.isExpired(this.tokenCache)) {
+      return this.tokenCache.accessToken;
+    }
+
+    // Cargar desde storage seguro
+    const tokenData = await SecureStorage.getObject<TokenData>(this.TOKEN_KEY);
+
+    if (!tokenData) return null;
+
+    if (this.isExpired(tokenData)) {
+      // Token expirado, intentar refresh
+      return null;
+    }
+
+    this.tokenCache = tokenData;
+    return tokenData.accessToken;
+  }
+
+  static async getRefreshToken(): Promise<string | null> {
+    if (this.tokenCache) {
+      return this.tokenCache.refreshToken;
+    }
+
+    const tokenData = await SecureStorage.getObject<TokenData>(this.TOKEN_KEY);
+    return tokenData?.refreshToken || null;
+  }
+
+  static async clearTokens(): Promise<void> {
+    await SecureStorage.remove(this.TOKEN_KEY);
+    this.tokenCache = null;
+  }
+
+  private static isExpired(tokenData: TokenData): boolean {
+    // Considerar expirado 5 minutos antes para dar margen
+    const bufferMs = 5 * 60 * 1000;
+    return Date.now() >= tokenData.expiresAt - bufferMs;
+  }
+}`,
+      highlightLines: [17, 18, 19, 20, 21, 22, 23, 24, 28, 29, 30, 31, 37, 38, 39, 40, 59, 60, 61, 62],
+    },
+    {
+      type: 'text',
+      content: '## Interceptor HTTP con Tokens',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/api.service.ts',
+      code: `import { TokenService } from './token.service';
+
+class ApiService {
+  private baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+
+  async fetch<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const accessToken = await TokenService.getAccessToken();
+
+    const headers = new Headers(options.headers);
+
+    if (accessToken) {
+      headers.set('Authorization', \`Bearer \${accessToken}\`);
+    }
+
+    const response = await fetch(\`\${this.baseUrl}\${endpoint}\`, {
+      ...options,
+      headers,
+    });
+
+    // Si el token expiró, intentar refresh
+    if (response.status === 401) {
+      const newToken = await this.refreshAndRetry();
+      if (newToken) {
+        headers.set('Authorization', \`Bearer \${newToken}\`);
+        const retryResponse = await fetch(\`\${this.baseUrl}\${endpoint}\`, {
+          ...options,
+          headers,
+        });
+        return retryResponse.json();
+      }
+      throw new Error('Session expired');
+    }
+
+    if (!response.ok) {
+      throw new Error(\`API Error: \${response.status}\`);
+    }
+
+    return response.json();
+  }
+
+  private async refreshAndRetry(): Promise<string | null> {
+    const refreshToken = await TokenService.getRefreshToken();
+    if (!refreshToken) return null;
+
+    try {
+      // Llamar al endpoint de refresh
+      const response = await fetch(\`\${this.baseUrl}/auth/refresh\`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+
+      if (!response.ok) return null;
+
+      const data = await response.json();
+      await TokenService.saveTokens(
+        data.access_token,
+        data.refresh_token,
+        data.expires_in
+      );
+
+      return data.access_token;
+    } catch {
+      return null;
+    }
+  }
+}
+
+export const api = new ApiService(import.meta.env.VITE_API_URL);`,
+      highlightLines: [14, 17, 18, 19, 27, 28, 29, 30, 31, 32, 33, 34, 35],
+    },
+    {
+      type: 'tip',
+      content: 'Usa un cache en memoria para el access_token y solo accede al Secure Storage cuando sea necesario. Esto mejora el rendimiento significativamente.',
+    },
+    {
+      type: 'info',
+      content: 'En iOS, Keychain persiste los datos incluso después de desinstalar la app. Considera limpiar los datos en el primer lanzamiento post-instalación.',
+    },
+  ],
+
+  'ssl-pinning': [
+    {
+      type: 'text',
+      content: '**SSL/Certificate Pinning** es una técnica de seguridad que protege tu app contra ataques Man-in-the-Middle (MITM) al verificar que el certificado del servidor coincide con un certificado conocido "pineado" en la app.',
+    },
+    {
+      type: 'info',
+      content: 'Sin SSL Pinning, un atacante con acceso a la red (WiFi público, proxy corporativo) puede interceptar el tráfico HTTPS usando un certificado falso.',
+    },
+    {
+      type: 'text',
+      content: '## ¿Cómo Funciona SSL Pinning?\n\n1. **Sin Pinning:** App confía en cualquier certificado firmado por una CA\n2. **Con Pinning:** App solo confía en certificados específicos que tú defines\n\nPuedes pinear:\n- El certificado completo\n- La clave pública (public key)\n- El hash del certificado (más común)',
+    },
+    {
+      type: 'text',
+      content: '## Implementación con capacitor-ssl-pinning',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `npm install @phuocbv/capacitor-ssl-pinning
+npx cap sync`,
+    },
+    {
+      type: 'text',
+      content: '## Obtener el Hash del Certificado\n\nPrimero, necesitas obtener el hash SHA-256 del certificado de tu servidor:',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `# Obtener el certificado y calcular su hash SHA-256
+echo | openssl s_client -servername api.tudominio.com -connect api.tudominio.com:443 2>/dev/null | \\
+  openssl x509 -pubkey -noout | \\
+  openssl pkey -pubin -outform der | \\
+  openssl dgst -sha256 -binary | \\
+  openssl enc -base64
+
+# Output ejemplo: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=`,
+    },
+    {
+      type: 'text',
+      content: '## Configurar SSL Pinning',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/ssl-pinning.service.ts',
+      code: `import { SSLPinning } from '@phuocbv/capacitor-ssl-pinning';
+import { Capacitor } from '@capacitor/core';
+
+// Configuración de pines por dominio
+const SSL_PINS: Record<string, string[]> = {
+  'api.tudominio.com': [
+    // Pin actual
+    'sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',
+    // Pin de backup (siguiente certificado)
+    'sha256/BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=',
+  ],
+  'auth.tudominio.com': [
+    'sha256/CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=',
+  ],
+};
+
+export class SSLPinningService {
+  private static initialized = false;
+
+  static async initialize(): Promise<void> {
+    // Solo necesario en plataformas nativas
+    if (!Capacitor.isNativePlatform()) {
+      console.log('SSL Pinning: Skipped on web');
+      return;
+    }
+
+    if (this.initialized) return;
+
+    try {
+      // Configurar los pines
+      for (const [hostname, pins] of Object.entries(SSL_PINS)) {
+        await SSLPinning.addCertificate({
+          hostname,
+          pins,
+        });
+      }
+
+      // Habilitar pinning
+      await SSLPinning.enable();
+
+      this.initialized = true;
+      console.log('SSL Pinning: Enabled');
+    } catch (error) {
+      console.error('SSL Pinning setup failed:', error);
+      // En producción, podrías querer bloquear la app aquí
+      if (import.meta.env.PROD) {
+        throw new Error('Security configuration failed');
+      }
+    }
+  }
+
+  static async disable(): Promise<void> {
+    if (!Capacitor.isNativePlatform()) return;
+
+    await SSLPinning.disable();
+    this.initialized = false;
+  }
+}`,
+      highlightLines: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 29, 30, 31, 32, 33, 34, 36],
+    },
+    {
+      type: 'text',
+      content: '## Inicializar en el Arranque de la App',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/main.tsx',
+      code: `import { SSLPinningService } from './services/ssl-pinning.service';
+
+async function bootstrap() {
+  // Inicializar SSL Pinning ANTES de cualquier llamada HTTP
+  await SSLPinningService.initialize();
+
+  // Resto de la inicialización de la app
+  const root = ReactDOM.createRoot(document.getElementById('root')!);
+  root.render(<App />);
+}
+
+bootstrap().catch(console.error);`,
+      highlightLines: [4, 5],
+    },
+    {
+      type: 'text',
+      content: '## Implementación Alternativa: Plugin Nativo Custom\n\nPara mayor control, puedes implementar SSL Pinning directamente en código nativo:',
+    },
+    {
+      type: 'code',
+      language: 'kotlin',
+      filename: 'android/app/src/main/java/SSLPinningPlugin.kt',
+      code: `// Android: Usando OkHttp CertificatePinner
+import okhttp3.CertificatePinner
+import okhttp3.OkHttpClient
+
+val certificatePinner = CertificatePinner.Builder()
+    .add("api.tudominio.com", "sha256/AAAA...")
+    .add("api.tudominio.com", "sha256/BBBB...") // Backup pin
+    .build()
+
+val client = OkHttpClient.Builder()
+    .certificatePinner(certificatePinner)
+    .build()`,
+      highlightLines: [5, 6, 7],
+    },
+    {
+      type: 'code',
+      language: 'swift',
+      filename: 'ios/App/App/SSLPinning.swift',
+      code: `// iOS: Usando URLSession delegate
+import Foundation
+import CommonCrypto
+
+class SSLPinningDelegate: NSObject, URLSessionDelegate {
+    let pinnedHashes: Set<String> = [
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB="
+    ]
+
+    func urlSession(_ session: URLSession,
+                    didReceive challenge: URLAuthenticationChallenge,
+                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+
+        guard let serverTrust = challenge.protectionSpace.serverTrust,
+              let certificate = SecTrustGetCertificateAtIndex(serverTrust, 0) else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+
+        let serverHash = sha256Hash(of: certificate)
+
+        if pinnedHashes.contains(serverHash) {
+            completionHandler(.useCredential, URLCredential(trust: serverTrust))
+        } else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+        }
+    }
+}`,
+      highlightLines: [6, 7, 8, 9, 22, 23, 24, 25, 26],
+    },
+    {
+      type: 'warning',
+      content: 'Siempre incluye al menos 2 pines: el actual y uno de backup. Si el certificado expira o cambia sin tener un backup, tu app dejará de funcionar.',
+    },
+    {
+      type: 'text',
+      content: '## Rotación de Certificados\n\nCuando tu certificado esté por expirar:\n\n1. Obtén el hash del nuevo certificado\n2. Agrégalo como pin de backup en una actualización de la app\n3. Espera a que los usuarios actualicen\n4. Rota el certificado en el servidor\n5. En la siguiente versión, remueve el pin antiguo',
+    },
+    {
+      type: 'tip',
+      content: 'En desarrollo, puedes deshabilitar SSL Pinning para permitir proxies como Charles o Fiddler. Usa variables de entorno para controlar esto.',
+    },
+  ],
+
+  'app-hardening': [
+    {
+      type: 'text',
+      content: 'El **hardening de aplicaciones** comprende técnicas para dificultar la ingeniería inversa, manipulación y ataques a tu app móvil. Aunque ninguna protección es 100% efectiva, múltiples capas de seguridad aumentan significativamente el esfuerzo requerido para comprometer tu app.',
+    },
+    {
+      type: 'text',
+      content: '## Detección de Root/Jailbreak\n\nDetectar si el dispositivo está rooteado (Android) o con jailbreak (iOS) es importante para apps que manejan datos sensibles:',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `npm install @AyushmehtaTech/capacitor-root-jailbreak-detector
+npx cap sync`,
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/device-integrity.service.ts',
+      code: `import { RootJailbreakDetector } from '@AyushmehtaTech/capacitor-root-jailbreak-detector';
+import { Capacitor } from '@capacitor/core';
+
+export interface DeviceIntegrityResult {
+  isCompromised: boolean;
+  isRooted: boolean;
+  isJailbroken: boolean;
+  isEmulator: boolean;
+  isDebugMode: boolean;
+}
+
+export class DeviceIntegrityService {
+  static async check(): Promise<DeviceIntegrityResult> {
+    if (!Capacitor.isNativePlatform()) {
+      // En web, no podemos verificar
+      return {
+        isCompromised: false,
+        isRooted: false,
+        isJailbroken: false,
+        isEmulator: false,
+        isDebugMode: import.meta.env.DEV,
+      };
+    }
+
+    const platform = Capacitor.getPlatform();
+
+    try {
+      if (platform === 'android') {
+        const [rootResult, emulatorResult] = await Promise.all([
+          RootJailbreakDetector.isRooted(),
+          RootJailbreakDetector.isRunningOnEmulator(),
+        ]);
+
+        return {
+          isCompromised: rootResult.isRooted || emulatorResult.isRunningOnEmulator,
+          isRooted: rootResult.isRooted,
+          isJailbroken: false,
+          isEmulator: emulatorResult.isRunningOnEmulator,
+          isDebugMode: await this.isDebuggable(),
+        };
+      } else {
+        const [jailbreakResult, emulatorResult] = await Promise.all([
+          RootJailbreakDetector.isJailbroken(),
+          RootJailbreakDetector.isRunningOnSimulator(),
+        ]);
+
+        return {
+          isCompromised: jailbreakResult.isJailbroken || emulatorResult.isRunningOnSimulator,
+          isRooted: false,
+          isJailbroken: jailbreakResult.isJailbroken,
+          isEmulator: emulatorResult.isRunningOnSimulator,
+          isDebugMode: await this.isDebuggable(),
+        };
+      }
+    } catch (error) {
+      console.error('Device integrity check failed:', error);
+      // En caso de error, asumir comprometido por seguridad
+      return {
+        isCompromised: true,
+        isRooted: false,
+        isJailbroken: false,
+        isEmulator: false,
+        isDebugMode: true,
+      };
+    }
+  }
+
+  private static async isDebuggable(): Promise<boolean> {
+    // Verificación adicional de modo debug
+    try {
+      const result = await RootJailbreakDetector.isDebuggable();
+      return result.isDebuggable;
+    } catch {
+      return false;
+    }
+  }
+}`,
+      highlightLines: [13, 14, 15, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38],
+    },
+    {
+      type: 'text',
+      content: '## Protección del Código JavaScript\n\nPara apps Capacitor, el código JS está accesible en el bundle. Usa ofuscación para dificultar la ingeniería inversa:',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `npm install --save-dev javascript-obfuscator rollup-plugin-obfuscator`,
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'vite.config.ts',
+      code: `import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import obfuscatorPlugin from 'rollup-plugin-obfuscator';
+
+export default defineConfig({
+  plugins: [
+    react(),
+  ],
+  build: {
+    rollupOptions: {
+      plugins: [
+        // Solo en producción
+        process.env.NODE_ENV === 'production' && obfuscatorPlugin({
+          options: {
+            compact: true,
+            controlFlowFlattening: true,
+            controlFlowFlatteningThreshold: 0.75,
+            deadCodeInjection: true,
+            deadCodeInjectionThreshold: 0.4,
+            debugProtection: true,
+            debugProtectionInterval: 2000,
+            disableConsoleOutput: true,
+            identifierNamesGenerator: 'hexadecimal',
+            log: false,
+            numbersToExpressions: true,
+            renameGlobals: false,
+            selfDefending: true,
+            simplify: true,
+            splitStrings: true,
+            splitStringsChunkLength: 10,
+            stringArray: true,
+            stringArrayCallsTransform: true,
+            stringArrayEncoding: ['base64'],
+            stringArrayThreshold: 0.75,
+            transformObjectKeys: true,
+            unicodeEscapeSequence: false,
+          },
+        }),
+      ].filter(Boolean),
+    },
+  },
+});`,
+      highlightLines: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+    },
+    {
+      type: 'text',
+      content: '## Detección de Tampering\n\nVerifica la integridad de tu app para detectar modificaciones:',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/integrity-check.service.ts',
+      code: `import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+
+export class IntegrityCheckService {
+  // Hash esperado del bundle en producción
+  private static readonly EXPECTED_CHECKSUMS: Record<string, string> = {
+    ios: import.meta.env.VITE_IOS_BUNDLE_CHECKSUM || '',
+    android: import.meta.env.VITE_ANDROID_BUNDLE_CHECKSUM || '',
+  };
+
+  static async verifyAppSignature(): Promise<boolean> {
+    if (!Capacitor.isNativePlatform()) return true;
+
+    try {
+      const info = await App.getInfo();
+      const platform = Capacitor.getPlatform();
+
+      // Verificar que el ID de la app no fue modificado
+      const expectedBundleId = import.meta.env.VITE_BUNDLE_ID;
+      if (info.id !== expectedBundleId) {
+        console.error('Bundle ID mismatch:', info.id);
+        return false;
+      }
+
+      // En producción, verificar firma
+      if (import.meta.env.PROD) {
+        // Implementar verificación de firma nativa
+        // Esto requiere código nativo adicional
+        return await this.verifyNativeSignature();
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Integrity check failed:', error);
+      return false;
+    }
+  }
+
+  private static async verifyNativeSignature(): Promise<boolean> {
+    // Esta verificación debe implementarse en código nativo
+    // Android: Verificar certificado de firma
+    // iOS: Verificar provisioning profile
+    return true; // Placeholder
+  }
+
+  static async checkAtLaunch(): Promise<void> {
+    const [deviceIntegrity, appIntegrity] = await Promise.all([
+      import('./device-integrity.service').then(m => m.DeviceIntegrityService.check()),
+      this.verifyAppSignature(),
+    ]);
+
+    if (deviceIntegrity.isCompromised) {
+      // Decidir qué hacer: bloquear, advertir, o degradar funcionalidad
+      console.warn('Device integrity compromised');
+
+      // Para apps de alta seguridad (fintech, salud):
+      if (import.meta.env.VITE_STRICT_SECURITY === 'true') {
+        throw new Error('This app cannot run on compromised devices');
+      }
+    }
+
+    if (!appIntegrity) {
+      console.error('App integrity check failed');
+      throw new Error('App integrity verification failed');
+    }
+  }
+}`,
+      highlightLines: [11, 12, 13, 19, 20, 21, 22, 23, 44, 45, 46, 47, 48, 50, 51, 52, 53, 54, 55, 56, 57],
+    },
+    {
+      type: 'text',
+      content: '## Configuración Android: ProGuard',
+    },
+    {
+      type: 'code',
+      language: 'text',
+      filename: 'android/app/proguard-rules.pro',
+      code: `# Reglas de ProGuard para Capacitor
+-keep class com.getcapacitor.** { *; }
+-keep class * extends com.getcapacitor.Plugin { *; }
+
+# Ofuscar nombres de clases y métodos
+-repackageclasses ''
+-allowaccessmodification
+-optimizations !code/simplification/arithmetic
+
+# Eliminar logs en release
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+}
+
+# Proteger código sensible
+-keep,allowobfuscation class com.tuapp.security.** { *; }`,
+      highlightLines: [6, 7, 8, 11, 12, 13, 14, 15],
+    },
+    {
+      type: 'warning',
+      content: 'El hardening aumenta la seguridad pero también puede afectar el rendimiento y la experiencia de desarrollo. Usa diferentes configuraciones para dev y producción.',
+    },
+    {
+      type: 'tip',
+      content: 'Considera usar soluciones comerciales como Guardsquare (DexGuard/iXGuard) para apps que requieren máxima protección contra ingeniería inversa.',
+    },
+  ],
+
+  'owasp-compliance': [
+    {
+      type: 'text',
+      content: 'El **OWASP Mobile Application Security Verification Standard (MASVS)** define los requisitos de seguridad para aplicaciones móviles. Cumplir con OWASP te ayuda a identificar y mitigar las vulnerabilidades más comunes en apps móviles.',
+    },
+    {
+      type: 'info',
+      content: 'OWASP MASVS tiene 3 niveles: L1 (estándar), L2 (defense-in-depth), y R (resistencia a ingeniería inversa). La mayoría de apps comerciales deben cumplir al menos L1.',
+    },
+    {
+      type: 'text',
+      content: '## OWASP Mobile Top 10 (2024)\n\n| # | Vulnerabilidad | Mitigación en Capacitor |\n|---|----------------|------------------------|\n| M1 | Improper Platform Usage | Usar APIs nativas correctamente |\n| M2 | Insecure Data Storage | Secure Storage, no localStorage |\n| M3 | Insecure Communication | SSL Pinning, HTTPS only |\n| M4 | Insecure Authentication | OAuth PKCE, biometría |\n| M5 | Insufficient Cryptography | Usar crypto nativo, no JS |\n| M6 | Insecure Authorization | Validar permisos server-side |\n| M7 | Client Code Quality | Code review, linting |\n| M8 | Code Tampering | App hardening, integrity checks |\n| M9 | Reverse Engineering | Ofuscación, SSL Pinning |\n| M10 | Extraneous Functionality | Remover debug code |',
+    },
+    {
+      type: 'text',
+      content: '## Checklist de Seguridad OWASP',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/utils/security-checklist.ts',
+      code: `/**
+ * Security Checklist basado en OWASP MASVS
+ * Ejecutar antes de cada release
+ */
+export const SECURITY_CHECKLIST = {
+  // MASVS-STORAGE: Almacenamiento de datos
+  storage: {
+    noSensitiveDataInLogs: 'No loguear tokens, contraseñas o PII',
+    secureStorageForCredentials: 'Usar Keychain/Keystore para credenciales',
+    noSensitiveDataInBackups: 'Excluir datos sensibles de backups',
+    noSensitiveDataInClipboard: 'Limpiar clipboard después de pegar',
+    noDataLeakageViaSnapshots: 'Ocultar contenido en app switcher',
+  },
+
+  // MASVS-CRYPTO: Criptografía
+  crypto: {
+    strongAlgorithms: 'Usar AES-256, RSA-2048+, SHA-256+',
+    secureKeyStorage: 'Keys en Keychain/Keystore, no hardcoded',
+    secureRandomGeneration: 'Usar SecureRandom, no Math.random',
+    noBrokenCrypto: 'No usar MD5, SHA1, DES, 3DES',
+  },
+
+  // MASVS-AUTH: Autenticación
+  auth: {
+    biometricAsSecondFactor: 'Biometría complementa, no reemplaza',
+    sessionManagement: 'Tokens con expiración, refresh rotation',
+    securePasswordPolicy: 'Mínimo 8 caracteres, complejidad',
+    accountLockout: 'Bloqueo después de intentos fallidos',
+  },
+
+  // MASVS-NETWORK: Comunicación
+  network: {
+    httpsOnly: 'Solo conexiones HTTPS',
+    certificatePinning: 'SSL Pinning implementado',
+    noCustomCAs: 'No aceptar CAs personalizadas en producción',
+    secureWebViews: 'Deshabilitar file:// y content:// en WebView',
+  },
+
+  // MASVS-PLATFORM: Uso de plataforma
+  platform: {
+    minimumPermissions: 'Solo permisos necesarios',
+    secureDeepLinks: 'Validar todas las URLs de deep links',
+    secureWebViewConfig: 'JavaScript deshabilitado si no es necesario',
+    exportedComponentsSecurity: 'Componentes exportados protegidos',
+  },
+
+  // MASVS-CODE: Calidad de código
+  code: {
+    noDebugCode: 'Sin console.log en producción',
+    noHardcodedSecrets: 'Sin API keys en código',
+    inputValidation: 'Validar todos los inputs',
+    errorHandling: 'No exponer stack traces',
+  },
+
+  // MASVS-RESILIENCE: Resistencia
+  resilience: {
+    rootDetection: 'Detectar root/jailbreak',
+    tamperDetection: 'Verificar integridad de la app',
+    antiDebugging: 'Detectar debuggers en producción',
+    codeObfuscation: 'Ofuscar código en producción',
+  },
+};`,
+      highlightLines: [8, 9, 10, 11, 12, 16, 17, 18, 19, 23, 24, 25, 26, 30, 31, 32, 33],
+    },
+    {
+      type: 'text',
+      content: '## Implementación de Controles de Seguridad',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/security.service.ts',
+      code: `import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+import { DeviceIntegrityService } from './device-integrity.service';
+import { SSLPinningService } from './ssl-pinning.service';
+
+interface SecurityConfig {
+  enforceSSLPinning: boolean;
+  blockRootedDevices: boolean;
+  blockEmulators: boolean;
+  enableAntiTampering: boolean;
+  sessionTimeoutMinutes: number;
+}
+
+const DEFAULT_CONFIG: SecurityConfig = {
+  enforceSSLPinning: true,
+  blockRootedDevices: false, // true para apps de alta seguridad
+  blockEmulators: false,     // true para producción
+  enableAntiTampering: true,
+  sessionTimeoutMinutes: 30,
+};
+
+export class SecurityService {
+  private static config: SecurityConfig = DEFAULT_CONFIG;
+  private static sessionTimeout: NodeJS.Timeout | null = null;
+
+  static async initialize(customConfig?: Partial<SecurityConfig>): Promise<void> {
+    this.config = { ...DEFAULT_CONFIG, ...customConfig };
+
+    // 1. Verificar integridad del dispositivo
+    await this.checkDeviceIntegrity();
+
+    // 2. Configurar SSL Pinning
+    if (this.config.enforceSSLPinning) {
+      await SSLPinningService.initialize();
+    }
+
+    // 3. Configurar listeners de seguridad
+    this.setupSecurityListeners();
+
+    // 4. Iniciar timeout de sesión
+    this.resetSessionTimeout();
+
+    console.log('Security initialized');
+  }
+
+  private static async checkDeviceIntegrity(): Promise<void> {
+    if (!Capacitor.isNativePlatform()) return;
+
+    const integrity = await DeviceIntegrityService.check();
+
+    if (this.config.blockRootedDevices && (integrity.isRooted || integrity.isJailbroken)) {
+      throw new SecurityError(
+        'DEVICE_COMPROMISED',
+        'Esta app no puede ejecutarse en dispositivos rooteados'
+      );
+    }
+
+    if (this.config.blockEmulators && integrity.isEmulator) {
+      throw new SecurityError(
+        'EMULATOR_DETECTED',
+        'Esta app no puede ejecutarse en emuladores'
+      );
+    }
+  }
+
+  private static setupSecurityListeners(): void {
+    // Detectar cuando la app va a background
+    App.addListener('appStateChange', ({ isActive }) => {
+      if (!isActive) {
+        // Ocultar contenido sensible para screenshot
+        this.hideSecureContent();
+        // Pausar timeout de sesión
+        this.pauseSessionTimeout();
+      } else {
+        this.showSecureContent();
+        this.resetSessionTimeout();
+      }
+    });
+
+    // Detectar capturas de pantalla (iOS)
+    App.addListener('screenshotTaken', () => {
+      // Advertir al usuario o loguear evento
+      console.warn('Screenshot detected');
+      this.logSecurityEvent('screenshot_taken');
+    });
+  }
+
+  private static hideSecureContent(): void {
+    // Agregar overlay para ocultar datos sensibles en app switcher
+    const overlay = document.createElement('div');
+    overlay.id = 'security-overlay';
+    overlay.style.cssText = \`
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      z-index: 99999;
+    \`;
+    document.body.appendChild(overlay);
+  }
+
+  private static showSecureContent(): void {
+    const overlay = document.getElementById('security-overlay');
+    overlay?.remove();
+  }
+
+  private static resetSessionTimeout(): void {
+    if (this.sessionTimeout) {
+      clearTimeout(this.sessionTimeout);
+    }
+
+    this.sessionTimeout = setTimeout(() => {
+      this.logSecurityEvent('session_timeout');
+      // Disparar evento de timeout
+      window.dispatchEvent(new CustomEvent('security:session-timeout'));
+    }, this.config.sessionTimeoutMinutes * 60 * 1000);
+  }
+
+  private static pauseSessionTimeout(): void {
+    if (this.sessionTimeout) {
+      clearTimeout(this.sessionTimeout);
+      this.sessionTimeout = null;
+    }
+  }
+
+  private static logSecurityEvent(event: string, data?: Record<string, any>): void {
+    // Enviar a tu sistema de analytics/logging
+    console.log('Security event:', event, data);
+  }
+}
+
+class SecurityError extends Error {
+  constructor(public code: string, message: string) {
+    super(message);
+    this.name = 'SecurityError';
+  }
+}`,
+      highlightLines: [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 44, 45, 46, 47, 48, 49, 50, 51, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73],
+    },
+    {
+      type: 'text',
+      content: '## Configuración Segura de WebView',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'capacitor.config.ts',
+      code: `import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  appId: 'com.tuapp.segura',
+  appName: 'Tu App Segura',
+  webDir: 'dist',
+
+  // Configuración de seguridad del WebView
+  server: {
+    // Solo en desarrollo
+    ...(process.env.NODE_ENV === 'development' && {
+      url: 'http://localhost:5173',
+      cleartext: true,
+    }),
+  },
+
+  android: {
+    // Deshabilitar backup de datos
+    allowMixedContent: false,
+    captureInput: true,
+    webContentsDebuggingEnabled: false, // IMPORTANTE en producción
+  },
+
+  ios: {
+    // Configuración de seguridad iOS
+    contentInset: 'always',
+    allowsLinkPreview: false,
+    scrollEnabled: true,
+  },
+
+  plugins: {
+    // Configuración de plugins de seguridad
+    SplashScreen: {
+      launchAutoHide: false, // Control manual para verificaciones
+    },
+  },
+};
+
+export default config;`,
+      highlightLines: [9, 10, 11, 12, 13, 14, 17, 18, 19, 20, 21],
+    },
+    {
+      type: 'text',
+      content: '## Auditoría de Seguridad Automatizada',
+    },
+    {
+      type: 'code',
+      language: 'json',
+      filename: 'package.json',
+      code: `{
+  "scripts": {
+    "security:audit": "npm audit --audit-level=moderate",
+    "security:check": "snyk test",
+    "security:lint": "eslint src --ext .ts,.tsx --rule 'no-console: error' --rule 'no-debugger: error'",
+    "prebuild": "npm run security:audit && npm run security:lint"
+  },
+  "devDependencies": {
+    "snyk": "^1.1200.0",
+    "eslint-plugin-security": "^2.1.0"
+  }
+}`,
+      highlightLines: [3, 4, 5, 6],
+    },
+    {
+      type: 'warning',
+      content: 'La seguridad es un proceso continuo. Realiza auditorías periódicas, mantén dependencias actualizadas, y considera penetration testing antes de lanzamientos importantes.',
+    },
+    {
+      type: 'tip',
+      content: 'Usa herramientas como OWASP ZAP, MobSF, o Frida para probar la seguridad de tu app antes del lanzamiento. Muchas vulnerabilidades solo se detectan con testing activo.',
+    },
+  ],
 }

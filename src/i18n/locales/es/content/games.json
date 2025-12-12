@@ -232,6 +232,150 @@
     "correctProblem": "Problema correcto",
     "falseAlarm": "Falsa alarma",
     "missedProblem": "Problema omitido",
-    "notSelected": "No seleccionado"
+    "notSelected": "No seleccionado",
+    "securityReview": "Auditoría de Seguridad",
+    "selectVulnerabilities": "Selecciona las vulnerabilidades de seguridad",
+    "perfectAudit": "¡Auditoría perfecta! Identificaste todas las vulnerabilidades.",
+    "falsePositives": "falsos positivos",
+    "missed": "no detectadas",
+    "vulnerabilityFound": "Vulnerabilidad detectada",
+    "falsePositive": "Falso positivo",
+    "vulnerabilityMissed": "Vulnerabilidad no detectada",
+    "categoryStorage": "Almacenamiento",
+    "categoryAuth": "Autenticación",
+    "categoryNetwork": "Red",
+    "categoryCrypto": "Criptografía",
+    "categoryPlatform": "Plataforma"
+  },
+  "security-audit": {
+    "title": "Auditoría de Seguridad",
+    "description": "Identifica vulnerabilidades de seguridad en código de apps móviles",
+    "instructions": "Revisa cada snippet de código y selecciona las prácticas que representan vulnerabilidades de seguridad.",
+    "scenarios": [
+      {
+        "id": "sec-1",
+        "title": "Almacenamiento de Tokens",
+        "description": "Revisa este código de gestión de tokens y encuentra las vulnerabilidades de seguridad.",
+        "explanation": "Los tokens NUNCA deben almacenarse en localStorage (texto plano) ni loguearse. Usa Keychain (iOS) o EncryptedSharedPreferences (Android) via @capacitor-community/secure-storage.",
+        "vulnerabilities": [
+          {
+            "id": "v1-1",
+            "description": "Usar localStorage para almacenar tokens (datos en texto plano)"
+          },
+          {
+            "id": "v1-2",
+            "description": "Loguear tokens sensibles en la consola"
+          },
+          {
+            "id": "v1-3",
+            "description": "Usar funciones async para operaciones de storage"
+          }
+        ]
+      },
+      {
+        "id": "sec-2",
+        "title": "Autenticación OAuth",
+        "description": "Analiza esta implementación de OAuth y detecta los problemas de seguridad.",
+        "explanation": "En apps móviles: nunca incluyas client_secret (son públicas), usa PKCE en lugar de implicit flow, y configura un esquema custom (com.myapp://) como redirect URL.",
+        "vulnerabilities": [
+          {
+            "id": "v2-1",
+            "description": "Client secret hardcodeado en el código fuente"
+          },
+          {
+            "id": "v2-2",
+            "description": "Usar implicit flow (token) en lugar de PKCE"
+          },
+          {
+            "id": "v2-3",
+            "description": "Redirect URL usando HTTP en lugar de esquema custom"
+          },
+          {
+            "id": "v2-4",
+            "description": "Solicitar scopes de OpenID Connect"
+          }
+        ]
+      },
+      {
+        "id": "sec-3",
+        "title": "Comunicación de Red",
+        "description": "Revisa esta configuración de API client y encuentra problemas de seguridad.",
+        "explanation": "Siempre usa HTTPS, implementa SSL Pinning para prevenir ataques MITM, y no expongas mensajes de error detallados del servidor que podrían revelar información sensible.",
+        "vulnerabilities": [
+          {
+            "id": "v3-1",
+            "description": "Usar HTTP en lugar de HTTPS para la API"
+          },
+          {
+            "id": "v3-2",
+            "description": "No implementar SSL Pinning para prevenir MITM"
+          },
+          {
+            "id": "v3-3",
+            "description": "Enviar token de autorización en header Authorization"
+          },
+          {
+            "id": "v3-4",
+            "description": "Exponer detalles del error del servidor al cliente"
+          }
+        ]
+      },
+      {
+        "id": "sec-4",
+        "title": "Configuración de WebView",
+        "description": "Analiza esta configuración de Capacitor y detecta los riesgos de seguridad.",
+        "explanation": "En producción: deshabilita cleartext y mixed content, restringe allowNavigation a dominios específicos, y NUNCA habilites webContentsDebuggingEnabled.",
+        "vulnerabilities": [
+          {
+            "id": "v4-1",
+            "description": "Permitir tráfico HTTP sin cifrar (cleartext)"
+          },
+          {
+            "id": "v4-2",
+            "description": "Permitir navegación a cualquier dominio"
+          },
+          {
+            "id": "v4-3",
+            "description": "Debugging habilitado en producción"
+          },
+          {
+            "id": "v4-4",
+            "description": "Permitir contenido mixto HTTP/HTTPS"
+          },
+          {
+            "id": "v4-5",
+            "description": "Permitir preview de links en iOS"
+          }
+        ]
+      },
+      {
+        "id": "sec-5",
+        "title": "Validación de Integridad",
+        "description": "Revisa este código de verificación de seguridad del dispositivo.",
+        "explanation": "Usa detección real de root/jailbreak, nunca hardcodees API keys, no las expongas en window, y bloquea o degrada funcionalidad cuando se detecten dispositivos comprometidos.",
+        "vulnerabilities": [
+          {
+            "id": "v5-1",
+            "description": "Usar Math.random() para decisiones de seguridad"
+          },
+          {
+            "id": "v5-2",
+            "description": "API key sensible hardcodeada en el código"
+          },
+          {
+            "id": "v5-3",
+            "description": "Exponer API key en el objeto global window"
+          },
+          {
+            "id": "v5-4",
+            "description": "No bloquear la app cuando se detecta dispositivo comprometido"
+          },
+          {
+            "id": "v5-5",
+            "description": "Usar console.warn para alertas de seguridad"
+          }
+        ]
+      }
+    ]
   }
 }

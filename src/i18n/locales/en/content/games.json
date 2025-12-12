@@ -232,6 +232,150 @@
     "correctProblem": "Correct problem",
     "falseAlarm": "False alarm",
     "missedProblem": "Missed problem",
-    "notSelected": "Not selected"
+    "notSelected": "Not selected",
+    "securityReview": "Security Audit",
+    "selectVulnerabilities": "Select the security vulnerabilities",
+    "perfectAudit": "Perfect audit! You identified all vulnerabilities.",
+    "falsePositives": "false positives",
+    "missed": "not detected",
+    "vulnerabilityFound": "Vulnerability detected",
+    "falsePositive": "False positive",
+    "vulnerabilityMissed": "Vulnerability not detected",
+    "categoryStorage": "Storage",
+    "categoryAuth": "Authentication",
+    "categoryNetwork": "Network",
+    "categoryCrypto": "Cryptography",
+    "categoryPlatform": "Platform"
+  },
+  "security-audit": {
+    "title": "Security Audit",
+    "description": "Identify security vulnerabilities in mobile app code",
+    "instructions": "Review each code snippet and select the practices that represent security vulnerabilities.",
+    "scenarios": [
+      {
+        "id": "sec-1",
+        "title": "Token Storage",
+        "description": "Review this token management code and find the security vulnerabilities.",
+        "explanation": "Tokens should NEVER be stored in localStorage (plain text) or logged. Use Keychain (iOS) or EncryptedSharedPreferences (Android) via @capacitor-community/secure-storage.",
+        "vulnerabilities": [
+          {
+            "id": "v1-1",
+            "description": "Using localStorage to store tokens (plain text data)"
+          },
+          {
+            "id": "v1-2",
+            "description": "Logging sensitive tokens to the console"
+          },
+          {
+            "id": "v1-3",
+            "description": "Using async functions for storage operations"
+          }
+        ]
+      },
+      {
+        "id": "sec-2",
+        "title": "OAuth Authentication",
+        "description": "Analyze this OAuth implementation and detect the security issues.",
+        "explanation": "In mobile apps: never include client_secret (they're public), use PKCE instead of implicit flow, and configure a custom scheme (com.myapp://) as redirect URL.",
+        "vulnerabilities": [
+          {
+            "id": "v2-1",
+            "description": "Client secret hardcoded in source code"
+          },
+          {
+            "id": "v2-2",
+            "description": "Using implicit flow (token) instead of PKCE"
+          },
+          {
+            "id": "v2-3",
+            "description": "Redirect URL using HTTP instead of custom scheme"
+          },
+          {
+            "id": "v2-4",
+            "description": "Requesting OpenID Connect scopes"
+          }
+        ]
+      },
+      {
+        "id": "sec-3",
+        "title": "Network Communication",
+        "description": "Review this API client configuration and find security issues.",
+        "explanation": "Always use HTTPS, implement SSL Pinning to prevent MITM attacks, and don't expose detailed server error messages that could reveal sensitive information.",
+        "vulnerabilities": [
+          {
+            "id": "v3-1",
+            "description": "Using HTTP instead of HTTPS for the API"
+          },
+          {
+            "id": "v3-2",
+            "description": "Not implementing SSL Pinning to prevent MITM"
+          },
+          {
+            "id": "v3-3",
+            "description": "Sending authorization token in Authorization header"
+          },
+          {
+            "id": "v3-4",
+            "description": "Exposing server error details to the client"
+          }
+        ]
+      },
+      {
+        "id": "sec-4",
+        "title": "WebView Configuration",
+        "description": "Analyze this Capacitor configuration and detect the security risks.",
+        "explanation": "In production: disable cleartext and mixed content, restrict allowNavigation to specific domains, and NEVER enable webContentsDebuggingEnabled.",
+        "vulnerabilities": [
+          {
+            "id": "v4-1",
+            "description": "Allowing unencrypted HTTP traffic (cleartext)"
+          },
+          {
+            "id": "v4-2",
+            "description": "Allowing navigation to any domain"
+          },
+          {
+            "id": "v4-3",
+            "description": "Debugging enabled in production"
+          },
+          {
+            "id": "v4-4",
+            "description": "Allowing mixed HTTP/HTTPS content"
+          },
+          {
+            "id": "v4-5",
+            "description": "Allowing link preview on iOS"
+          }
+        ]
+      },
+      {
+        "id": "sec-5",
+        "title": "Integrity Validation",
+        "description": "Review this device security verification code.",
+        "explanation": "Use real root/jailbreak detection, never hardcode API keys, don't expose them in window, and block or degrade functionality when compromised devices are detected.",
+        "vulnerabilities": [
+          {
+            "id": "v5-1",
+            "description": "Using Math.random() for security decisions"
+          },
+          {
+            "id": "v5-2",
+            "description": "Sensitive API key hardcoded in code"
+          },
+          {
+            "id": "v5-3",
+            "description": "Exposing API key in global window object"
+          },
+          {
+            "id": "v5-4",
+            "description": "Not blocking app when compromised device detected"
+          },
+          {
+            "id": "v5-5",
+            "description": "Using console.warn for security alerts"
+          }
+        ]
+      }
+    ]
   }
 }
