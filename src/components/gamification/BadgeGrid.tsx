@@ -110,22 +110,30 @@ export function BadgeGrid({
               )}
             </div>
 
-            {/* How to Unlock Section */}
-            {!isSelectedUnlocked && (
-              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
-                <div className="flex items-start gap-3">
-                  <Lightbulb className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-400" />
-                  <div>
-                    <h4 className="mb-1 font-semibold text-amber-400">
-                      {t('badgeDialog.howToUnlock')}
-                    </h4>
-                    <p className="text-sm text-amber-200/80">
-                      {t(`badges.${selectedBadge.id}.howToUnlock`)}
-                    </p>
-                  </div>
+            {/* How to Unlock Section - Always visible */}
+            <div className={`rounded-lg border p-4 ${
+              isSelectedUnlocked
+                ? 'border-gray-600 bg-gray-800/50'
+                : 'border-amber-500/30 bg-amber-500/10'
+            }`}>
+              <div className="flex items-start gap-3">
+                <Lightbulb className={`mt-0.5 h-5 w-5 flex-shrink-0 ${
+                  isSelectedUnlocked ? 'text-gray-400' : 'text-amber-400'
+                }`} />
+                <div>
+                  <h4 className={`mb-1 font-semibold ${
+                    isSelectedUnlocked ? 'text-gray-300' : 'text-amber-400'
+                  }`}>
+                    {t('badgeDialog.howToUnlock')}
+                  </h4>
+                  <p className={`text-sm ${
+                    isSelectedUnlocked ? 'text-gray-400' : 'text-amber-200/80'
+                  }`}>
+                    {t(`badges.${selectedBadge.id}.howToUnlock`)}
+                  </p>
                 </div>
               </div>
-            )}
+            </div>
 
             {/* XP Reward */}
             {selectedBadge.xpBonus > 0 && (
