@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Search, X, Loader2 } from 'lucide-react'
 
 export interface SearchInputProps {
@@ -20,7 +21,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     {
       value,
       onChange,
-      placeholder = 'Buscar...',
+      placeholder,
       isLoading = false,
       onClear,
       onFocus,
@@ -32,9 +33,13 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     },
     ref
   ) => {
+    const { t } = useTranslation('search')
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value)
     }
+
+    const resolvedPlaceholder = placeholder ?? t('placeholderShort')
 
     const handleClear = () => {
       onChange('')
@@ -82,7 +87,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           onFocus={onFocus}
           onBlur={onBlur}
           onKeyDown={onKeyDown}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           autoFocus={autoFocus}
           className={`
             w-full rounded-lg border border-gray-600 bg-gray-800
@@ -91,7 +96,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             transition-colors duration-200
             ${sizeClasses[size]}
           `}
-          aria-label={placeholder}
+          aria-label={resolvedPlaceholder}
           role="searchbox"
         />
 
@@ -102,14 +107,14 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           {isLoading ? (
             <Loader2
               className={`${iconSizeClasses[size]} animate-spin text-gray-400`}
-              aria-label="Buscando..."
+              aria-label={t('searching')}
             />
           ) : value.length > 0 ? (
             <button
               type="button"
               onClick={handleClear}
               className="rounded p-0.5 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-colors"
-              aria-label="Limpiar búsqueda"
+              aria-label={t('clearSearch')}
             >
               <X className={iconSizeClasses[size]} />
             </button>

@@ -10,6 +10,7 @@ import lessonEs from './locales/es/lesson.json'
 import quizEs from './locales/es/quiz.json'
 import gameEs from './locales/es/game.json'
 import gamificationEs from './locales/es/gamification.json'
+import searchEs from './locales/es/search.json'
 import lessonsContentEs from './locales/es/content/lessons.json'
 import quizzesContentEs from './locales/es/content/quizzes.json'
 import gamesContentEs from './locales/es/content/games.json'
@@ -21,6 +22,7 @@ import lessonEn from './locales/en/lesson.json'
 import quizEn from './locales/en/quiz.json'
 import gameEn from './locales/en/game.json'
 import gamificationEn from './locales/en/gamification.json'
+import searchEn from './locales/en/search.json'
 import lessonsContentEn from './locales/en/content/lessons.json'
 import quizzesContentEn from './locales/en/content/quizzes.json'
 import gamesContentEn from './locales/en/content/games.json'
@@ -32,6 +34,7 @@ import lessonPt from './locales/pt/lesson.json'
 import quizPt from './locales/pt/quiz.json'
 import gamePt from './locales/pt/game.json'
 import gamificationPt from './locales/pt/gamification.json'
+import searchPt from './locales/pt/search.json'
 import lessonsContentPt from './locales/pt/content/lessons.json'
 import quizzesContentPt from './locales/pt/content/quizzes.json'
 import gamesContentPt from './locales/pt/content/games.json'
@@ -64,6 +67,7 @@ const resources = {
     quiz: quizEs,
     game: gameEs,
     gamification: gamificationEs,
+    search: searchEs,
     lessonsContent: lessonsContentEs,
     quizzesContent: quizzesContentEs,
     gamesContent: gamesContentEs,
@@ -76,6 +80,7 @@ const resources = {
     quiz: quizEn,
     game: gameEn,
     gamification: gamificationEn,
+    search: searchEn,
     lessonsContent: lessonsContentEn,
     quizzesContent: quizzesContentEn,
     gamesContent: gamesContentEn,
@@ -88,6 +93,7 @@ const resources = {
     quiz: quizPt,
     game: gamePt,
     gamification: gamificationPt,
+    search: searchPt,
     lessonsContent: lessonsContentPt,
     quizzesContent: quizzesContentPt,
     gamesContent: gamesContentPt,
@@ -111,6 +117,7 @@ i18n
       'quiz',
       'game',
       'gamification',
+      'search',
       'lessonsContent',
       'quizzesContent',
       'gamesContent',

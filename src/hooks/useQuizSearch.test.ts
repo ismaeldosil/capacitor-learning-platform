@@ -60,7 +60,7 @@ describe('useQuizSearch', () => {
     })
 
     expect(
-      result.current.results.some((r) => r.matchedIn === 'explanation')
+      result.current.results.some((r) => r.matchLocations.includes('explanation'))
     ).toBe(true)
   })
 
