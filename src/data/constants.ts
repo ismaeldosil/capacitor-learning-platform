@@ -191,6 +191,24 @@ export const MODULES: Module[] = [
     gameId: 'store-reviewer',
     estimatedTime: '2.5 horas',
   },
+  {
+    id: 'module-5',
+    title: 'Arquitectura Avanzada',
+    description: 'Patrones de arquitectura escalable para apps Capacitor empresariales',
+    icon: 'layers',
+    requiredXP: 600,
+    lessons: [
+      'monorepos-turborepo',
+      'feature-based-architecture',
+      'tanstack-query',
+      'zustand',
+      'native-bridge-patterns',
+      'performance-optimization',
+    ],
+    quizId: 'quiz-module-5',
+    gameId: 'architecture-planner',
+    estimatedTime: '3 horas',
+  },
 ]
 
 // Quiz Config

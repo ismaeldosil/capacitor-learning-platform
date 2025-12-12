@@ -80,6 +80,11 @@
       "title": "Testing + App Store Preparation",
       "description": "Prepare and publish to app stores",
       "estimatedTime": "2.5 hours"
+    },
+    "module-5": {
+      "title": "Advanced Architecture",
+      "description": "Scalable architecture patterns for enterprise Capacitor apps",
+      "estimatedTime": "3 hours"
     }
   },
   "lessonTitles": {
@@ -102,12 +107,19 @@
     "testing-strategy": "Testing Strategy",
     "play-store": "Google Play Store",
     "app-store": "App Store",
-    "fintech-compliance": "Fintech Compliance"
+    "fintech-compliance": "Fintech Compliance",
+    "monorepos-turborepo": "Monorepos with Turborepo",
+    "feature-based-architecture": "Feature-Based Architecture",
+    "tanstack-query": "TanStack Query",
+    "zustand": "Zustand",
+    "native-bridge-patterns": "Native Bridge Patterns",
+    "performance-optimization": "Performance Optimization"
   },
   "gameTitles": {
     "command-builder": "Command Builder",
     "plugin-matcher": "Plugin Matcher",
     "build-pipeline": "Build Pipeline",
-    "store-reviewer": "Store Reviewer"
+    "store-reviewer": "Store Reviewer",
+    "architecture-planner": "Architecture Planner"
   }
 }

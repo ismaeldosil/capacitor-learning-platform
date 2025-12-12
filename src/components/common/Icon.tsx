@@ -3,6 +3,7 @@ import {
   Plug,
   Hammer,
   Store,
+  Layers,
   Sprout,
   Crown,
   Target,
@@ -22,6 +23,7 @@ const iconMap: Record<string, LucideIcon> = {
   plug: Plug,
   hammer: Hammer,
   store: Store,
+  layers: Layers,
   // Levels
   sprout: Sprout,
   crown: Crown,

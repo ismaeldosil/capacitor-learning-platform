@@ -31,6 +31,11 @@
       "name": "Store Reviewer",
       "description": "Identify errors in app store configurations",
       "instructions": "Read each scenario and select the issues that would cause rejection in the stores."
+    },
+    "architecturePlanner": {
+      "name": "Architecture Planner",
+      "description": "Design scalable architectures by classifying components into layers",
+      "instructions": "Drag each component to its correct architectural layer: Presentation, Domain, Data or Infrastructure."
     }
   }
 }
