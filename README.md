@@ -102,12 +102,15 @@ npm run typecheck
 
 ## Módulos Educativos
 
-| Módulo | Tema | Mini-juego |
-|--------|------|------------|
-| 1 | Setup + Fundamentos Capacitor | Command Builder |
-| 2 | Plugins Core + Web-to-Native Bridge | Plugin Matcher |
-| 3 | Desarrollo + Build Processes | Build Pipeline |
-| 4 | Testing + App Store Preparation | Store Reviewer |
+| Módulo | Tema | Lecciones | Mini-juego |
+|--------|------|-----------|------------|
+| 1 | Setup + Fundamentos Capacitor | 5 | Command Builder |
+| 2 | Plugins Core + Web-to-Native Bridge | 6 | Plugin Matcher |
+| 3 | Desarrollo + Build Processes | 5 | Build Pipeline |
+| 4 | Testing + App Store Preparation | 4 | Store Reviewer |
+| 5 | Arquitectura Avanzada | 6 | Architecture Planner |
+
+**Total:** 26 lecciones interactivas, 5 quizzes de evaluación, 5 mini-juegos
 
 ## Sistema de Gamificación
 
