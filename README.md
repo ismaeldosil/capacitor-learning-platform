@@ -109,8 +109,9 @@ npm run typecheck
 | 3 | Desarrollo + Build Processes | 5 | Build Pipeline |
 | 4 | Testing + App Store Preparation | 4 | Store Reviewer |
 | 5 | Arquitectura Avanzada | 6 | Architecture Planner |
+| 6 | Seguridad en Apps Móviles | 6 | Security Audit |
 
-**Total:** 26 lecciones interactivas, 5 quizzes de evaluación, 5 mini-juegos
+**Total:** 32 lecciones interactivas, 6 quizzes de evaluación, 6 mini-juegos
 
 ## Sistema de Gamificación
 
