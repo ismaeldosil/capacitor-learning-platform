@@ -17,6 +17,9 @@ export function Lesson() {
   const { t } = useTranslation('lesson')
   const { t: tGamification } = useTranslation('gamification')
 
+  // Call hooks unconditionally at the top
+  const lessonContent = useTranslatedLessonContent(lessonId || '')
+
   const module = MODULES.find((m) => m.id === moduleId)
 
   if (!module || !lessonId) {
@@ -40,7 +43,6 @@ export function Lesson() {
       ? module.lessons[lessonIndex + 1]
       : null
 
-  const lessonContent = useTranslatedLessonContent(lessonId)
   const lessonTitle = tGamification(`lessonTitles.${lessonId}`)
   const moduleTitle = tGamification(`modules.${module.id}.title`)
 
