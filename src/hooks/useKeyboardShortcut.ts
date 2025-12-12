@@ -60,7 +60,16 @@ export function useKeyboardShortcut({
       }
 
       // Verificar que todos los modificadores requeridos estén presentes
-      const hasAllModifiers = modifiers.every((mod) => modifierChecks[mod])
+      // Ctrl y Meta son intercambiables (para soporte cross-platform)
+      const hasAllModifiers = modifiers.every((mod) => {
+        if (mod === 'meta') {
+          return modifierChecks.meta || modifierChecks.ctrl
+        }
+        if (mod === 'ctrl') {
+          return modifierChecks.ctrl || modifierChecks.meta
+        }
+        return modifierChecks[mod]
+      })
 
       // Verificar que no haya modificadores extra no requeridos
       // (excepto si usamos meta, permitimos ctrl como alternativa en Windows)
