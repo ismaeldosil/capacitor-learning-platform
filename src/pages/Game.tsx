@@ -3,12 +3,13 @@ import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES, XP_REWARDS } from '../data/constants'
-import { ArrowLeft, Trophy, RotateCcw, CheckCircle, Wrench, Plug, Hammer, Search } from 'lucide-react'
+import { ArrowLeft, Trophy, RotateCcw, CheckCircle, Wrench, Plug, Hammer, Search, Layers } from 'lucide-react'
 import {
   CommandBuilder,
   PluginMatcher,
   BuildPipeline,
   StoreReviewer,
+  ArchitecturePlanner,
 } from '../components/games'
 import type { GameType } from '../data/types'
 
@@ -81,11 +82,13 @@ export function Game() {
     | 'plugin-matcher'
     | 'build-pipeline'
     | 'store-reviewer'
+    | 'architecture-planner'
   const gameTypeMap: Record<string, string> = {
     'command-builder': 'commandBuilder',
     'plugin-matcher': 'pluginMatcher',
     'build-pipeline': 'buildPipeline',
     'store-reviewer': 'storeReviewer',
+    'architecture-planner': 'architecturePlanner',
   }
   const gameKey = gameTypeMap[gameTypeKey] || 'commandBuilder'
 
@@ -94,6 +97,7 @@ export function Game() {
     'plugin-matcher': Plug,
     'build-pipeline': Hammer,
     'store-reviewer': Search,
+    'architecture-planner': Layers,
   }[module.gameId] || Wrench
   const gameTitle = tGamification(`gameTitles.${module.gameId}`)
 
@@ -107,6 +111,8 @@ export function Game() {
         return <BuildPipeline onComplete={handleGameComplete} />
       case 'store-reviewer':
         return <StoreReviewer onComplete={handleGameComplete} />
+      case 'architecture-planner':
+        return <ArchitecturePlanner onComplete={handleGameComplete} />
       default:
         return (
           <div className="py-12 text-center">

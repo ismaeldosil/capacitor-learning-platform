@@ -553,6 +553,144 @@ export const QUIZZES: Quiz[] = [
       },
     ],
   },
+  {
+    id: 'quiz-module-5',
+    moduleId: 'module-5',
+    passingScore: 70,
+    xpReward: 25,
+    questions: [
+      {
+        id: 'q5-1',
+        text: '¿Qué es un monorepo y cuál es su principal ventaja para apps Capacitor empresariales?',
+        options: [
+          'Un repositorio con un solo proyecto para mayor simplicidad',
+          'Múltiples proyectos en un repositorio que permite compartir código entre web, mobile y backend',
+          'Un repositorio que solo contiene documentación',
+          'Un sistema de backup de código',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Un monorepo permite tener múltiples proyectos relacionados en un solo repositorio, facilitando compartir código entre diferentes aplicaciones.',
+      },
+      {
+        id: 'q5-2',
+        text: '¿Qué hace Turborepo para optimizar los builds en un monorepo?',
+        options: [
+          'Comprime los archivos automáticamente',
+          'Cachea builds y ejecuta tareas en paralelo',
+          'Elimina código no utilizado',
+          'Convierte TypeScript a JavaScript más rápido',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Turborepo cachea los resultados de builds y ejecuta tareas en paralelo cuando no hay dependencias entre ellas, acelerando significativamente el proceso.',
+      },
+      {
+        id: 'q5-3',
+        text: '¿Cuál es el principio fundamental de la arquitectura Feature-Based?',
+        options: [
+          'Agrupar código por tipo técnico (components, hooks, services)',
+          'Agrupar código por dominio de negocio (auth, products, cart)',
+          'Separar código frontend del backend',
+          'Usar una carpeta por cada desarrollador',
+        ],
+        correctIndex: 1,
+        explanation:
+          'La arquitectura Feature-Based organiza el código por dominio de negocio, colocando todo lo relacionado a una feature (componentes, hooks, servicios) en una misma carpeta.',
+      },
+      {
+        id: 'q5-4',
+        text: '¿Cuál es la regla de importación entre features en una arquitectura Feature-Based?',
+        options: [
+          'Las features pueden importar cualquier archivo de otras features',
+          'Las features solo deben importar desde el index.ts (API pública) de otras features',
+          'Las features no pueden comunicarse entre sí',
+          'Solo el administrador puede crear importaciones',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Las features solo deben importar desde el archivo index.ts de otras features, que actúa como API pública y crea un contrato claro entre módulos.',
+      },
+      {
+        id: 'q5-5',
+        text: '¿Qué diferencia hay entre staleTime y gcTime en TanStack Query?',
+        options: [
+          'Son lo mismo, solo cambiaron el nombre',
+          'staleTime define cuándo los datos se consideran obsoletos, gcTime cuánto tiempo permanecen en cache',
+          'staleTime es para mutaciones, gcTime para queries',
+          'gcTime es más rápido que staleTime',
+        ],
+        correctIndex: 1,
+        explanation:
+          'staleTime define el tiempo que los datos se consideran "frescos" antes de hacer refetch. gcTime (antes cacheTime) define cuánto permanecen en cache antes de ser eliminados.',
+      },
+      {
+        id: 'q5-6',
+        text: '¿Qué es un "optimistic update" en TanStack Query?',
+        options: [
+          'Una actualización que siempre funciona',
+          'Actualizar la UI inmediatamente antes de recibir la respuesta del servidor',
+          'Una forma de actualizar múltiples queries a la vez',
+          'Un tipo especial de cache',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Un optimistic update actualiza la UI inmediatamente asumiendo que la operación tendrá éxito, y revierte si hay error, mejorando la percepción de velocidad.',
+      },
+      {
+        id: 'q5-7',
+        text: '¿Cuál es la principal ventaja de Zustand sobre Context API para estado global?',
+        options: [
+          'Tiene más features',
+          'Es más fácil de configurar',
+          'No causa re-renders innecesarios gracias a los selectores',
+          'Es más antiguo y probado',
+        ],
+        correctIndex: 2,
+        explanation:
+          'Zustand permite usar selectores que solo suscriben al componente a partes específicas del estado, evitando re-renders cuando otras partes del estado cambian.',
+      },
+      {
+        id: 'q5-8',
+        text: '¿Cómo se accede al estado de Zustand fuera de componentes React?',
+        options: [
+          'No es posible',
+          'Usando useStore.getState()',
+          'Con un provider especial',
+          'Importando directamente el estado',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Zustand expone getState() que permite leer el estado actual fuera de componentes React, útil en servicios, utils, o event handlers.',
+      },
+      {
+        id: 'q5-9',
+        text: '¿Qué se debe evitar enviar frecuentemente a través del Bridge de Capacitor?',
+        options: [
+          'Strings cortos',
+          'Números',
+          'Objetos grandes o datos binarios (base64)',
+          'Booleans',
+        ],
+        correctIndex: 2,
+        explanation:
+          'Los datos que cruzan el Bridge se serializan a JSON, por lo que enviar objetos grandes o datos binarios frecuentemente puede afectar el rendimiento.',
+      },
+      {
+        id: 'q5-10',
+        text: '¿Qué técnica de React mejora el rendimiento de listas largas mostrando solo elementos visibles?',
+        options: [
+          'Lazy loading',
+          'Code splitting',
+          'Virtualización',
+          'Memoización',
+        ],
+        correctIndex: 2,
+        explanation:
+          'La virtualización (con librerías como @tanstack/react-virtual) renderiza solo los elementos visibles en el viewport, mejorando drasticamente el rendimiento de listas largas.',
+      },
+    ],
+  },
 ]
 
 export function getQuizByModuleId(moduleId: string): Quiz | undefined {

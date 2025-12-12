@@ -7,6 +7,7 @@ import {
   PLUGIN_PAIRS as PLUGIN_PAIRS_STATIC,
   BUILD_CHALLENGES as BUILD_CHALLENGES_STATIC,
   STORE_SCENARIOS as STORE_SCENARIOS_STATIC,
+  ARCHITECTURE_CHALLENGES as ARCHITECTURE_CHALLENGES_STATIC,
 } from '../data/games'
 import type { Quiz } from '../data/types'
 
@@ -286,4 +287,51 @@ export function useGameUITranslations() {
     readyToPlay: t('command-builder.ui.readyToPlay', { defaultValue: '¿Listo para jugar?' }),
     gameCompleted: t('command-builder.ui.gameCompleted', { defaultValue: 'Juego Completado' }),
   }
+}
+
+// Hook to get translated architecture challenges
+export function useTranslatedArchitectureChallenges() {
+  const { t } = useTranslation('gamesContent')
+
+  const translatedChallenges = t('architecture-planner.challenges', {
+    returnObjects: true,
+    defaultValue: null,
+  }) as
+    | Array<{
+        id: string
+        title: string
+        scenario: string
+        hint: string
+        components: Array<{
+          id: string
+          name: string
+          description: string
+        }>
+      }>
+    | null
+
+  if (!translatedChallenges || !Array.isArray(translatedChallenges)) {
+    return ARCHITECTURE_CHALLENGES_STATIC
+  }
+
+  return ARCHITECTURE_CHALLENGES_STATIC.map((challenge, index) => {
+    const translated = translatedChallenges[index]
+    if (!translated) return challenge
+
+    return {
+      ...challenge,
+      title: translated.title || challenge.title,
+      scenario: translated.scenario || challenge.scenario,
+      hint: translated.hint || challenge.hint,
+      components: challenge.components.map((comp, compIndex) => {
+        const translatedComp = translated.components?.[compIndex]
+        if (!translatedComp) return comp
+
+        return {
+          ...comp,
+          description: translatedComp.description || comp.description,
+        }
+      }),
+    }
+  })
 }

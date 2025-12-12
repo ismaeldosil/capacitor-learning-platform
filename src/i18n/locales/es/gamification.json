@@ -80,6 +80,11 @@
       "title": "Testing + App Store Preparation",
       "description": "Preparar y publicar en las tiendas de apps",
       "estimatedTime": "2.5 horas"
+    },
+    "module-5": {
+      "title": "Arquitectura Avanzada",
+      "description": "Patrones de arquitectura escalable para apps Capacitor empresariales",
+      "estimatedTime": "3 horas"
     }
   },
   "lessonTitles": {
@@ -102,12 +107,19 @@
     "testing-strategy": "Estrategia de Testing",
     "play-store": "Google Play Store",
     "app-store": "App Store",
-    "fintech-compliance": "Compliance Fintech"
+    "fintech-compliance": "Compliance Fintech",
+    "monorepos-turborepo": "Monorepos con Turborepo",
+    "feature-based-architecture": "Arquitectura Feature-Based",
+    "tanstack-query": "TanStack Query",
+    "zustand": "Zustand",
+    "native-bridge-patterns": "Patrones del Native Bridge",
+    "performance-optimization": "Optimización de Rendimiento"
   },
   "gameTitles": {
     "command-builder": "Constructor de Comandos",
     "plugin-matcher": "Plugin Matcher",
     "build-pipeline": "Build Pipeline",
-    "store-reviewer": "Store Reviewer"
+    "store-reviewer": "Store Reviewer",
+    "architecture-planner": "Planificador de Arquitectura"
   }
 }
