@@ -147,8 +147,10 @@ describe('useQuizSearch', () => {
       expect(result.current.results.length).toBeGreaterThan(0)
     })
 
-    expect(result.current.results[0].moduleName).toBeTruthy()
-    expect(result.current.results[0].moduleId).toBeTruthy()
+    const firstResult = result.current.results[0]
+    expect(firstResult).toBeDefined()
+    expect(firstResult?.moduleName).toBeTruthy()
+    expect(firstResult?.moduleId).toBeTruthy()
   })
 })
 
