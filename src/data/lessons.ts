@@ -5214,4 +5214,184 @@ export default config;`,
       content: 'Usa herramientas como OWASP ZAP, MobSF, o Frida para probar la seguridad de tu app antes del lanzamiento. Muchas vulnerabilidades solo se detectan con testing activo.',
     },
   ],
+
+  // =====================
+  // MÓDULO 12: Hardware APIs & Sensors
+  // =====================
+
+  'bluetooth-ble-basics': [
+    {
+      type: 'text',
+      content: '**Bluetooth Low Energy (BLE)** es un protocolo de comunicación inalámbrica diseñado para transferir pequeñas cantidades de datos con un consumo mínimo de batería. Es ideal para dispositivos IoT, wearables, sensores y periféricos.',
+    },
+    {
+      type: 'info',
+      content: 'BLE es diferente de Bluetooth Classic. BLE está optimizado para transmisiones cortas y periódicas, mientras que Bluetooth Classic es mejor para streaming continuo (audio, video).',
+    },
+    {
+      type: 'list',
+      items: [
+        'BLE consume hasta 100 veces menos energía',
+        'BLE tiene alcance similar (50-150m) pero menor throughput',
+        'BLE usa modelo GATT (Generic Attribute Profile)',
+        'BLE es mejor para sensores, beacons, fitness trackers',
+      ],
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `# Instalar el plugin BLE
+npm install @capacitor-community/bluetooth-le
+npx cap sync`,
+    },
+    {
+      type: 'warning',
+      content: 'En Android 12+, necesitas permisos BLUETOOTH_SCAN y BLUETOOTH_CONNECT en runtime. En iOS, el usuario debe aceptar el prompt de Bluetooth la primera vez.',
+    },
+  ],
+
+  'bluetooth-communication': [
+    {
+      type: 'text',
+      content: 'Una vez que has escaneado y encontrado dispositivos BLE, el siguiente paso es conectarte a ellos y comenzar a leer o escribir datos a través de las características GATT.',
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      filename: 'src/services/bluetooth-connection.ts',
+      code: `import { BleClient } from '@capacitor-community/bluetooth-le';
+
+export const connectToDevice = async (deviceId: string) => {
+  await BleClient.connect(deviceId, (id) => {
+    console.log('Dispositivo desconectado');
+  });
+  const services = await BleClient.getServices(deviceId);
+  return services;
+};`,
+    },
+    {
+      type: 'tip',
+      content: 'Siempre desuscríbete de las notificaciones antes de desconectar el dispositivo para evitar memory leaks.',
+    },
+  ],
+
+  'camera-gallery': [
+    {
+      type: 'text',
+      content: 'El plugin **@capacitor/camera** proporciona acceso completo a la cámara del dispositivo y la galería de fotos.',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `npm install @capacitor/camera
+npx cap sync`,
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      code: `import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
+const photo = await Camera.getPhoto({
+  quality: 90,
+  resultType: CameraResultType.Uri,
+  source: CameraSource.Camera,
+  saveToGallery: true,
+});`,
+    },
+    {
+      type: 'tip',
+      content: 'Usa CameraResultType.Uri para fotos grandes en lugar de Base64.',
+    },
+  ],
+
+  'geolocation-maps': [
+    {
+      type: 'text',
+      content: 'El plugin **@capacitor/geolocation** proporciona acceso a la ubicación GPS del dispositivo.',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `npm install @capacitor/geolocation
+npx cap sync`,
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      code: `import { Geolocation } from '@capacitor/geolocation';
+
+const position = await Geolocation.getCurrentPosition({
+  enableHighAccuracy: true,
+  timeout: 10000,
+});
+
+console.log(position.coords.latitude, position.coords.longitude);`,
+    },
+    {
+      type: 'warning',
+      content: 'enableHighAccuracy: true usa GPS y consume más batería.',
+    },
+  ],
+
+  'motion-sensors': [
+    {
+      type: 'text',
+      content: 'El plugin **@capacitor/motion** proporciona acceso a los sensores de movimiento: acelerómetro, giroscopio, y orientación.',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `npm install @capacitor/motion
+npx cap sync`,
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      code: `import { Motion } from '@capacitor/motion';
+
+await Motion.addListener('accel', (event) => {
+  const { x, y, z } = event.acceleration;
+  console.log('Aceleración:', { x, y, z });
+});`,
+    },
+    {
+      type: 'warning',
+      content: 'Los sensores de movimiento consumen batería. Asegúrate de remover listeners cuando no los necesites.',
+    },
+  ],
+
+  'biometric-auth-advanced': [
+    {
+      type: 'text',
+      content: 'La autenticación biométrica permite a los usuarios autenticarse usando **Face ID**, **Touch ID**, o **Fingerprint**.',
+    },
+    {
+      type: 'code',
+      language: 'bash',
+      code: `npm install @capacitor-community/biometric-auth
+npx cap sync`,
+    },
+    {
+      type: 'code',
+      language: 'typescript',
+      code: `import { BiometricAuth } from '@capacitor-community/biometric-auth';
+
+const result = await BiometricAuth.checkBiometry();
+if (result.isAvailable) {
+  await BiometricAuth.authenticate({
+    reason: 'Verifica tu identidad',
+    allowDeviceCredential: true,
+  });
+}`,
+    },
+    {
+      type: 'warning',
+      content: 'Nunca confíes únicamente en la autenticación biométrica del lado del cliente. Siempre valida en el servidor.',
+    },
+    {
+      type: 'success',
+      content: 'Has completado el módulo de Hardware APIs & Sensors.',
+    },
+  ],
+
 }
