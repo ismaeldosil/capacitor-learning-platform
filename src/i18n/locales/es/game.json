@@ -1,0 +1,46 @@
+{
+  "backToModule": "Volver al módulo",
+  "notAvailable": {
+    "title": "Juego no disponible"
+  },
+  "intro": {
+    "completed": "Juego completado",
+    "xpReward": "+{{xp}} XP al completar",
+    "readyPlay": "¿Listo para jugar?",
+    "alreadyCompleted": "¡Juego Completado!",
+    "playAgain": "Jugar de nuevo",
+    "start": "Comenzar juego"
+  },
+  "types": {
+    "commandBuilder": {
+      "name": "Command Builder",
+      "description": "Construye comandos de Capacitor CLI arrastrando y soltando las partes correctas",
+      "instructions": "Arrastra y suelta las partes del comando en el orden correcto para construir comandos válidos de Capacitor CLI."
+    },
+    "pluginMatcher": {
+      "name": "Plugin Matcher",
+      "description": "Conecta casos de uso con el plugin de Capacitor correcto",
+      "instructions": "Empareja cada caso de uso con el plugin que lo resuelve. ¡Demuestra tu conocimiento de los plugins!"
+    },
+    "buildPipeline": {
+      "name": "Build Pipeline",
+      "description": "Ordena los pasos del proceso de build correctamente",
+      "instructions": "Arrastra los pasos en el orden correcto para completar el proceso de build."
+    },
+    "storeReviewer": {
+      "name": "Store Reviewer",
+      "description": "Identifica errores en configuraciones de app stores",
+      "instructions": "Lee cada escenario y selecciona los issues que causarían rechazo en las tiendas."
+    },
+    "architecturePlanner": {
+      "name": "Architecture Planner",
+      "description": "Diseña arquitecturas escalables clasificando componentes en capas",
+      "instructions": "Arrastra cada componente a su capa arquitectónica correcta: Presentation, Domain, Data o Infrastructure."
+    },
+    "securityAudit": {
+      "name": "Security Audit",
+      "description": "Identifica vulnerabilidades de seguridad en código de apps móviles",
+      "instructions": "Revisa cada snippet de código y selecciona las prácticas que representan vulnerabilidades de seguridad."
+    }
+  }
+}

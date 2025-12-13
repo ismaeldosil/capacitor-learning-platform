@@ -47,6 +47,66 @@ export interface StoreScenario {
   explanation: string
 }
 
+export interface ArchitectureComponent {
+  id: string
+  name: string
+  description: string
+  layer: 'presentation' | 'domain' | 'data' | 'infrastructure'
+}
+
+export interface ArchitectureChallenge {
+  id: string
+  title: string
+  scenario: string
+  components: ArchitectureComponent[]
+  connections: { from: string; to: string; label: string }[]
+  correctLayers: Record<string, 'presentation' | 'domain' | 'data' | 'infrastructure'>
+  hint: string
+}
+
+export interface SecurityVulnerability {
+  id: string
+  code: string
+  description: string
+  isVulnerable: boolean
+  category: 'storage' | 'auth' | 'network' | 'crypto' | 'platform'
+}
+
+export interface SecurityAuditScenario {
+  id: string
+  title: string
+  description: string
+  codeSnippet: string
+  language: string
+  vulnerabilities: SecurityVulnerability[]
+  explanation: string
+}
+
+export interface LinkPart {
+  id: string
+  text: string
+  type: 'scheme' | 'host' | 'path' | 'param'
+}
+
+export interface LinkChallenge {
+  id: string
+  instruction: string
+  description: string
+  parts: LinkPart[]
+  correctOrder: string[]
+  hint: string
+}
+
+export interface SensorChallenge {
+  id: string
+  title: string
+  description: string
+  codeSnippet: string
+  options: string[]
+  correctIndex: number
+  explanation: string
+}
+
 export interface Game {
   id: GameType
   moduleId: string
@@ -292,6 +352,601 @@ export const STORE_SCENARIOS: StoreScenario[] = [
   },
 ]
 
+// Architecture Planner Game Data (Module 5)
+export const ARCHITECTURE_CHALLENGES: ArchitectureChallenge[] = [
+  {
+    id: 'arch-1',
+    title: 'Feature-Based Structure',
+    scenario: 'Estás diseñando la arquitectura para una feature de autenticación. Clasifica cada componente en su capa correcta.',
+    components: [
+      { id: 'c1', name: 'LoginForm.tsx', description: 'Componente visual del formulario de login', layer: 'presentation' },
+      { id: 'c2', name: 'useAuth.ts', description: 'Hook que expone estado y acciones de autenticación', layer: 'presentation' },
+      { id: 'c3', name: 'authService.ts', description: 'Servicio que hace llamadas a la API', layer: 'data' },
+      { id: 'c4', name: 'validateCredentials.ts', description: 'Función que valida formato de email/password', layer: 'domain' },
+      { id: 'c5', name: 'authStore.ts', description: 'Store de Zustand con estado global de auth', layer: 'domain' },
+      { id: 'c6', name: 'apiClient.ts', description: 'Cliente HTTP configurado con interceptores', layer: 'infrastructure' },
+    ],
+    connections: [
+      { from: 'c1', to: 'c2', label: 'usa' },
+      { from: 'c2', to: 'c5', label: 'accede' },
+      { from: 'c2', to: 'c3', label: 'llama' },
+      { from: 'c3', to: 'c6', label: 'usa' },
+      { from: 'c4', to: 'c2', label: 'valida' },
+    ],
+    correctLayers: {
+      c1: 'presentation',
+      c2: 'presentation',
+      c3: 'data',
+      c4: 'domain',
+      c5: 'domain',
+      c6: 'infrastructure',
+    },
+    hint: 'Presentation = UI/Hooks, Domain = Lógica de negocio/State, Data = API calls, Infrastructure = Configuración base',
+  },
+  {
+    id: 'arch-2',
+    title: 'Monorepo Structure',
+    scenario: 'Organiza los packages de un monorepo Turborepo para una app Capacitor con web y admin.',
+    components: [
+      { id: 'c1', name: 'apps/mobile', description: 'App Capacitor principal', layer: 'presentation' },
+      { id: 'c2', name: 'apps/web', description: 'Aplicación web Next.js', layer: 'presentation' },
+      { id: 'c3', name: 'packages/ui', description: 'Componentes compartidos React', layer: 'presentation' },
+      { id: 'c4', name: 'packages/api-client', description: 'Cliente API tipado compartido', layer: 'data' },
+      { id: 'c5', name: 'packages/types', description: 'Tipos TypeScript compartidos', layer: 'domain' },
+      { id: 'c6', name: 'packages/utils', description: 'Utilidades de validación y formateo', layer: 'domain' },
+    ],
+    connections: [
+      { from: 'c1', to: 'c3', label: 'importa' },
+      { from: 'c2', to: 'c3', label: 'importa' },
+      { from: 'c1', to: 'c4', label: 'usa' },
+      { from: 'c2', to: 'c4', label: 'usa' },
+      { from: 'c4', to: 'c5', label: 'implementa' },
+    ],
+    correctLayers: {
+      c1: 'presentation',
+      c2: 'presentation',
+      c3: 'presentation',
+      c4: 'data',
+      c5: 'domain',
+      c6: 'domain',
+    },
+    hint: 'Apps son presentation, packages/ui también. api-client es data, types y utils son domain.',
+  },
+  {
+    id: 'arch-3',
+    title: 'State Management',
+    scenario: 'Diseña la arquitectura de estado para una app de e-commerce. Decide qué va en TanStack Query vs Zustand.',
+    components: [
+      { id: 'c1', name: 'useProducts', description: 'Hook para obtener lista de productos', layer: 'data' },
+      { id: 'c2', name: 'useCartStore', description: 'Store del carrito de compras', layer: 'domain' },
+      { id: 'c3', name: 'ProductList.tsx', description: 'Componente que muestra productos', layer: 'presentation' },
+      { id: 'c4', name: 'useCreateOrder', description: 'Mutation para crear una orden', layer: 'data' },
+      { id: 'c5', name: 'useUIStore', description: 'Store para estado de UI (sidebar, modals)', layer: 'presentation' },
+      { id: 'c6', name: 'productsApi.ts', description: 'Funciones que llaman a la API REST', layer: 'infrastructure' },
+    ],
+    connections: [
+      { from: 'c3', to: 'c1', label: 'usa' },
+      { from: 'c1', to: 'c6', label: 'queryFn' },
+      { from: 'c3', to: 'c2', label: 'addToCart' },
+      { from: 'c4', to: 'c2', label: 'lee items' },
+    ],
+    correctLayers: {
+      c1: 'data',
+      c2: 'domain',
+      c3: 'presentation',
+      c4: 'data',
+      c5: 'presentation',
+      c6: 'infrastructure',
+    },
+    hint: 'TanStack Query (data) para server state, Zustand (domain) para client state, UI state puede ser presentation.',
+  },
+  {
+    id: 'arch-4',
+    title: 'Native Bridge Architecture',
+    scenario: 'Organiza los componentes de un plugin Capacitor personalizado de seguridad.',
+    components: [
+      { id: 'c1', name: 'definitions.ts', description: 'Interfaz TypeScript del plugin', layer: 'domain' },
+      { id: 'c2', name: 'index.ts', description: 'Registro del plugin con registerPlugin', layer: 'infrastructure' },
+      { id: 'c3', name: 'web.ts', description: 'Implementación web (fallback)', layer: 'data' },
+      { id: 'c4', name: 'SecurityPlugin.swift', description: 'Implementación nativa iOS', layer: 'data' },
+      { id: 'c5', name: 'useSecurity.ts', description: 'Hook React para usar el plugin', layer: 'presentation' },
+      { id: 'c6', name: 'SecurityScreen.tsx', description: 'UI que muestra estado de seguridad', layer: 'presentation' },
+    ],
+    connections: [
+      { from: 'c2', to: 'c1', label: 'implementa' },
+      { from: 'c3', to: 'c1', label: 'implementa' },
+      { from: 'c4', to: 'c1', label: 'implementa' },
+      { from: 'c5', to: 'c2', label: 'usa' },
+      { from: 'c6', to: 'c5', label: 'usa' },
+    ],
+    correctLayers: {
+      c1: 'domain',
+      c2: 'infrastructure',
+      c3: 'data',
+      c4: 'data',
+      c5: 'presentation',
+      c6: 'presentation',
+    },
+    hint: 'Definitions son domain (contratos), implementaciones son data, registro es infrastructure.',
+  },
+]
+
+// Link Builder Game Data (Module 11)
+export const LINK_CHALLENGES: LinkChallenge[] = [
+  {
+    id: 'link-1',
+    instruction: 'Crea un custom URL scheme simple para abrir la página principal',
+    description: 'Construye el deep link: myapp://home',
+    parts: [
+      { id: 'p1', text: 'myapp://', type: 'scheme' },
+      { id: 'p2', text: 'home', type: 'host' },
+    ],
+    correctOrder: ['p1', 'p2'],
+    hint: 'El esquema va primero, seguido del host',
+  },
+  {
+    id: 'link-2',
+    instruction: 'Crea un URL scheme con path para ver un producto específico',
+    description: 'Construye el deep link: myapp://product/123',
+    parts: [
+      { id: 'p1', text: 'myapp://', type: 'scheme' },
+      { id: 'p2', text: 'product', type: 'host' },
+      { id: 'p3', text: '/123', type: 'path' },
+    ],
+    correctOrder: ['p1', 'p2', 'p3'],
+    hint: 'Esquema + host + path con el ID del producto',
+  },
+  {
+    id: 'link-3',
+    instruction: 'Crea un Universal Link para iOS/Android con dominio verificado',
+    description: 'Construye el universal link: https://example.com/product/123',
+    parts: [
+      { id: 'p1', text: 'https://', type: 'scheme' },
+      { id: 'p2', text: 'example.com', type: 'host' },
+      { id: 'p3', text: '/product', type: 'path' },
+      { id: 'p4', text: '/123', type: 'path' },
+    ],
+    correctOrder: ['p1', 'p2', 'p3', 'p4'],
+    hint: 'Universal links usan HTTPS + dominio verificado + paths',
+  },
+  {
+    id: 'link-4',
+    instruction: 'Crea un deep link con query parameters para búsqueda',
+    description: 'Construye el deep link: myapp://search?q=phone&sort=price',
+    parts: [
+      { id: 'p1', text: 'myapp://', type: 'scheme' },
+      { id: 'p2', text: 'search', type: 'host' },
+      { id: 'p3', text: '?q=phone', type: 'param' },
+      { id: 'p4', text: '&sort=price', type: 'param' },
+    ],
+    correctOrder: ['p1', 'p2', 'p3', 'p4'],
+    hint: 'Esquema + host + primer parámetro con ? + parámetros adicionales con &',
+  },
+  {
+    id: 'link-5',
+    instruction: 'Crea un Branch link con parámetros de campaña y referencia',
+    description: 'Construye el link: https://myapp.app.link/promo?campaign=summer&ref=email',
+    parts: [
+      { id: 'p1', text: 'https://', type: 'scheme' },
+      { id: 'p2', text: 'myapp.app.link', type: 'host' },
+      { id: 'p3', text: '/promo', type: 'path' },
+      { id: 'p4', text: '?campaign=summer', type: 'param' },
+      { id: 'p5', text: '&ref=email', type: 'param' },
+    ],
+    correctOrder: ['p1', 'p2', 'p3', 'p4', 'p5'],
+    hint: 'Branch links usan subdominios .app.link con paths y parámetros de atribución',
+  },
+]
+
+// Security Audit Game Data (Module 6)
+export const SECURITY_AUDIT_SCENARIOS: SecurityAuditScenario[] = [
+  {
+    id: 'sec-1',
+    title: 'Almacenamiento de Tokens',
+    description: 'Revisa este código de gestión de tokens y encuentra las vulnerabilidades de seguridad.',
+    codeSnippet: `// auth.service.ts
+async function saveTokens(accessToken: string, refreshToken: string) {
+  // Guardar tokens para persistencia
+  localStorage.setItem('access_token', accessToken);
+  localStorage.setItem('refresh_token', refreshToken);
+
+  console.log('Tokens saved:', { accessToken, refreshToken });
+}
+
+async function getAccessToken(): string | null {
+  return localStorage.getItem('access_token');
+}`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v1-1',
+        code: 'localStorage.setItem',
+        description: 'Usar localStorage para almacenar tokens (datos en texto plano)',
+        isVulnerable: true,
+        category: 'storage',
+      },
+      {
+        id: 'v1-2',
+        code: 'console.log tokens',
+        description: 'Loguear tokens sensibles en la consola',
+        isVulnerable: true,
+        category: 'storage',
+      },
+      {
+        id: 'v1-3',
+        code: 'async function',
+        description: 'Usar funciones async para operaciones de storage',
+        isVulnerable: false,
+        category: 'platform',
+      },
+    ],
+    explanation: 'Los tokens NUNCA deben almacenarse en localStorage (texto plano) ni loguearse. Usa Keychain (iOS) o EncryptedSharedPreferences (Android) via @capacitor-community/secure-storage.',
+  },
+  {
+    id: 'sec-2',
+    title: 'Autenticación OAuth',
+    description: 'Analiza esta implementación de OAuth y detecta los problemas de seguridad.',
+    codeSnippet: `// oauth.config.ts
+const oauthConfig = {
+  clientId: 'my-app-client',
+  clientSecret: 'super-secret-key-123', // Para autenticación
+  redirectUrl: 'http://localhost:3000/callback',
+  scope: 'openid profile email',
+  responseType: 'token', // Implicit flow para simplicidad
+};
+
+async function authenticate() {
+  const authUrl = buildAuthUrl(oauthConfig);
+  window.location.href = authUrl;
+}`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v2-1',
+        code: 'clientSecret hardcoded',
+        description: 'Client secret hardcodeado en el código fuente',
+        isVulnerable: true,
+        category: 'auth',
+      },
+      {
+        id: 'v2-2',
+        code: 'responseType: token',
+        description: 'Usar implicit flow (token) en lugar de PKCE',
+        isVulnerable: true,
+        category: 'auth',
+      },
+      {
+        id: 'v2-3',
+        code: 'http://localhost',
+        description: 'Redirect URL usando HTTP en lugar de esquema custom',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v2-4',
+        code: 'openid profile email',
+        description: 'Solicitar scopes de OpenID Connect',
+        isVulnerable: false,
+        category: 'auth',
+      },
+    ],
+    explanation: 'En apps móviles: nunca incluyas client_secret (son públicas), usa PKCE en lugar de implicit flow, y configura un esquema custom (com.myapp://) como redirect URL.',
+  },
+  {
+    id: 'sec-3',
+    title: 'Comunicación de Red',
+    description: 'Revisa esta configuración de API client y encuentra problemas de seguridad.',
+    codeSnippet: `// api.client.ts
+const API_BASE = 'http://api.example.com/v1';
+
+async function fetchData(endpoint: string, token: string) {
+  const response = await fetch(\`\${API_BASE}\${endpoint}\`, {
+    headers: {
+      'Authorization': \`Bearer \${token}\`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(\`Error: \${response.status} - \${await response.text()}\`);
+  }
+
+  return response.json();
+}`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v3-1',
+        code: 'http://api',
+        description: 'Usar HTTP en lugar de HTTPS para la API',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v3-2',
+        code: 'Sin SSL Pinning',
+        description: 'No implementar SSL Pinning para prevenir MITM',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v3-3',
+        code: 'Bearer token en header',
+        description: 'Enviar token de autorización en header Authorization',
+        isVulnerable: false,
+        category: 'auth',
+      },
+      {
+        id: 'v3-4',
+        code: 'Exponer response.text() en error',
+        description: 'Exponer detalles del error del servidor al cliente',
+        isVulnerable: true,
+        category: 'platform',
+      },
+    ],
+    explanation: 'Siempre usa HTTPS, implementa SSL Pinning para prevenir ataques MITM, y no expongas mensajes de error detallados del servidor que podrían revelar información sensible.',
+  },
+  {
+    id: 'sec-4',
+    title: 'Configuración de WebView',
+    description: 'Analiza esta configuración de Capacitor y detecta los riesgos de seguridad.',
+    codeSnippet: `// capacitor.config.ts
+const config = {
+  appId: 'com.myapp.prod',
+  appName: 'My App',
+  webDir: 'dist',
+  server: {
+    cleartext: true,
+    allowNavigation: ['*'],
+  },
+  android: {
+    allowMixedContent: true,
+    webContentsDebuggingEnabled: true,
+  },
+  ios: {
+    allowsLinkPreview: true,
+  },
+};`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v4-1',
+        code: 'cleartext: true',
+        description: 'Permitir tráfico HTTP sin cifrar (cleartext)',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v4-2',
+        code: 'allowNavigation: [\'*\']',
+        description: 'Permitir navegación a cualquier dominio',
+        isVulnerable: true,
+        category: 'platform',
+      },
+      {
+        id: 'v4-3',
+        code: 'webContentsDebuggingEnabled: true',
+        description: 'Debugging habilitado en producción',
+        isVulnerable: true,
+        category: 'platform',
+      },
+      {
+        id: 'v4-4',
+        code: 'allowMixedContent: true',
+        description: 'Permitir contenido mixto HTTP/HTTPS',
+        isVulnerable: true,
+        category: 'network',
+      },
+      {
+        id: 'v4-5',
+        code: 'allowsLinkPreview: true',
+        description: 'Permitir preview de links en iOS',
+        isVulnerable: false,
+        category: 'platform',
+      },
+    ],
+    explanation: 'En producción: deshabilita cleartext y mixed content, restringe allowNavigation a dominios específicos, y NUNCA habilites webContentsDebuggingEnabled.',
+  },
+  {
+    id: 'sec-5',
+    title: 'Validación de Integridad',
+    description: 'Revisa este código de verificación de seguridad del dispositivo.',
+    codeSnippet: `// security.check.ts
+async function initializeApp() {
+  // Verificar integridad
+  const isSecure = Math.random() > 0.5; // Simulación
+
+  if (!isSecure) {
+    console.warn('Device may be compromised');
+    // Continuar de todas formas
+  }
+
+  // Cargar datos sensibles
+  const apiKey = 'sk-live-abc123xyz789';
+  setupAPI(apiKey);
+}
+
+function setupAPI(key: string) {
+  window.API_KEY = key; // Para acceso global
+}`,
+    language: 'typescript',
+    vulnerabilities: [
+      {
+        id: 'v5-1',
+        code: 'Math.random() para seguridad',
+        description: 'Usar Math.random() para decisiones de seguridad',
+        isVulnerable: true,
+        category: 'crypto',
+      },
+      {
+        id: 'v5-2',
+        code: 'API key hardcodeada',
+        description: 'API key sensible hardcodeada en el código',
+        isVulnerable: true,
+        category: 'storage',
+      },
+      {
+        id: 'v5-3',
+        code: 'window.API_KEY',
+        description: 'Exponer API key en el objeto global window',
+        isVulnerable: true,
+        category: 'platform',
+      },
+      {
+        id: 'v5-4',
+        code: 'Continuar sin bloquear',
+        description: 'No bloquear la app cuando se detecta dispositivo comprometido',
+        isVulnerable: true,
+        category: 'platform',
+      },
+      {
+        id: 'v5-5',
+        code: 'console.warn',
+        description: 'Usar console.warn para alertas de seguridad',
+        isVulnerable: false,
+        category: 'platform',
+      },
+    ],
+    explanation: 'Usa detección real de root/jailbreak, nunca hardcodees API keys, no las expongas en window, y bloquea o degrada funcionalidad cuando se detecten dispositivos comprometidos.',
+  },
+]
+
+// Sensor Quest Game Data (Module 12)
+export const SENSOR_CHALLENGES: SensorChallenge[] = [
+  {
+    id: 'sensor-1',
+    title: 'Compass Quest',
+    description: 'Identifica el código correcto para obtener la orientación del dispositivo usando el magnetómetro.',
+    codeSnippet: `// compass.ts
+import { Motion } from '@capacitor/motion';
+
+async function startCompass() {
+  const handler = await Motion.addListener('orientation', (event) => {
+    const heading = event.alpha; // Ángulo del norte magnético
+    updateCompass(heading);
+  });
+
+  return handler;
+}`,
+    options: [
+      'El código es correcto y usa el magnetómetro para obtener heading',
+      'Debe usar DeviceMotion en lugar de Motion',
+      'event.alpha da el heading, pero falta solicitar permisos primero',
+      'Debe usar Geolocation plugin en lugar de Motion',
+    ],
+    correctIndex: 2,
+    explanation: 'El código usa correctamente Motion.addListener con "orientation", y event.alpha proporciona el heading del norte magnético. Sin embargo, en algunas plataformas se requiere solicitar permisos de sensores de movimiento antes de acceder al magnetómetro.',
+  },
+  {
+    id: 'sensor-2',
+    title: 'Shake Detection',
+    description: 'Revisa este código de detección de sacudidas y determina si el threshold del acelerómetro es correcto.',
+    codeSnippet: `// shake-detector.ts
+import { Motion } from '@capacitor/motion';
+
+const SHAKE_THRESHOLD = 0.5; // m/s²
+
+async function detectShake() {
+  await Motion.addListener('accel', (event) => {
+    const { x, y, z } = event.acceleration;
+    const magnitude = Math.sqrt(x*x + y*y + z*z);
+
+    if (magnitude > SHAKE_THRESHOLD) {
+      onShakeDetected();
+    }
+  });
+}`,
+    options: [
+      'El threshold de 0.5 m/s² es demasiado bajo, detectará movimientos leves',
+      'El código es perfecto, 0.5 m/s² es ideal para shake detection',
+      'Debe usar event.accelerationIncludingGravity en lugar de event.acceleration',
+      'Falta convertir la magnitud de m/s² a g-force antes de comparar',
+    ],
+    correctIndex: 0,
+    explanation: 'Un threshold de 0.5 m/s² es extremadamente bajo para detectar sacudidas. Los valores típicos para shake detection están entre 15-20 m/s² (aproximadamente 1.5-2 g). Con 0.5 m/s², cualquier movimiento mínimo del dispositivo activaría el detector.',
+  },
+  {
+    id: 'sensor-3',
+    title: 'Level Bubble',
+    description: 'Analiza esta implementación de nivel de burbuja y determina si usa correctamente el giroscopio.',
+    codeSnippet: `// level-bubble.ts
+import { Motion } from '@capacitor/motion';
+
+async function startLevelBubble() {
+  await Motion.addListener('orientation', (event) => {
+    const pitch = event.beta;  // Inclinación adelante/atrás
+    const roll = event.gamma;  // Inclinación izquierda/derecha
+
+    updateBubblePosition(pitch, roll);
+  });
+}`,
+    options: [
+      'El código usa el giroscopio correctamente para level bubble',
+      'Debería usar "accel" en lugar de "orientation" para medir gravedad',
+      'event.beta y event.gamma vienen del acelerómetro y giroscopio fusionados, no solo giroscopio',
+      'Falta calibrar el nivel antes de empezar a medir',
+    ],
+    correctIndex: 2,
+    explanation: 'El listener "orientation" proporciona datos de orientación del dispositivo que combinan información del acelerómetro, giroscopio y magnetómetro (sensor fusion). Los valores beta (pitch) y gamma (roll) son perfectos para un level bubble, pero no vienen solo del giroscopio sino de la fusión de múltiples sensores.',
+  },
+  {
+    id: 'sensor-4',
+    title: 'Location Tracker',
+    description: 'Revisa esta implementación de tracking de ubicación en tiempo real.',
+    codeSnippet: `// location-tracker.ts
+import { Geolocation } from '@capacitor/geolocation';
+
+async function startTracking() {
+  const watchId = await Geolocation.watchPosition(
+    { enableHighAccuracy: true, timeout: 5000 },
+    (position) => {
+      updateMap(position.coords);
+    }
+  );
+
+  return watchId;
+}`,
+    options: [
+      'Falta solicitar permisos de ubicación antes de watchPosition',
+      'timeout de 5000ms es demasiado corto para high accuracy GPS',
+      'El código es correcto pero debería incluir maximumAge para cachear posiciones',
+      'enableHighAccuracy: true consume mucha batería, debe ser false',
+    ],
+    correctIndex: 0,
+    explanation: 'Aunque el código configura watchPosition correctamente, falta el paso crítico de solicitar permisos al usuario con Geolocation.requestPermissions(). Sin este paso, watchPosition fallará en iOS y Android. Los permisos deben solicitarse antes de cualquier operación de geolocalización.',
+  },
+  {
+    id: 'sensor-5',
+    title: 'Biometric Auth',
+    description: 'Identifica el flujo correcto de autenticación biométrica en esta implementación.',
+    codeSnippet: `// biometric-auth.ts
+import { NativeBiometric } from '@capacitor-community/native-biometric';
+
+async function authenticateUser() {
+  const result = await NativeBiometric.isAvailable();
+
+  if (result.isAvailable) {
+    const verified = await NativeBiometric.verifyIdentity({
+      reason: 'Para acceder a tu cuenta',
+      title: 'Autenticación',
+    });
+
+    if (verified) {
+      loginUser();
+    }
+  }
+}`,
+    options: [
+      'El código es correcto y sigue el flujo estándar de biometric auth',
+      'Falta manejar el caso cuando la biometría falla o se cancela',
+      'Debe usar getCredentials() después de verificar identidad para obtener el token guardado',
+      'isAvailable() debe llamarse en el init de la app, no cada vez que se autentica',
+    ],
+    correctIndex: 1,
+    explanation: 'El código verifica disponibilidad y solicita autenticación biométrica correctamente, pero no maneja errores ni cancelaciones. verifyIdentity() puede lanzar excepciones si el usuario cancela, si falla la biometría después de varios intentos, o si hay errores de hardware. El código debe usar try-catch y proporcionar un método alternativo de autenticación.',
+  },
+]
+
 // Game Definitions
 export const GAMES: Game[] = [
   {
@@ -326,6 +981,38 @@ export const GAMES: Game[] = [
     instructions: 'Lee cada escenario y selecciona los issues que podrían causar un rechazo en las tiendas.',
     xpReward: 100,
   },
+  {
+    id: 'architecture-planner',
+    moduleId: 'module-5',
+    title: 'Architecture Planner',
+    description: 'Diseña arquitecturas escalables clasificando componentes en sus capas correctas',
+    instructions: 'Arrastra cada componente a su capa arquitectónica correcta: Presentation, Domain, Data o Infrastructure.',
+    xpReward: 100,
+  },
+  {
+    id: 'security-audit',
+    moduleId: 'module-6',
+    title: 'Security Audit',
+    description: 'Identifica vulnerabilidades de seguridad en código de apps móviles',
+    instructions: 'Revisa cada snippet de código y selecciona las prácticas que representan vulnerabilidades de seguridad.',
+    xpReward: 100,
+  },
+  {
+    id: 'link-builder',
+    moduleId: 'module-11',
+    title: 'Link Builder',
+    description: 'Construye deep links y universal links arrastrando las partes en el orden correcto',
+    instructions: 'Arrastra y suelta las partes del link (esquema, host, path, parámetros) en el orden correcto para crear deep links funcionales.',
+    xpReward: 100,
+  },
+  {
+    id: 'sensor-quest',
+    moduleId: 'module-12',
+    title: 'Sensor Quest',
+    description: 'Identifica el uso correcto de sensores y APIs de hardware en código Capacitor',
+    instructions: 'Revisa cada snippet de código y selecciona la opción que describe correctamente el funcionamiento o problema del código.',
+    xpReward: 100,
+  },
 ]
 
 // Helper Functions
@@ -351,4 +1038,20 @@ export function getBuildChallenges(): BuildChallenge[] {
 
 export function getStoreScenarios(): StoreScenario[] {
   return STORE_SCENARIOS
+}
+
+export function getArchitectureChallenges(): ArchitectureChallenge[] {
+  return ARCHITECTURE_CHALLENGES
+}
+
+export function getSecurityAuditScenarios(): SecurityAuditScenario[] {
+  return SECURITY_AUDIT_SCENARIOS
+}
+
+export function getLinkChallenges(): LinkChallenge[] {
+  return LINK_CHALLENGES
+}
+
+export function getSensorChallenges(): SensorChallenge[] {
+  return SENSOR_CHALLENGES
 }

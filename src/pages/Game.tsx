@@ -1,45 +1,19 @@
 import { useState, useCallback } from 'react'
 import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES, XP_REWARDS } from '../data/constants'
-import { ArrowLeft, Trophy, RotateCcw, CheckCircle } from 'lucide-react'
-import { CommandBuilder, PluginMatcher, BuildPipeline, StoreReviewer } from '../components/games'
+import { ArrowLeft, Trophy, RotateCcw, CheckCircle, Wrench, Plug, Hammer, Search, Layers, Shield } from 'lucide-react'
+import {
+  CommandBuilder,
+  PluginMatcher,
+  BuildPipeline,
+  StoreReviewer,
+  ArchitecturePlanner,
+  SecurityAudit,
+} from '../components/games'
 import type { GameType } from '../data/types'
 import { trackGameStart, trackGameComplete } from '../utils'
-
-const gameInfo: Record<
-  string,
-  { title: string; description: string; icon: string; instructions: string }
-> = {
-  'command-builder': {
-    title: 'Command Builder',
-    description:
-      'Construye comandos de Capacitor CLI arrastrando los segmentos en el orden correcto',
-    icon: '🔧',
-    instructions: 'Arrastra y suelta las partes del comando en el orden correcto para completar cada desafío.',
-  },
-  'plugin-matcher': {
-    title: 'Plugin Matcher',
-    description:
-      'Conecta casos de uso con el plugin de Capacitor correcto',
-    icon: '🔌',
-    instructions: 'Empareja cada caso de uso con el plugin que lo resuelve. Usa las pistas si necesitas ayuda.',
-  },
-  'build-pipeline': {
-    title: 'Build Pipeline',
-    description:
-      'Ordena los pasos del proceso de build para Android e iOS',
-    icon: '🔨',
-    instructions: 'Arrastra los pasos en el orden correcto para completar el pipeline de build.',
-  },
-  'store-reviewer': {
-    title: 'Store Reviewer',
-    description:
-      'Identifica errores en configuraciones que causarían rechazo en las tiendas',
-    icon: '🔍',
-    instructions: 'Lee cada escenario y selecciona los issues que podrían causar un rechazo.',
-  },
-}
 
 type GameState = 'intro' | 'playing' | 'result'
 
@@ -54,6 +28,8 @@ export function Game() {
   const { moduleId } = useParams<{ moduleId: string }>()
   const navigate = useNavigate()
   const { user, isQuizCompleted, isGameCompleted, completeGame } = useUser()
+  const { t } = useTranslation('game')
+  const { t: tGamification } = useTranslation('gamification')
 
   const [gameState, setGameState] = useState<GameState>('intro')
   const [result, setResult] = useState<GameResult | null>(null)
@@ -68,22 +44,25 @@ export function Game() {
     }
   }, [module])
 
-  const handleGameComplete = useCallback((score: number, total: number) => {
-    const passed = score >= total * 0.7 // 70% to pass
-    const xpEarned = passed ? XP_REWARDS.GAME_COMPLETE : 0
+  const handleGameComplete = useCallback(
+    (score: number, total: number) => {
+      const passed = score >= total * 0.7 // 70% to pass
+      const xpEarned = passed ? XP_REWARDS.GAME_COMPLETE : 0
 
-    if (module) {
-      // Track game completion
-      trackGameComplete(module.gameId, Math.round((score / total) * 100))
+      if (module) {
+        // Track game completion
+        trackGameComplete(module.gameId, Math.round((score / total) * 100))
 
-      if (passed) {
-        completeGame(module.gameId)
+        if (passed) {
+          completeGame(module.gameId)
+        }
       }
-    }
 
-    setResult({ score, total, passed, xpEarned })
-    setGameState('result')
-  }, [module, completeGame])
+      setResult({ score, total, passed, xpEarned })
+      setGameState('result')
+    },
+    [module, completeGame]
+  )
 
   const handlePlayAgain = useCallback(() => {
     setGameState('intro')
@@ -106,12 +85,34 @@ export function Game() {
   }
 
   const gameDone = isGameCompleted(module.gameId)
-  const game = gameInfo[module.gameId] || {
-    title: module.gameId,
-    description: '',
-    icon: '🎮',
-    instructions: '',
+
+  // Get game type key
+  const gameTypeKey = module.gameId as
+    | 'command-builder'
+    | 'plugin-matcher'
+    | 'build-pipeline'
+    | 'store-reviewer'
+    | 'architecture-planner'
+    | 'security-audit'
+  const gameTypeMap: Record<string, string> = {
+    'command-builder': 'commandBuilder',
+    'plugin-matcher': 'pluginMatcher',
+    'build-pipeline': 'buildPipeline',
+    'store-reviewer': 'storeReviewer',
+    'architecture-planner': 'architecturePlanner',
+    'security-audit': 'securityAudit',
   }
+  const gameKey = gameTypeMap[gameTypeKey] || 'commandBuilder'
+
+  const GameIcon = {
+    'command-builder': Wrench,
+    'plugin-matcher': Plug,
+    'build-pipeline': Hammer,
+    'store-reviewer': Search,
+    'architecture-planner': Layers,
+    'security-audit': Shield,
+  }[module.gameId] || Wrench
+  const gameTitle = tGamification(`gameTitles.${module.gameId}`)
 
   const renderGame = () => {
     switch (module.gameId as GameType) {
@@ -123,10 +124,14 @@ export function Game() {
         return <BuildPipeline onComplete={handleGameComplete} />
       case 'store-reviewer':
         return <StoreReviewer onComplete={handleGameComplete} />
+      case 'architecture-planner':
+        return <ArchitecturePlanner onComplete={handleGameComplete} />
+      case 'security-audit':
+        return <SecurityAudit onComplete={handleGameComplete} />
       default:
         return (
           <div className="py-12 text-center">
-            <p className="text-gray-400">Juego no disponible</p>
+            <p className="text-gray-400">{t('notAvailable.title')}</p>
           </div>
         )
     }
@@ -140,20 +145,29 @@ export function Game() {
         className="mb-6 inline-flex items-center gap-2 text-gray-400 hover:text-white"
       >
         <ArrowLeft className="h-4 w-4" />
-        <span>Volver al módulo</span>
+        <span>{t('backToModule')}</span>
       </Link>
 
       {/* Game Header */}
       <div className="card mb-8">
         <div className="flex items-start gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-orange-600 text-3xl">
-            {game.icon}
+          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-orange-600">
+            <GameIcon className="h-8 w-8 text-white" />
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold">{game.title}</h1>
-            <p className="mt-1 text-gray-400">{game.description}</p>
-            <p className="mt-2 text-sm text-gray-500">
-              {gameDone ? '✅ Juego completado' : `🏆 +${XP_REWARDS.GAME_COMPLETE} XP al completar`}
+            <h1 className="text-2xl font-bold">{gameTitle}</h1>
+            <p className="mt-1 text-gray-400">
+              {t(`types.${gameKey}.description`)}
+            </p>
+            <p className="mt-2 flex items-center gap-1 text-sm text-gray-500">
+              {gameDone ? (
+                <>
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  {t('intro.completed')}
+                </>
+              ) : (
+                t('intro.xpReward', { xp: XP_REWARDS.GAME_COMPLETE })
+              )}
             </p>
           </div>
         </div>
@@ -163,21 +177,21 @@ export function Game() {
       {gameState === 'intro' && (
         <div className="card">
           <div className="py-12 text-center">
-            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-orange-600/20 text-5xl">
-              {game.icon}
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-orange-600/20">
+              <GameIcon className="h-12 w-12 text-orange-400" />
             </div>
             <h2 className="mb-2 text-xl font-semibold">
-              {gameDone ? '¡Juego Completado!' : '¿Listo para jugar?'}
+              {gameDone ? t('intro.alreadyCompleted') : t('intro.readyPlay')}
             </h2>
             <p className="mx-auto mb-6 max-w-md text-gray-400">
-              {game.instructions}
+              {t(`types.${gameKey}.instructions`)}
             </p>
             <div className="flex justify-center gap-4">
               <button
                 onClick={handleStartGame}
                 className="btn-primary flex items-center gap-2"
               >
-                {gameDone ? 'Jugar de nuevo' : 'Comenzar juego'}
+                {gameDone ? t('intro.playAgain') : t('intro.start')}
                 <Trophy className="h-4 w-4" />
               </button>
             </div>
@@ -185,11 +199,7 @@ export function Game() {
         </div>
       )}
 
-      {gameState === 'playing' && (
-        <div className="card">
-          {renderGame()}
-        </div>
-      )}
+      {gameState === 'playing' && <div className="card">{renderGame()}</div>}
 
       {gameState === 'result' && result && (
         <div className="card">
@@ -209,7 +219,7 @@ export function Game() {
 
             {/* Result Title */}
             <h2 className="mb-2 text-2xl font-bold">
-              {result.passed ? '¡Juego Completado!' : 'Inténtalo de nuevo'}
+              {result.passed ? t('intro.alreadyCompleted') : t('intro.start')}
             </h2>
 
             {/* Score */}
@@ -218,7 +228,7 @@ export function Game() {
                 {Math.round((result.score / result.total) * 100)}%
               </div>
               <p className="text-gray-400">
-                {result.score} de {result.total} correctos
+                {result.score} / {result.total}
               </p>
             </div>
 
@@ -232,29 +242,22 @@ export function Game() {
               </div>
             )}
 
-            {/* Message */}
-            <p className="mx-auto mb-8 max-w-md text-gray-400">
-              {result.passed
-                ? '¡Excelente trabajo! Has demostrado tu conocimiento en este desafío.'
-                : 'Necesitas al menos 70% para aprobar. Revisa el contenido y vuelve a intentarlo.'}
-            </p>
-
             {/* Actions */}
-            <div className="flex justify-center gap-4">
+            <div className="mt-8 flex justify-center gap-4">
               {!result.passed && (
                 <button
                   onClick={handlePlayAgain}
                   className="btn-secondary flex items-center gap-2"
                 >
                   <RotateCcw className="h-4 w-4" />
-                  Intentar de nuevo
+                  {t('intro.playAgain')}
                 </button>
               )}
               <button
                 onClick={() => navigate(`/module/${moduleId}`)}
                 className="btn-primary"
               >
-                Volver al módulo
+                {t('backToModule')}
               </button>
             </div>
           </div>

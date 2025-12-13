@@ -70,7 +70,7 @@ describe('Game', () => {
         },
       })
 
-      expect(screen.getByText(/command builder/i)).toBeInTheDocument()
+      expect(screen.getByText(/constructor de comandos/i)).toBeInTheDocument()
       expect(screen.getByText(/¿listo para jugar\?/i)).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /comenzar juego/i })).toBeInTheDocument()
     })
@@ -305,7 +305,7 @@ describe('Game', () => {
         },
       })
 
-      expect(screen.getByText(/command builder/i)).toBeInTheDocument()
+      expect(screen.getByText(/constructor de comandos/i)).toBeInTheDocument()
       expect(screen.getByText(/construye comandos de capacitor cli/i)).toBeInTheDocument()
     })
 
@@ -339,8 +339,8 @@ describe('Game', () => {
         },
       })
 
-      // Game icon appears in multiple places
-      expect(screen.getAllByText('🔧').length).toBeGreaterThan(0)
+      // Game header and content should render with the game title
+      expect(screen.getByText(/constructor de comandos/i)).toBeInTheDocument()
     })
   })
 })

@@ -1,0 +1,34 @@
+{
+  "backToModule": "Voltar ao módulo",
+  "notAvailable": {
+    "title": "Quiz em Desenvolvimento",
+    "message": "O quiz para este módulo estará disponível em breve."
+  },
+  "intro": {
+    "subtitle": "Teste seus conhecimentos do módulo",
+    "completed": "Quiz completado",
+    "questions": "{{count}} perguntas",
+    "passingScore": "{{score}}% para passar",
+    "readyImprove": "Pronto para melhorar sua pontuação?",
+    "readyStart": "Pronto para o quiz?",
+    "instructions": "Este quiz tem {{count}} perguntas. Você precisa de {{score}}% para passar e desbloquear o mini-game.",
+    "retry": "Repetir Quiz",
+    "start": "Começar Quiz"
+  },
+  "result": {
+    "perfect": "Pontuação Perfeita!",
+    "passed": "Quiz Aprovado!",
+    "failed": "Quiz Não Aprovado",
+    "perfectMessage": "Você demonstrou domínio completo do tema.",
+    "passedMessage": "Você demonstrou um bom entendimento do tema.",
+    "failedMessage": "Você precisa de {{score}}% ou mais para passar. Tente novamente!",
+    "score": "Pontuação",
+    "correct": "Corretas",
+    "xpEarned": "XP Ganho",
+    "summary": "Resumo das respostas",
+    "correctAnswer": "Resposta correta:",
+    "tryAgain": "Tentar novamente",
+    "continue": "Continuar",
+    "backToModule": "Voltar ao módulo"
+  }
+}

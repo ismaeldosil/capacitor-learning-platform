@@ -1,0 +1,381 @@
+{
+  "command-builder": {
+    "title": "Command Builder",
+    "description": "Build Capacitor CLI commands by dragging parts in the correct order",
+    "instructions": "Drag and drop command parts in the correct order to complete each challenge.",
+    "challenges": [
+      {
+        "id": "cmd-1",
+        "instruction": "Create a new Capacitor project named \"my-app\"",
+        "description": "Use the npx command to initialize a project",
+        "hint": "The base command is npx @capacitor/cli create"
+      },
+      {
+        "id": "cmd-2",
+        "instruction": "Add the Android platform to the project",
+        "description": "Use npm to install the native platform",
+        "hint": "Use npm install to add dependencies"
+      },
+      {
+        "id": "cmd-3",
+        "instruction": "Sync the web project with native platforms",
+        "description": "Copy web assets and update plugins",
+        "hint": "cap sync is the command to synchronize"
+      },
+      {
+        "id": "cmd-4",
+        "instruction": "Open the Android project in Android Studio",
+        "description": "Launch the native IDE for development",
+        "hint": "Use cap open followed by the platform"
+      },
+      {
+        "id": "cmd-5",
+        "instruction": "Run the app on a connected Android device",
+        "description": "Compile and run in development mode",
+        "hint": "cap run with --target device runs on a physical device"
+      }
+    ]
+  },
+  "plugin-matcher": {
+    "title": "Plugin Matcher",
+    "description": "Connect each use case with the correct Capacitor plugin",
+    "instructions": "Match each use case with the plugin that solves it. Use hints if you need help.",
+    "pairs": [
+      {
+        "id": "pair-1",
+        "useCase": "Show Face ID or fingerprint for authentication",
+        "hint": "Native biometric authentication"
+      },
+      {
+        "id": "pair-2",
+        "useCase": "Save user preferences persistently",
+        "hint": "Persistent key-value storage"
+      },
+      {
+        "id": "pair-3",
+        "useCase": "Send push notifications to the device",
+        "hint": "Remote notifications via Firebase/APNs"
+      },
+      {
+        "id": "pair-4",
+        "useCase": "Show a splash screen while the app loads",
+        "hint": "Initial loading screen"
+      },
+      {
+        "id": "pair-5",
+        "useCase": "Change the device status bar color",
+        "hint": "Control of the system top bar"
+      },
+      {
+        "id": "pair-6",
+        "useCase": "Detect when the virtual keyboard shows or hides",
+        "hint": "Virtual keyboard events"
+      },
+      {
+        "id": "pair-7",
+        "useCase": "Open a URL in the system browser",
+        "hint": "In-app or external browser"
+      },
+      {
+        "id": "pair-8",
+        "useCase": "Get information about the device and app",
+        "hint": "Application metadata and lifecycle"
+      }
+    ]
+  },
+  "build-pipeline": {
+    "title": "Build Pipeline",
+    "description": "Order the build process steps for Android and iOS",
+    "instructions": "Drag steps in the correct order to complete the build pipeline.",
+    "challenges": {
+      "android": {
+        "steps": [
+          { "id": "s1", "name": "npm run build", "description": "Compile the web app" },
+          { "id": "s2", "name": "npx cap sync android", "description": "Sync with Android" },
+          { "id": "s3", "name": "Open Android Studio", "description": "Load native project" },
+          { "id": "s4", "name": "Build > Generate Signed Bundle", "description": "Generate signed AAB" },
+          { "id": "s5", "name": "Select keystore", "description": "Use signing certificate" },
+          { "id": "s6", "name": "Build release", "description": "Compile production version" }
+        ]
+      },
+      "ios": {
+        "steps": [
+          { "id": "s1", "name": "npm run build", "description": "Compile the web app" },
+          { "id": "s2", "name": "npx cap sync ios", "description": "Sync with iOS" },
+          { "id": "s3", "name": "Open Xcode", "description": "Load native project" },
+          { "id": "s4", "name": "Select Team", "description": "Configure signing team" },
+          { "id": "s5", "name": "Product > Archive", "description": "Create distribution archive" },
+          { "id": "s6", "name": "Distribute App", "description": "Upload to App Store Connect" }
+        ]
+      }
+    }
+  },
+  "store-reviewer": {
+    "title": "Store Reviewer",
+    "description": "Identify issues that would cause an app rejection",
+    "instructions": "Read each scenario and select the issues that could cause a rejection in the stores.",
+    "scenarios": [
+      {
+        "id": "scenario-1",
+        "title": "Finance App - Play Store Rejection",
+        "description": "Your banking app was rejected. Review the following items and mark those that could cause the rejection.",
+        "issues": [
+          "Missing privacy policy in the app",
+          "Camera permissions without justification",
+          "App icon with correct resolution",
+          "Does not declare use of financial data",
+          "Clear description of features"
+        ],
+        "explanation": "Financial apps require privacy policy, permission justification, and sensitive data declaration."
+      },
+      {
+        "id": "scenario-2",
+        "title": "Social App - App Store Rejection",
+        "description": "Your social network was rejected by Apple. Identify the problems.",
+        "issues": [
+          "Delete account button not visible",
+          "High quality screenshots",
+          "Sign in with Apple not implemented",
+          "User-generated content without moderation",
+          "iPad support included"
+        ],
+        "explanation": "Apple requires: option to delete account, Sign in with Apple if there's social login, and UGC moderation."
+      },
+      {
+        "id": "scenario-3",
+        "title": "Health App - Compliance",
+        "description": "You're preparing a health tracking app. What do you need before publishing?",
+        "issues": [
+          "Explicit consent for health data",
+          "Smooth animations throughout the app",
+          "Encryption of sensitive data",
+          "Notice that it doesn't replace medical advice",
+          "Multiple languages supported"
+        ],
+        "explanation": "Health apps need HIPAA/GDPR consent, encryption, and medical disclaimers."
+      },
+      {
+        "id": "scenario-4",
+        "title": "App with In-App Purchases - Configuration",
+        "description": "Your app has premium subscriptions. Verify the configuration.",
+        "issues": [
+          "Restore purchases button visible",
+          "Clear subscription terms before purchase",
+          "Link to terms of service",
+          "Price shown in local format",
+          "Dark theme option"
+        ],
+        "explanation": "Stores require: restore purchases, clear terms, ToS, and localized prices for IAP."
+      }
+    ]
+  },
+  "ui": {
+    "startGame": "Start Game",
+    "playAgain": "Play Again",
+    "next": "Next",
+    "submit": "Submit",
+    "verify": "Verify",
+    "hint": "Hint",
+    "showHint": "Show hint",
+    "correct": "Correct!",
+    "incorrect": "Incorrect",
+    "completed": "Game Completed!",
+    "score": "Score",
+    "challenge": "Challenge",
+    "of": "of",
+    "dragAndDrop": "Drag and drop",
+    "selectIssues": "Select the issues",
+    "matchPlugins": "Match the plugins",
+    "orderSteps": "Order the steps",
+    "xpReward": "+100 XP on completion",
+    "readyToPlay": "Ready to play?",
+    "gameCompleted": "Game Completed",
+    "yourCommand": "Your command",
+    "dragPartsHere": "Drag parts here or click on them",
+    "availableParts": "Available parts",
+    "allPartsUsed": "All parts have been used",
+    "correctCommand": "Correct command",
+    "reset": "Reset",
+    "viewResults": "View Results",
+    "legend": "Legend",
+    "baseCommand": "Base command",
+    "flag": "Flag",
+    "argument": "Argument",
+    "platform": "Platform",
+    "matched": "Matched",
+    "useCases": "Use Cases",
+    "plugins": "Plugins",
+    "nowSelectPlugin": "Now select the corresponding plugin",
+    "selectUseCaseToStart": "Select a use case to start",
+    "perfectMatch": "Perfect! All matches correct",
+    "correctMatches": "correct",
+    "reviewIncorrect": "Review incorrect answers above",
+    "youMasterPlugins": "You've mastered Capacitor plugins",
+    "selected": "Selected",
+    "correctAnswer": "Correct",
+    "pipeline": "Pipeline",
+    "yourPipeline": "Your Pipeline",
+    "dragStepsHere": "Drag steps here in the correct order",
+    "allStepsAssigned": "All steps have been assigned",
+    "availableSteps": "Available steps",
+    "pipelineFor": "Build Pipeline for",
+    "orderStepsCorrectly": "Order the build process steps in the correct order",
+    "pipelineCorrect": "Pipeline correct!",
+    "incorrectOrder": "Incorrect order",
+    "correctOrder": "Correct order",
+    "scenario": "Scenario",
+    "applicationRejected": "Application rejected",
+    "selectProblems": "Select issues that would cause rejection",
+    "perfectIdentified": "Perfect! You identified all problems",
+    "correctMissedWrong": "correct, wrong, missed",
+    "explanation": "Explanation",
+    "correctProblem": "Correct problem",
+    "falseAlarm": "False alarm",
+    "missedProblem": "Missed problem",
+    "notSelected": "Not selected",
+    "securityReview": "Security Audit",
+    "selectVulnerabilities": "Select the security vulnerabilities",
+    "perfectAudit": "Perfect audit! You identified all vulnerabilities.",
+    "falsePositives": "false positives",
+    "missed": "not detected",
+    "vulnerabilityFound": "Vulnerability detected",
+    "falsePositive": "False positive",
+    "vulnerabilityMissed": "Vulnerability not detected",
+    "categoryStorage": "Storage",
+    "categoryAuth": "Authentication",
+    "categoryNetwork": "Network",
+    "categoryCrypto": "Cryptography",
+    "categoryPlatform": "Platform"
+  },
+  "security-audit": {
+    "title": "Security Audit",
+    "description": "Identify security vulnerabilities in mobile app code",
+    "instructions": "Review each code snippet and select the practices that represent security vulnerabilities.",
+    "scenarios": [
+      {
+        "id": "sec-1",
+        "title": "Token Storage",
+        "description": "Review this token management code and find the security vulnerabilities.",
+        "explanation": "Tokens should NEVER be stored in localStorage (plain text) or logged. Use Keychain (iOS) or EncryptedSharedPreferences (Android) via @capacitor-community/secure-storage.",
+        "vulnerabilities": [
+          {
+            "id": "v1-1",
+            "description": "Using localStorage to store tokens (plain text data)"
+          },
+          {
+            "id": "v1-2",
+            "description": "Logging sensitive tokens to the console"
+          },
+          {
+            "id": "v1-3",
+            "description": "Using async functions for storage operations"
+          }
+        ]
+      },
+      {
+        "id": "sec-2",
+        "title": "OAuth Authentication",
+        "description": "Analyze this OAuth implementation and detect the security issues.",
+        "explanation": "In mobile apps: never include client_secret (they're public), use PKCE instead of implicit flow, and configure a custom scheme (com.myapp://) as redirect URL.",
+        "vulnerabilities": [
+          {
+            "id": "v2-1",
+            "description": "Client secret hardcoded in source code"
+          },
+          {
+            "id": "v2-2",
+            "description": "Using implicit flow (token) instead of PKCE"
+          },
+          {
+            "id": "v2-3",
+            "description": "Redirect URL using HTTP instead of custom scheme"
+          },
+          {
+            "id": "v2-4",
+            "description": "Requesting OpenID Connect scopes"
+          }
+        ]
+      },
+      {
+        "id": "sec-3",
+        "title": "Network Communication",
+        "description": "Review this API client configuration and find security issues.",
+        "explanation": "Always use HTTPS, implement SSL Pinning to prevent MITM attacks, and don't expose detailed server error messages that could reveal sensitive information.",
+        "vulnerabilities": [
+          {
+            "id": "v3-1",
+            "description": "Using HTTP instead of HTTPS for the API"
+          },
+          {
+            "id": "v3-2",
+            "description": "Not implementing SSL Pinning to prevent MITM"
+          },
+          {
+            "id": "v3-3",
+            "description": "Sending authorization token in Authorization header"
+          },
+          {
+            "id": "v3-4",
+            "description": "Exposing server error details to the client"
+          }
+        ]
+      },
+      {
+        "id": "sec-4",
+        "title": "WebView Configuration",
+        "description": "Analyze this Capacitor configuration and detect the security risks.",
+        "explanation": "In production: disable cleartext and mixed content, restrict allowNavigation to specific domains, and NEVER enable webContentsDebuggingEnabled.",
+        "vulnerabilities": [
+          {
+            "id": "v4-1",
+            "description": "Allowing unencrypted HTTP traffic (cleartext)"
+          },
+          {
+            "id": "v4-2",
+            "description": "Allowing navigation to any domain"
+          },
+          {
+            "id": "v4-3",
+            "description": "Debugging enabled in production"
+          },
+          {
+            "id": "v4-4",
+            "description": "Allowing mixed HTTP/HTTPS content"
+          },
+          {
+            "id": "v4-5",
+            "description": "Allowing link preview on iOS"
+          }
+        ]
+      },
+      {
+        "id": "sec-5",
+        "title": "Integrity Validation",
+        "description": "Review this device security verification code.",
+        "explanation": "Use real root/jailbreak detection, never hardcode API keys, don't expose them in window, and block or degrade functionality when compromised devices are detected.",
+        "vulnerabilities": [
+          {
+            "id": "v5-1",
+            "description": "Using Math.random() for security decisions"
+          },
+          {
+            "id": "v5-2",
+            "description": "Sensitive API key hardcoded in code"
+          },
+          {
+            "id": "v5-3",
+            "description": "Exposing API key in global window object"
+          },
+          {
+            "id": "v5-4",
+            "description": "Not blocking app when compromised device detected"
+          },
+          {
+            "id": "v5-5",
+            "description": "Using console.warn for security alerts"
+          }
+        ]
+      }
+    ]
+  }
+}

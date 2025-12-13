@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Lock, CheckCircle, ChevronRight, Clock, BookOpen } from 'lucide-react'
 import type { ModuleStatus } from '../../data/types'
+import { Icon } from '../common/Icon'
 
 interface ModuleCardProps {
   id: string
@@ -72,11 +73,11 @@ export function ModuleCard({
       <div className="relative flex items-start gap-4">
         <div
           className={`
-            flex h-14 w-14 items-center justify-center rounded-xl text-3xl transition-transform duration-300
+            flex h-14 w-14 items-center justify-center rounded-xl transition-transform duration-300
             ${isLocked ? 'bg-gray-700' : 'bg-gray-700 group-hover:scale-110'}
           `}
         >
-          {icon}
+          <Icon name={icon} className="h-7 w-7 text-primary-400" />
         </div>
         <div className="flex-1 pr-8">
           <h3 className="font-semibold text-lg leading-tight">{title}</h3>

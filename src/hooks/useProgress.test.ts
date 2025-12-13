@@ -49,7 +49,7 @@ describe('useProgress', () => {
 
       const modules = result.current.getModulesWithStatus(0, [], [], [])
 
-      expect(modules.length).toBe(4)
+      expect(modules.length).toBe(12) // 12 modules total
       expect(modules[0]?.status).toBe('available')
       expect(modules[1]?.status).toBe('locked') // Requires 100 XP
     })
@@ -149,12 +149,12 @@ describe('useProgress', () => {
     it('should calculate total progress correctly', () => {
       const { result } = renderHook(() => useProgress())
 
-      // Total lessons: 5 + 6 + 5 + 4 = 20
+      // Total lessons: 5 + 6 + 5 + 4 + 6 + 6 + 6*6 = 68 (12 modules)
       const progress = result.current.getTotalProgress([
         'what-is-capacitor',
         'architecture',
       ])
-      expect(progress).toBe(10) // 2/20 = 10%
+      expect(progress).toBe(3) // 2/68 ≈ 3%
     })
   })
 })

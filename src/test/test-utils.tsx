@@ -1,6 +1,8 @@
 import { ReactElement, ReactNode } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom'
+import { I18nextProvider } from 'react-i18next'
+import i18n from '../i18n'
 import { UserProvider } from '../contexts/UserContext'
 import { STORAGE_KEYS } from '../data/constants'
 import type { User } from '../data/types'
@@ -11,9 +13,11 @@ interface WrapperProps {
 
 function AllProviders({ children }: WrapperProps) {
   return (
-    <BrowserRouter>
-      <UserProvider>{children}</UserProvider>
-    </BrowserRouter>
+    <I18nextProvider i18n={i18n}>
+      <BrowserRouter>
+        <UserProvider>{children}</UserProvider>
+      </BrowserRouter>
+    </I18nextProvider>
   )
 }
 
@@ -63,15 +67,17 @@ function renderWithRoute(
   }
 
   return render(
-    <MemoryRouter initialEntries={[route]}>
-      <UserProvider>
-        <Routes>
-          <Route path={path} element={ui} />
-          <Route path="/" element={<div>Home</div>} />
-          <Route path="/module/:moduleId" element={<div>Module Page</div>} />
-        </Routes>
-      </UserProvider>
-    </MemoryRouter>,
+    <I18nextProvider i18n={i18n}>
+      <MemoryRouter initialEntries={[route]}>
+        <UserProvider>
+          <Routes>
+            <Route path={path} element={ui} />
+            <Route path="/" element={<div>Home</div>} />
+            <Route path="/module/:moduleId" element={<div>Module Page</div>} />
+          </Routes>
+        </UserProvider>
+      </MemoryRouter>
+    </I18nextProvider>,
     options
   )
 }

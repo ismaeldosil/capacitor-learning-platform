@@ -1,0 +1,458 @@
+{
+  "quiz-module-1": {
+    "questions": [
+      {
+        "id": "q1-1",
+        "text": "O que é Capacitor?",
+        "options": [
+          "Um framework CSS para aplicações móveis",
+          "Um runtime nativo que permite executar apps web como apps nativas",
+          "Uma linguagem de programação para iOS",
+          "Um banco de dados para aplicações móveis"
+        ],
+        "explanation": "Capacitor é um runtime nativo moderno que permite executar aplicações web de forma nativa no iOS, Android e na Web."
+      },
+      {
+        "id": "q1-2",
+        "text": "Qual é o comando para sincronizar seu app web com os projetos nativos?",
+        "options": [
+          "npx cap build",
+          "npx cap run",
+          "npx cap sync",
+          "npx cap update"
+        ],
+        "explanation": "O comando \"npx cap sync\" copia seu build web para os projetos nativos e atualiza os plugins do Capacitor."
+      },
+      {
+        "id": "q1-3",
+        "text": "Qual WebView o Capacitor usa no iOS?",
+        "options": [
+          "UIWebView",
+          "WKWebView",
+          "Safari WebView",
+          "Chrome WebView"
+        ],
+        "explanation": "No iOS, Capacitor usa WKWebView, que é o WebView moderno e de alto desempenho da Apple."
+      },
+      {
+        "id": "q1-4",
+        "text": "Qual é o arquivo principal de configuração do Capacitor?",
+        "options": [
+          "package.json",
+          "config.xml",
+          "capacitor.config.ts",
+          "ionic.config.json"
+        ],
+        "explanation": "O arquivo capacitor.config.ts (ou .json) contém toda a configuração do seu projeto Capacitor."
+      },
+      {
+        "id": "q1-5",
+        "text": "O que faz o comando \"npx cap open android\"?",
+        "options": [
+          "Compila o app para Android",
+          "Executa o app em um emulador Android",
+          "Abre o projeto no Android Studio",
+          "Publica o app na Play Store"
+        ],
+        "explanation": "O comando \"npx cap open\" abre o projeto nativo no IDE correspondente (Android Studio para Android, Xcode para iOS)."
+      },
+      {
+        "id": "q1-6",
+        "text": "Qual diretório contém seu app web dentro do projeto Android?",
+        "options": [
+          "android/app/src/main/res/",
+          "android/app/src/main/assets/www/",
+          "android/www/",
+          "android/public/"
+        ],
+        "explanation": "Seu app web compilado é copiado para android/app/src/main/assets/www/ quando você executa cap sync ou cap copy."
+      },
+      {
+        "id": "q1-7",
+        "text": "O que você precisa configurar para usar Live Reload em um dispositivo?",
+        "options": [
+          "Apenas iniciar o servidor de desenvolvimento",
+          "Configurar server.url com seu IP local em capacitor.config.ts",
+          "Instalar um plugin especial de hot reload",
+          "Conectar o dispositivo por USB apenas"
+        ],
+        "explanation": "Para Live Reload, você deve configurar server.url com seu IP local para que o dispositivo possa conectar-se ao seu servidor de desenvolvimento."
+      },
+      {
+        "id": "q1-8",
+        "text": "Qual é a diferença entre \"npx cap copy\" e \"npx cap sync\"?",
+        "options": [
+          "São exatamente iguais",
+          "copy só copia arquivos web, sync também atualiza plugins nativos",
+          "sync é mais rápido que copy",
+          "copy atualiza plugins, sync só copia arquivos"
+        ],
+        "explanation": "\"copy\" só copia seu build web para os projetos nativos. \"sync\" executa copy e também atualiza os plugins nativos do Capacitor."
+      },
+      {
+        "id": "q1-9",
+        "text": "Com quais frameworks web o Capacitor é compatível?",
+        "options": [
+          "Apenas com Ionic Framework",
+          "Apenas com React e Angular",
+          "Qualquer framework que gere arquivos estáticos",
+          "Apenas com frameworks que suportem SSR"
+        ],
+        "explanation": "Capacitor é agnóstico de framework. Funciona com React, Vue, Angular, Svelte, ou qualquer projeto web que gere arquivos estáticos."
+      },
+      {
+        "id": "q1-10",
+        "text": "O que é o \"Bridge\" na arquitetura do Capacitor?",
+        "options": [
+          "Um componente visual da interface",
+          "O sistema de comunicação entre JavaScript e código nativo",
+          "Uma ferramenta de debugging",
+          "O compilador de TypeScript"
+        ],
+        "explanation": "O Bridge é o sistema de comunicação que permite ao seu código JavaScript chamar APIs nativas e receber respostas do código nativo."
+      }
+    ]
+  },
+  "quiz-module-2": {
+    "questions": [
+      {
+        "id": "q2-1",
+        "text": "Qual plugin é usado para gerenciar o ciclo de vida do app?",
+        "options": [
+          "@capacitor/lifecycle",
+          "@capacitor/app",
+          "@capacitor/core",
+          "@capacitor/status"
+        ],
+        "explanation": "O plugin @capacitor/app fornece métodos para gerenciar o ciclo de vida da aplicação, como detectar quando vai para segundo plano."
+      },
+      {
+        "id": "q2-2",
+        "text": "Qual é o método correto para escutar quando o app vai para segundo plano?",
+        "options": [
+          "App.onPause()",
+          "App.addListener(\"appStateChange\", ...)",
+          "App.background()",
+          "App.onBackground()"
+        ],
+        "explanation": "Usa-se App.addListener(\"appStateChange\", callback) para escutar mudanças de estado do app, incluindo quando vai para segundo plano."
+      },
+      {
+        "id": "q2-3",
+        "text": "Qual plugin é usado para armazenamento seguro de dados pequenos?",
+        "options": [
+          "@capacitor/storage",
+          "@capacitor/preferences",
+          "@capacitor/secure-storage",
+          "@capacitor/keychain"
+        ],
+        "explanation": "@capacitor/preferences é o plugin oficial para armazenar dados key-value de forma persistente e segura."
+      },
+      {
+        "id": "q2-4",
+        "text": "O que retorna PushNotifications.requestPermissions()?",
+        "options": [
+          "Um boolean",
+          "Um objeto com a propriedade \"receive\"",
+          "Uma string com o token",
+          "Um array de permissões"
+        ],
+        "explanation": "requestPermissions() retorna um objeto PermissionStatus com a propriedade \"receive\" indicando se as permissões foram concedidas."
+      },
+      {
+        "id": "q2-5",
+        "text": "Qual é a função do SplashScreen no Capacitor?",
+        "options": [
+          "Mostrar anúncios no início",
+          "Mostrar uma tela de carregamento enquanto o app inicializa",
+          "Proteger o app com senha",
+          "Mostrar o menu principal"
+        ],
+        "explanation": "O SplashScreen mostra uma imagem de início enquanto sua aplicação web carrega, melhorando a experiência do usuário."
+      },
+      {
+        "id": "q2-6",
+        "text": "Qual método do plugin Keyboard permite ocultar o teclado virtual?",
+        "options": [
+          "Keyboard.close()",
+          "Keyboard.dismiss()",
+          "Keyboard.hide()",
+          "Keyboard.remove()"
+        ],
+        "explanation": "Keyboard.hide() oculta o teclado virtual programaticamente quando não é mais necessário."
+      },
+      {
+        "id": "q2-7",
+        "text": "Qual evento do plugin Keyboard é disparado ANTES do teclado aparecer?",
+        "options": [
+          "keyboardWillShow",
+          "keyboardDidShow",
+          "keyboardOpening",
+          "keyboardVisible"
+        ],
+        "explanation": "O evento keyboardWillShow é disparado antes da animação do teclado, permitindo ajustar o layout antecipadamente."
+      },
+      {
+        "id": "q2-8",
+        "text": "Qual é a vantagem de usar o plugin Browser sobre window.open()?",
+        "options": [
+          "É mais rápido",
+          "Permite personalizar a toolbar e manter o usuário no app",
+          "Não requer conexão com internet",
+          "Suporta mais idiomas"
+        ],
+        "explanation": "O plugin Browser abre URLs em um navegador in-app com toolbar personalizável, mantendo o usuário dentro da sua aplicação."
+      },
+      {
+        "id": "q2-9",
+        "text": "Qual método de NativeBiometric verifica a identidade do usuário?",
+        "options": [
+          "NativeBiometric.authenticate()",
+          "NativeBiometric.verifyIdentity()",
+          "NativeBiometric.checkBiometric()",
+          "NativeBiometric.scanFinger()"
+        ],
+        "explanation": "verifyIdentity() solicita autenticação biométrica ao usuário mostrando o prompt do sistema."
+      },
+      {
+        "id": "q2-10",
+        "text": "Onde o NativeBiometric armazena credenciais de forma segura?",
+        "options": [
+          "localStorage do navegador",
+          "Em um arquivo JSON",
+          "Keychain (iOS) ou Keystore (Android)",
+          "SharedPreferences sem criptografia"
+        ],
+        "explanation": "NativeBiometric usa o Keychain do iOS e o Keystore do Android, que são armazenamentos criptografados a nível de hardware."
+      }
+    ]
+  },
+  "quiz-module-3": {
+    "questions": [
+      {
+        "id": "q3-1",
+        "text": "Qual método do Capacitor permite saber se o app está rodando em um dispositivo nativo?",
+        "options": [
+          "Capacitor.isDevice()",
+          "Capacitor.isNativePlatform()",
+          "Capacitor.isMobile()",
+          "Capacitor.checkNative()"
+        ],
+        "explanation": "Capacitor.isNativePlatform() retorna true se o app está rodando no iOS ou Android, e false se está na web."
+      },
+      {
+        "id": "q3-2",
+        "text": "Qual é o diretório webDir correto para um projeto Vite?",
+        "options": [
+          "build",
+          "www",
+          "dist",
+          "public"
+        ],
+        "explanation": "Vite gera o build de produção no diretório \"dist\" por padrão."
+      },
+      {
+        "id": "q3-3",
+        "text": "Qual evento do plugin App é usado para manipular deep links?",
+        "options": [
+          "appDeepLink",
+          "appUrlOpen",
+          "appLinkReceived",
+          "appNavigate"
+        ],
+        "explanation": "O evento appUrlOpen é disparado quando o app é aberto via um URL scheme personalizado ou deep link."
+      },
+      {
+        "id": "q3-4",
+        "text": "Qual CameraResultType retorna uma URL utilizável diretamente em uma tag <img>?",
+        "options": [
+          "CameraResultType.Base64",
+          "CameraResultType.Uri",
+          "CameraResultType.DataUrl",
+          "CameraResultType.Path"
+        ],
+        "explanation": "CameraResultType.Uri retorna um webPath que pode ser usado diretamente como src de uma imagem."
+      },
+      {
+        "id": "q3-5",
+        "text": "Qual formato de app a Google Play requer para novas publicações?",
+        "options": [
+          "APK",
+          "AAB (Android App Bundle)",
+          "IPA",
+          "ZIP"
+        ],
+        "explanation": "Google Play requer Android App Bundle (AAB) para novos apps, pois permite otimizar o tamanho do download."
+      },
+      {
+        "id": "q3-6",
+        "text": "Qual comando gera um keystore para assinar apps Android?",
+        "options": [
+          "npm run keytool",
+          "keytool -genkey",
+          "gradle signKey",
+          "android-keygen"
+        ],
+        "explanation": "O comando keytool -genkey (parte do JDK) gera um keystore com as chaves para assinar seu app."
+      },
+      {
+        "id": "q3-7",
+        "text": "Por que é importante NUNCA perder seu keystore de release?",
+        "options": [
+          "Você terá que reinstalar o Android Studio",
+          "Você não poderá atualizar seu app na Google Play",
+          "O app vai parar de funcionar",
+          "Você perderá o código fonte"
+        ],
+        "explanation": "Sem o keystore original, você não pode assinar atualizações com a mesma assinatura, impedindo atualizar o app publicado."
+      },
+      {
+        "id": "q3-8",
+        "text": "Qual ferramenta automatiza o processo de build e deploy para iOS?",
+        "options": [
+          "Gradle",
+          "Fastlane",
+          "Xcode CLI",
+          "npm deploy"
+        ],
+        "explanation": "Fastlane automatiza tarefas comuns como builds, assinatura, screenshots, e upload para App Store/TestFlight."
+      },
+      {
+        "id": "q3-9",
+        "text": "Qual opção do Xcode é usada para criar o arquivo para App Store?",
+        "options": [
+          "Build > Run",
+          "Product > Archive",
+          "File > Export",
+          "Debug > Release"
+        ],
+        "explanation": "Product > Archive compila o app em modo release e cria um arquivo que pode ser enviado para App Store Connect."
+      },
+      {
+        "id": "q3-10",
+        "text": "Em qual arquivo é configurada a assinatura de release para Android?",
+        "options": [
+          "AndroidManifest.xml",
+          "capacitor.config.ts",
+          "android/app/build.gradle",
+          "settings.gradle"
+        ],
+        "explanation": "A configuração de signingConfigs para release é definida no arquivo build.gradle do módulo app."
+      }
+    ]
+  },
+  "quiz-module-4": {
+    "questions": [
+      {
+        "id": "q4-1",
+        "text": "Qual tipo de teste verifica fluxos completos de usuário do início ao fim?",
+        "options": [
+          "Unit Tests",
+          "Integration Tests",
+          "E2E Tests",
+          "Snapshot Tests"
+        ],
+        "explanation": "Os E2E (End-to-End) Tests simulam interações reais do usuário através de toda a aplicação."
+      },
+      {
+        "id": "q4-2",
+        "text": "Como se testam componentes que usam plugins do Capacitor em testes unitários?",
+        "options": [
+          "Executam-se em um emulador",
+          "Usam-se mocks dos plugins",
+          "Não podem ser testados",
+          "Conecta-se um dispositivo real"
+        ],
+        "explanation": "Criam-se mocks dos plugins do Capacitor que simulam as respostas, permitindo testes rápidos e isolados."
+      },
+      {
+        "id": "q4-3",
+        "text": "Quanto custa a conta de desenvolvedor Google Play?",
+        "options": [
+          "$25/ano",
+          "$99/ano",
+          "$25 única vez",
+          "$99 única vez"
+        ],
+        "explanation": "Google Play Developer requer um pagamento único de $25 USD para publicar apps."
+      },
+      {
+        "id": "q4-4",
+        "text": "Quanto custa a conta Apple Developer?",
+        "options": [
+          "$25/ano",
+          "$99/ano",
+          "$25 única vez",
+          "$99 única vez"
+        ],
+        "explanation": "Apple Developer Program requer uma assinatura anual de $99 USD."
+      },
+      {
+        "id": "q4-5",
+        "text": "O que são os \"Nutrition Labels\" no App Store Connect?",
+        "options": [
+          "Informação nutricional do app",
+          "Declaração de quais dados seu app coleta",
+          "Etiquetas de categoria",
+          "Informação do desenvolvedor"
+        ],
+        "explanation": "Os \"Nutrition Labels\" (App Privacy) são declarações obrigatórias sobre quais dados seu app coleta e como os usa."
+      },
+      {
+        "id": "q4-6",
+        "text": "Qual é um motivo comum de rejeição em ambas as lojas?",
+        "options": [
+          "Usar cores brilhantes",
+          "Falta de política de privacidade",
+          "App muito pequeno",
+          "Usar muitas imagens"
+        ],
+        "explanation": "Ambas as lojas requerem uma política de privacidade acessível publicamente, especialmente se você coleta dados de usuários."
+      },
+      {
+        "id": "q4-7",
+        "text": "O que é KYC no contexto de apps fintech?",
+        "options": [
+          "Keep Your Credentials",
+          "Know Your Customer",
+          "Key Yield Calculation",
+          "Knowledge Your Code"
+        ],
+        "explanation": "KYC (Know Your Customer) é o processo de verificação de identidade requerido por regulamentações financeiras."
+      },
+      {
+        "id": "q4-8",
+        "text": "Qual regulamentação aplica se seu app manipula dados de cartão de crédito?",
+        "options": [
+          "GDPR",
+          "PCI-DSS",
+          "HIPAA",
+          "SOX"
+        ],
+        "explanation": "PCI-DSS é o padrão de segurança para o manuseio de dados de cartões de pagamento."
+      },
+      {
+        "id": "q4-9",
+        "text": "Por que se deve implementar timeout de sessão em apps fintech?",
+        "options": [
+          "Para economizar bateria",
+          "Por segurança, para proteger a conta se o dispositivo ficar desatendido",
+          "Para reduzir o uso de dados",
+          "É um requisito de design"
+        ],
+        "explanation": "O timeout de sessão protege a conta do usuário se ele deixar o dispositivo desatendido ou perdê-lo."
+      },
+      {
+        "id": "q4-10",
+        "text": "O que é certificate pinning e por que é importante em apps financeiros?",
+        "options": [
+          "Fixar o certificado SSL esperado para prevenir ataques MITM",
+          "Criar certificados de usuário",
+          "Criptografar dados locais",
+          "Validar a identidade do usuário"
+        ],
+        "explanation": "Certificate pinning verifica que o servidor é o esperado, prevenindo ataques man-in-the-middle onde alguém intercepte o tráfego."
+      }
+    ]
+  }
+}
