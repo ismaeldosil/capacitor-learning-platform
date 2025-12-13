@@ -6,9 +6,13 @@ import { Lesson } from './pages/Lesson'
 import { Quiz } from './pages/Quiz'
 import { Game } from './pages/Game'
 import { NotFound } from './pages/NotFound'
-import { ErrorBoundary } from './components/common'
+import { ErrorBoundary, CookieConsent } from './components/common'
+import { usePageTracking } from './hooks'
 
 function App() {
+  // Track page views on route changes
+  usePageTracking()
+
   return (
     <ErrorBoundary>
       <Routes>
@@ -21,6 +25,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
+      <CookieConsent />
     </ErrorBoundary>
   )
 }

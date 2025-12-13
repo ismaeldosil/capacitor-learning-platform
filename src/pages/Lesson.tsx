@@ -2,6 +2,7 @@ import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES } from '../data/constants'
+import { trackLessonComplete } from '../utils'
 import { ArrowLeft, ArrowRight, CheckCircle, FileText, Code, Image, Lightbulb, AlertTriangle } from 'lucide-react'
 import { Button } from '../components/common/Button'
 import { LessonContent } from '../components/lesson'
@@ -47,8 +48,9 @@ export function Lesson() {
   const moduleTitle = tGamification(`modules.${module.id}.title`)
 
   const handleComplete = () => {
-    if (!isCompleted) {
+    if (!isCompleted && moduleId) {
       completeLesson(lessonId)
+      trackLessonComplete(moduleId, lessonId)
     }
 
     if (nextLesson) {
