@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react'
 import { useParams, Link, Navigate, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useUser } from '../contexts/UserContext'
 import { MODULES, XP_REWARDS } from '../data/constants'
-import { getQuizByModuleId } from '../data/quizzes'
-import { ArrowLeft, Brain } from 'lucide-react'
+import { useTranslatedQuiz } from '../hooks/useTranslatedContent'
+import { ArrowLeft, Brain, CheckCircle, BarChart3 } from 'lucide-react'
 import { QuizQuestion, QuizProgress, QuizResult } from '../components/quiz'
 
 type QuizState = 'intro' | 'playing' | 'result'
@@ -12,6 +13,8 @@ export function Quiz() {
   const { moduleId } = useParams<{ moduleId: string }>()
   const navigate = useNavigate()
   const { user, isQuizCompleted, completeQuiz } = useUser()
+  const { t } = useTranslation('quiz')
+  const { t: tGamification } = useTranslation('gamification')
 
   const [quizState, setQuizState] = useState<QuizState>('intro')
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -19,15 +22,18 @@ export function Quiz() {
   const [score, setScore] = useState(0)
 
   const module = MODULES.find((m) => m.id === moduleId)
-  const quiz = module ? getQuizByModuleId(module.id) : undefined
+  const quiz = useTranslatedQuiz(moduleId || '')
 
-  const handleSelectAnswer = useCallback((index: number) => {
-    setAnswers((prev) => {
-      const newAnswers = [...prev]
-      newAnswers[currentQuestionIndex] = index
-      return newAnswers
-    })
-  }, [currentQuestionIndex])
+  const handleSelectAnswer = useCallback(
+    (index: number) => {
+      setAnswers((prev) => {
+        const newAnswers = [...prev]
+        newAnswers[currentQuestionIndex] = index
+        return newAnswers
+      })
+    },
+    [currentQuestionIndex]
+  )
 
   const handleNextQuestion = useCallback(() => {
     if (!quiz) return
@@ -56,7 +62,10 @@ export function Quiz() {
         }
       }
       // Add last answer if not already counted
-      if (currentAnswer === currentQuestion.correctIndex && answers[currentQuestionIndex] !== currentAnswer) {
+      if (
+        currentAnswer === currentQuestion.correctIndex &&
+        answers[currentQuestionIndex] !== currentAnswer
+      ) {
         finalScore++
       }
 
@@ -118,7 +127,7 @@ export function Quiz() {
           className="mb-6 inline-flex items-center gap-2 text-gray-400 hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" />
-          <span>Volver al módulo</span>
+          <span>{t('backToModule')}</span>
         </Link>
 
         <div className="card">
@@ -126,13 +135,15 @@ export function Quiz() {
             <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-purple-600/20">
               <Brain className="h-12 w-12 text-purple-400" />
             </div>
-            <h2 className="mb-2 text-xl font-semibold">Quiz en Desarrollo</h2>
+            <h2 className="mb-2 text-xl font-semibold">
+              {t('notAvailable.title')}
+            </h2>
             <p className="mx-auto max-w-md text-gray-400">
-              El quiz para este módulo estará disponible próximamente.
+              {t('notAvailable.message')}
             </p>
             <div className="mt-8">
               <Link to={`/module/${moduleId}`} className="btn-primary">
-                Volver al módulo
+                {t('backToModule')}
               </Link>
             </div>
           </div>
@@ -151,6 +162,7 @@ export function Quiz() {
     : 0
 
   const currentQuestion = quiz.questions[currentQuestionIndex]
+  const moduleTitle = tGamification(`modules.${module.id}.title`)
 
   return (
     <div className="mx-auto max-w-4xl animate-in">
@@ -160,7 +172,7 @@ export function Quiz() {
         className="mb-6 inline-flex items-center gap-2 text-gray-400 hover:text-white"
       >
         <ArrowLeft className="h-4 w-4" />
-        <span>Volver al módulo</span>
+        <span>{t('backToModule')}</span>
       </Link>
 
       {/* Quiz Header */}
@@ -170,14 +182,20 @@ export function Quiz() {
             <Brain className="h-8 w-8" />
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold">Quiz: {module.title}</h1>
-            <p className="mt-1 text-gray-400">
-              Evalúa tus conocimientos del módulo
-            </p>
-            <p className="mt-2 text-sm text-gray-500">
-              {quizDone
-                ? '✅ Quiz completado'
-                : `📊 ${quiz.questions.length} preguntas • ${quiz.passingScore}% para aprobar`}
+            <h1 className="text-2xl font-bold">Quiz: {moduleTitle}</h1>
+            <p className="mt-1 text-gray-400">{t('intro.subtitle')}</p>
+            <p className="mt-2 flex items-center gap-1 text-sm text-gray-500">
+              {quizDone ? (
+                <>
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  {t('intro.completed')}
+                </>
+              ) : (
+                <>
+                  <BarChart3 className="h-4 w-4" />
+                  {t('intro.questions', { count: quiz.questions.length })} | {t('intro.passingScore', { score: quiz.passingScore })}
+                </>
+              )}
             </p>
           </div>
         </div>
@@ -191,20 +209,26 @@ export function Quiz() {
               <Brain className="h-10 w-10 text-purple-400" />
             </div>
             <h2 className="mb-2 text-xl font-semibold">
-              {quizDone ? '¿Listo para mejorar tu puntuación?' : '¿Listo para el quiz?'}
+              {quizDone ? t('intro.readyImprove') : t('intro.readyStart')}
             </h2>
             <p className="mx-auto mb-8 max-w-md text-gray-400">
               {quizDone
-                ? 'Ya completaste este quiz. Puedes intentarlo de nuevo para reforzar tus conocimientos.'
-                : `Este quiz tiene ${quiz.questions.length} preguntas. Necesitas ${quiz.passingScore}% para aprobar y desbloquear el mini-juego.`}
+                ? t('intro.instructions', {
+                    count: quiz.questions.length,
+                    score: quiz.passingScore,
+                  })
+                : t('intro.instructions', {
+                    count: quiz.questions.length,
+                    score: quiz.passingScore,
+                  })}
             </p>
             <div className="space-y-4">
               <button onClick={handleStartQuiz} className="btn-primary">
-                {quizDone ? 'Repetir Quiz' : 'Comenzar Quiz'}
+                {quizDone ? t('intro.retry') : t('intro.start')}
               </button>
               {quizDone && (
                 <p className="text-sm text-green-500">
-                  +{XP_REWARDS.QUIZ_PASSED} XP ganados anteriormente
+                  +{XP_REWARDS.QUIZ_PASSED} XP
                 </p>
               )}
             </div>
@@ -222,7 +246,12 @@ export function Quiz() {
               question={currentQuestion}
               questionNumber={currentQuestionIndex + 1}
               totalQuestions={quiz.questions.length}
-              selectedAnswer={answers[currentQuestionIndex] !== undefined && answers[currentQuestionIndex] >= 0 ? answers[currentQuestionIndex] : null}
+              selectedAnswer={
+                answers[currentQuestionIndex] !== undefined &&
+                answers[currentQuestionIndex] >= 0
+                  ? answers[currentQuestionIndex]
+                  : null
+              }
               onSelectAnswer={handleSelectAnswer}
               onNext={handleNextQuestion}
             />

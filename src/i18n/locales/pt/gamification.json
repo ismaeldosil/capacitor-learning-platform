@@ -1,0 +1,137 @@
+{
+  "xpToNext": "{{xp}} XP para {{level}}",
+  "levelUp": {
+    "title": "Subiu de Nível!",
+    "newLevel": "Nível {{level}}: {{name}}",
+    "congratulations": "Parabéns pelo seu progresso!"
+  },
+  "levels": {
+    "capacitor-rookie": "Capacitor Rookie",
+    "plugin-explorer": "Plugin Explorer",
+    "build-master": "Build Master",
+    "store-publisher": "Store Publisher",
+    "capacitor-expert": "Capacitor Expert"
+  },
+  "badges": {
+    "first-launch": {
+      "name": "First Launch",
+      "description": "Completar sua primeira lição",
+      "howToUnlock": "Complete qualquer lição do curso para obter esta conquista. É seu primeiro passo na jornada do Capacitor!"
+    },
+    "speed-runner": {
+      "name": "Speed Runner",
+      "description": "Completar um módulo em menos de 1 hora",
+      "howToUnlock": "Complete todas as lições, o quiz e o mini-game do Módulo 1 em menos de 60 minutos."
+    },
+    "perfect-score": {
+      "name": "Perfect Score",
+      "description": "Obter 100% em um quiz",
+      "howToUnlock": "Responda corretamente todas as perguntas de qualquer quiz. Demonstre seu domínio do tema!"
+    },
+    "on-fire": {
+      "name": "On Fire",
+      "description": "Manter uma sequência de 3 dias",
+      "howToUnlock": "Estude durante 3 dias consecutivos. A constância é fundamental para o aprendizado."
+    },
+    "module-master": {
+      "name": "Module Master",
+      "description": "Completar o primeiro módulo",
+      "howToUnlock": "Complete todas as lições, passe no quiz e termine o mini-game do Módulo 1: Setup + Fundamentos."
+    },
+    "capacitor-king": {
+      "name": "Capacitor King",
+      "description": "Completar todos os módulos",
+      "howToUnlock": "Complete os 4 módulos do curso com todas as lições, quizzes e mini-games. Você será um especialista em Capacitor!"
+    },
+    "quiz-genius": {
+      "name": "Quiz Genius",
+      "description": "Obter 100% em 5 quizzes",
+      "howToUnlock": "Obtenha pontuação perfeita em 5 quizzes diferentes. Estude bem antes de cada avaliação."
+    },
+    "gamer": {
+      "name": "Gamer",
+      "description": "Completar todos os mini-games",
+      "howToUnlock": "Complete os 4 mini-games: Constructor de Comandos, Plugin Matcher, Build Pipeline e Store Reviewer."
+    }
+  },
+  "badgeDialog": {
+    "howToUnlock": "Como desbloquear?",
+    "unlocked": "Desbloqueado",
+    "locked": "Bloqueado",
+    "xpReward": "+{{xp}} XP de recompensa"
+  },
+  "modules": {
+    "module-1": {
+      "title": "Setup + Fundamentos Capacitor",
+      "description": "Configurar o ambiente e entender a arquitetura",
+      "estimatedTime": "2 horas"
+    },
+    "module-2": {
+      "title": "Plugins Core + Web-to-Native Bridge",
+      "description": "Dominar os plugins principais do Capacitor",
+      "estimatedTime": "3 horas"
+    },
+    "module-3": {
+      "title": "Desenvolvimento + Build Processes",
+      "description": "Compilar e implantar para Android e iOS",
+      "estimatedTime": "3 horas"
+    },
+    "module-4": {
+      "title": "Testing + App Store Preparation",
+      "description": "Preparar e publicar nas lojas de apps",
+      "estimatedTime": "2.5 horas"
+    },
+    "module-5": {
+      "title": "Arquitetura Avançada",
+      "description": "Padrões de arquitetura escalável para apps Capacitor empresariais",
+      "estimatedTime": "3 horas"
+    },
+    "module-6": {
+      "title": "Segurança em Apps Móveis",
+      "description": "Implementar autenticação segura, armazenamento protegido e conformidade OWASP",
+      "estimatedTime": "3 horas"
+    }
+  },
+  "lessonTitles": {
+    "what-is-capacitor": "O que é Capacitor?",
+    "architecture": "Arquitetura",
+    "project-structure": "Estrutura do Projeto",
+    "commands": "Comandos CLI",
+    "live-reload": "Live Reload",
+    "app-plugin": "App Plugin",
+    "push-notifications": "Push Notifications",
+    "splash-statusbar": "Splash & Status Bar",
+    "keyboard-browser": "Keyboard & Browser",
+    "preferences": "Preferences",
+    "biometric": "Autenticação Biométrica",
+    "web-integration": "Integração Web",
+    "native-features": "Features Nativos",
+    "android-build": "Build Android",
+    "ios-build": "Build iOS",
+    "automation": "Automação CI/CD",
+    "testing-strategy": "Estratégia de Testing",
+    "play-store": "Google Play Store",
+    "app-store": "App Store",
+    "fintech-compliance": "Compliance Fintech",
+    "monorepos-turborepo": "Monorepos com Turborepo",
+    "feature-based-architecture": "Arquitetura Feature-Based",
+    "tanstack-query": "TanStack Query",
+    "zustand": "Zustand",
+    "native-bridge-patterns": "Padrões do Native Bridge",
+    "performance-optimization": "Otimização de Performance",
+    "biometric-authentication": "Autenticação Biométrica",
+    "oauth-pkce": "OAuth 2.0 com PKCE",
+    "secure-storage": "Armazenamento Seguro",
+    "ssl-pinning": "SSL Pinning",
+    "app-hardening": "Hardening de Apps",
+    "owasp-compliance": "Conformidade OWASP"
+  },
+  "gameTitles": {
+    "command-builder": "Constructor de Comandos",
+    "plugin-matcher": "Plugin Matcher",
+    "build-pipeline": "Build Pipeline",
+    "store-reviewer": "Store Reviewer",
+    "architecture-planner": "Planejador de Arquitetura",
+    "security-audit": "Auditoria de Segurança"
+  }
+}

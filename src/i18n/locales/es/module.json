@@ -1,0 +1,18 @@
+{
+  "backToDashboard": "Volver al Dashboard",
+  "sections": {
+    "lessons": "Lecciones",
+    "evaluation": "Evaluación"
+  },
+  "lessonStatus": {
+    "completed": "Completada"
+  },
+  "quiz": {
+    "title": "Quiz del Módulo",
+    "locked": "Completa todas las lecciones primero"
+  },
+  "game": {
+    "title": "Mini-Juego",
+    "locked": "Aprueba el quiz primero"
+  }
+}

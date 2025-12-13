@@ -1,4 +1,5 @@
 import type { Level } from '../../data/types'
+import { Icon } from '../common/Icon'
 
 interface LevelBadgeProps {
   level: Level
@@ -10,17 +11,17 @@ interface LevelBadgeProps {
 const sizeStyles = {
   sm: {
     container: 'px-2 py-1 gap-1',
-    icon: 'text-base',
+    icon: 'h-4 w-4',
     text: 'text-xs',
   },
   md: {
     container: 'px-3 py-1.5 gap-1.5',
-    icon: 'text-lg',
+    icon: 'h-5 w-5',
     text: 'text-sm',
   },
   lg: {
     container: 'px-4 py-2 gap-2',
-    icon: 'text-2xl',
+    icon: 'h-6 w-6',
     text: 'text-base',
   },
 }
@@ -36,7 +37,7 @@ export function LevelBadge({
   if (variant === 'minimal') {
     return (
       <div className={`flex items-center ${styles.container}`}>
-        <span className={styles.icon}>{level.icon}</span>
+        <Icon name={level.icon} className={`${styles.icon} ${level.color}`} />
         <span className={`font-semibold ${level.color} ${styles.text}`}>
           {level.level}
         </span>
@@ -51,7 +52,7 @@ export function LevelBadge({
         ${styles.container}
       `}
     >
-      <span className={styles.icon}>{level.icon}</span>
+      <Icon name={level.icon} className={`${styles.icon} ${level.color}`} />
       <span className={`font-semibold ${level.color} ${styles.text}`}>
         Lvl {level.level}
       </span>

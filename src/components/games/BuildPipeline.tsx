@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CheckCircle, XCircle, RotateCcw, ArrowRight, ArrowDown, Smartphone } from 'lucide-react'
-import { getBuildChallenges, type BuildStep } from '../../data/games'
+import { useTranslatedBuildChallenges } from '../../hooks/useTranslatedContent'
+import { type BuildStep } from '../../data/games'
 
 interface BuildPipelineProps {
   onComplete: (score: number, total: number) => void
@@ -16,7 +18,8 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export function BuildPipeline({ onComplete }: BuildPipelineProps) {
-  const challenges = getBuildChallenges()
+  const { t } = useTranslation('gamesContent')
+  const challenges = useTranslatedBuildChallenges()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [arrangedSteps, setArrangedSteps] = useState<BuildStep[]>([])
   const [availableSteps, setAvailableSteps] = useState<BuildStep[]>(() =>
@@ -132,10 +135,10 @@ export function BuildPipeline({ onComplete }: BuildPipelineProps) {
       {/* Progress */}
       <div className="flex items-center justify-between">
         <span className="text-sm text-gray-400">
-          Pipeline {currentIndex + 1} de {challenges.length}
+          {t('ui.pipeline')} {currentIndex + 1} {t('ui.of')} {challenges.length}
         </span>
         <span className="text-sm font-medium text-green-400">
-          Puntuación: {score}/{currentIndex + (isVerified ? 1 : 0)}
+          {t('ui.score')}: {score}/{currentIndex + (isVerified ? 1 : 0)}
         </span>
       </div>
 
@@ -154,10 +157,10 @@ export function BuildPipeline({ onComplete }: BuildPipelineProps) {
         </div>
         <div>
           <h3 className="font-semibold">
-            Build Pipeline para {currentChallenge.platform === 'android' ? 'Android' : 'iOS'}
+            {t('ui.pipelineFor')} {currentChallenge.platform === 'android' ? 'Android' : 'iOS'}
           </h3>
           <p className="text-sm text-gray-400">
-            Ordena los pasos del proceso de build en el orden correcto
+            {t('ui.orderStepsCorrectly')}
           </p>
         </div>
       </div>
@@ -166,7 +169,7 @@ export function BuildPipeline({ onComplete }: BuildPipelineProps) {
       <div className="space-y-4">
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <Smartphone className="h-4 w-4" />
-          <span>Tu Pipeline:</span>
+          <span>{t('ui.yourPipeline')}:</span>
         </div>
 
         {/* Drop Zone for Pipeline */}
@@ -183,7 +186,7 @@ export function BuildPipeline({ onComplete }: BuildPipelineProps) {
         >
           {arrangedSteps.length === 0 ? (
             <div className="flex h-full items-center justify-center text-gray-500">
-              Arrastra los pasos aquí en el orden correcto
+              {t('ui.dragStepsHere')}
             </div>
           ) : (
             <div className="space-y-2">
@@ -225,7 +228,7 @@ export function BuildPipeline({ onComplete }: BuildPipelineProps) {
         </div>
 
         {/* Available Steps */}
-        <div className="text-sm text-gray-500">Pasos disponibles:</div>
+        <div className="text-sm text-gray-500">{t('ui.availableSteps')}:</div>
         <div
           className="min-h-[100px] rounded-lg bg-gray-800 p-4"
           onDragOver={handleDragOver}
@@ -234,7 +237,7 @@ export function BuildPipeline({ onComplete }: BuildPipelineProps) {
           aria-label="Pasos disponibles"
         >
           {availableSteps.length === 0 ? (
-            <div className="text-center text-gray-500">Todos los pasos han sido asignados</div>
+            <div className="text-center text-gray-500">{t('ui.allStepsAssigned')}</div>
           ) : (
             <div className="grid gap-2 sm:grid-cols-2">
               {availableSteps.map(step => (
@@ -275,11 +278,11 @@ export function BuildPipeline({ onComplete }: BuildPipelineProps) {
             )}
             <div>
               <p className={`font-medium ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
-                {isCorrect ? '¡Pipeline correcto!' : 'Orden incorrecto'}
+                {isCorrect ? t('ui.pipelineCorrect') : t('ui.incorrectOrder')}
               </p>
               {!isCorrect && (
                 <div className="mt-2 text-sm text-gray-400">
-                  <p className="mb-1">Orden correcto:</p>
+                  <p className="mb-1">{t('ui.correctOrder')}:</p>
                   <ol className="list-inside list-decimal space-y-1">
                     {currentChallenge.steps
                       .sort((a, b) => {
@@ -304,10 +307,10 @@ export function BuildPipeline({ onComplete }: BuildPipelineProps) {
           onClick={handleReset}
           disabled={isVerified}
           className="btn-secondary flex items-center gap-2"
-          aria-label="Reiniciar"
+          aria-label={t('ui.reset')}
         >
           <RotateCcw className="h-4 w-4" />
-          Reiniciar
+          {t('ui.reset')}
         </button>
 
         {!isVerified ? (
@@ -315,18 +318,18 @@ export function BuildPipeline({ onComplete }: BuildPipelineProps) {
             onClick={handleVerify}
             disabled={arrangedSteps.length !== currentChallenge.steps.length}
             className="btn-primary flex items-center gap-2"
-            aria-label="Verificar pipeline"
+            aria-label={t('ui.verify')}
           >
-            Verificar
+            {t('ui.verify')}
             <CheckCircle className="h-4 w-4" />
           </button>
         ) : (
           <button
             onClick={handleNext}
             className="btn-primary flex items-center gap-2"
-            aria-label={currentIndex < challenges.length - 1 ? 'Siguiente pipeline' : 'Ver resultados'}
+            aria-label={currentIndex < challenges.length - 1 ? t('ui.next') : t('ui.viewResults')}
           >
-            {currentIndex < challenges.length - 1 ? 'Siguiente' : 'Ver Resultados'}
+            {currentIndex < challenges.length - 1 ? t('ui.next') : t('ui.viewResults')}
             <ArrowRight className="h-4 w-4" />
           </button>
         )}

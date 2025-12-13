@@ -8,7 +8,7 @@ const mockCurrentLevel: Level = {
   name: 'Plugin Explorer',
   minXP: 101,
   maxXP: 300,
-  icon: '🔌',
+  icon: 'plug',
   color: 'text-blue-500',
 }
 
@@ -17,7 +17,7 @@ const mockNextLevel: Level = {
   name: 'Build Master',
   minXP: 301,
   maxXP: 600,
-  icon: '🏗️',
+  icon: 'hammer',
   color: 'text-purple-500',
 }
 
@@ -82,7 +82,7 @@ describe('XPBar', () => {
           xpProgress={100}
         />
       )
-      expect(screen.getByText('¡Nivel máximo alcanzado! 🏆')).toBeInTheDocument()
+      expect(screen.getByText(/nivel maximo alcanzado/i)).toBeInTheDocument()
     })
   })
 

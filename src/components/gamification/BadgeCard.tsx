@@ -1,5 +1,6 @@
 import { Lock } from 'lucide-react'
 import type { Badge } from '../../data/types'
+import { Icon } from '../common/Icon'
 
 interface BadgeCardProps {
   badge: Badge
@@ -12,17 +13,17 @@ interface BadgeCardProps {
 const sizeStyles = {
   sm: {
     container: 'w-16 h-16',
-    icon: 'text-2xl',
+    icon: 'h-6 w-6',
     lock: 'h-4 w-4',
   },
   md: {
     container: 'w-20 h-20',
-    icon: 'text-3xl',
+    icon: 'h-8 w-8',
     lock: 'h-5 w-5',
   },
   lg: {
     container: 'w-24 h-24',
-    icon: 'text-4xl',
+    icon: 'h-10 w-10',
     lock: 'h-6 w-6',
   },
 }
@@ -42,9 +43,9 @@ export function BadgeCard({
       disabled={!onClick}
       className={`
         group flex flex-col items-center gap-2 p-2 rounded-xl transition-all duration-300
-        ${onClick ? 'cursor-pointer hover:scale-105' : 'cursor-default'}
-        ${isUnlocked ? 'hover:bg-gray-700/50' : ''}
+        ${onClick ? 'cursor-pointer hover:scale-105 hover:bg-gray-700/50' : 'cursor-default'}
       `}
+      title={isUnlocked ? badge.name : `${badge.name} - Click para ver cómo desbloquearlo`}
     >
       {/* Badge Icon */}
       <div
@@ -60,9 +61,10 @@ export function BadgeCard({
         `}
       >
         {isUnlocked ? (
-          <span className={`${styles.icon} ${isUnlocked ? 'animate-bounce-subtle' : ''}`}>
-            {badge.icon}
-          </span>
+          <Icon
+            name={badge.icon}
+            className={`${styles.icon} text-primary-400 ${isUnlocked ? 'animate-bounce-subtle' : ''}`}
+          />
         ) : (
           <Lock className={`${styles.lock} text-gray-500`} />
         )}

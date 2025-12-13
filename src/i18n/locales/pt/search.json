@@ -1,0 +1,35 @@
+{
+  "placeholder": "Buscar conceitos nos quizzes...",
+  "placeholderShort": "Buscar...",
+  "searching": "Buscando...",
+  "closeSearch": "Fechar busca",
+  "clearSearch": "Limpar busca",
+  "recentSearches": "Buscas recentes",
+  "clearRecent": "Limpar",
+  "searchConcepts": "Buscar conceitos...",
+  "keyboard": {
+    "toSearch": "para buscar",
+    "toClose": "para fechar",
+    "kToSearch": "+ K para buscar"
+  },
+  "badges": {
+    "question": "Pergunta",
+    "answer": "Resposta",
+    "explanation": "Explica\u00e7\u00e3o"
+  },
+  "results": {
+    "title": "Busque conceitos nos quizzes",
+    "hint": "Digite pelo menos 2 caracteres para buscar em perguntas, respostas e explica\u00e7\u00f5es.",
+    "noResults": "Nenhum resultado encontrado",
+    "noResultsHint": "N\u00e3o h\u00e1 correspond\u00eancias para \"{{term}}\" nas perguntas, respostas ou explica\u00e7\u00f5es dos quizzes.",
+    "count_one": "{{count}} resultado encontrado",
+    "count_other": "{{count}} resultados encontrados"
+  },
+  "card": {
+    "questionLabel": "Pergunta:",
+    "questionTitle": "Pergunta",
+    "optionsTitle": "Op\u00e7\u00f5es",
+    "explanationTitle": "Explica\u00e7\u00e3o",
+    "correct": "(Correta)"
+  }
+}

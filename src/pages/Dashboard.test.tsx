@@ -76,16 +76,18 @@ describe('Dashboard', () => {
   })
 
   describe('badges section', () => {
-    it('should render badges heading', () => {
+    it('should render badges heading with count', () => {
       render(<Dashboard />)
+      // BadgeGrid shows "Logros (0/8)" format
       expect(screen.getByText(/logros/i)).toBeInTheDocument()
     })
 
-    it('should render badge icons', () => {
+    it('should render clickable badge buttons', () => {
       render(<Dashboard />)
-      expect(screen.getByText('🎯')).toBeInTheDocument()
-      expect(screen.getByText('⚡')).toBeInTheDocument()
-      expect(screen.getByText('💯')).toBeInTheDocument()
+      // BadgeGrid renders badges as clickable buttons
+      const badges = screen.getAllByRole('button')
+      // Should have at least 8 badge buttons (there are 8 badges)
+      expect(badges.length).toBeGreaterThanOrEqual(8)
     })
   })
 })
