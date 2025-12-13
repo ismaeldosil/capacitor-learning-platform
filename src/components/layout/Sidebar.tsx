@@ -143,7 +143,7 @@ export function Sidebar() {
           <div className="border-t border-gray-700 p-4">
             <div className="text-center text-xs text-gray-500">
               <p>Capacitor Learning</p>
-              <p className="mt-1">v0.7.0</p>
+              <p className="mt-1">v0.8.0</p>
             </div>
           </div>
         )}
