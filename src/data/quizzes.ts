@@ -830,6 +830,284 @@ export const QUIZZES: Quiz[] = [
       },
     ],
   },
+  // Quiz Module 11: Deep Linking
+  {
+    id: 'quiz-module-11',
+    moduleId: 'module-11',
+    passingScore: 70,
+    xpReward: 25,
+    questions: [
+      {
+        id: 'q11-1',
+        text: '¿Cuál es la principal diferencia entre Universal Links y Custom URL Schemes?',
+        options: [
+          'Universal Links son solo para iOS, Custom URL Schemes solo para Android',
+          'Universal Links funcionan sin instalar la app, Custom URL Schemes requieren la app instalada',
+          'Universal Links son más seguros y verificados por el sistema, Custom URL Schemes no requieren verificación',
+          'No hay diferencia, son términos intercambiables',
+        ],
+        correctIndex: 2,
+        explanation:
+          'Universal Links (iOS) y App Links (Android) requieren verificación del dominio mediante archivos del servidor, ofreciendo mayor seguridad. Custom URL Schemes (miapp://) pueden ser registrados por cualquier app sin verificación.',
+      },
+      {
+        id: 'q11-2',
+        text: '¿Qué es un archivo AASA y dónde debe estar hospedado?',
+        options: [
+          'Un archivo de configuración de Android, en el directorio /assets/',
+          'Apple App Site Association, en https://dominio.com/.well-known/apple-app-site-association',
+          'Un certificado SSL para la app',
+          'Un archivo de metadatos para la App Store',
+        ],
+        correctIndex: 1,
+        explanation:
+          'El archivo AASA (Apple App Site Association) es un JSON que asocia tu dominio con tu app iOS. Debe estar en https://tudominio.com/.well-known/apple-app-site-association y ser servido con content-type application/json.',
+      },
+      {
+        id: 'q11-3',
+        text: '¿Qué campo del archivo AASA vincula las rutas del sitio web con la app?',
+        options: [
+          'webcredentials',
+          'applinks',
+          'activitycontinuation',
+          'urlrouting',
+        ],
+        correctIndex: 1,
+        explanation:
+          'El campo "applinks" en el archivo AASA especifica qué rutas (paths) del dominio deben abrir la app. También incluye el appID (Team ID + Bundle ID) para vincular correctamente.',
+      },
+      {
+        id: 'q11-4',
+        text: '¿Qué elemento de AndroidManifest.xml se usa para configurar App Links?',
+        options: [
+          '<activity> con atributo android:deepLink',
+          '<intent-filter> con android:autoVerify="true" y categoría BROWSABLE',
+          '<meta-data> con nombre deeplink.config',
+          '<receiver> con action VIEW',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Se usa <intent-filter> dentro de <activity> con android:autoVerify="true", action VIEW, categoría DEFAULT y BROWSABLE, más <data> especificando el scheme, host y pathPrefix.',
+      },
+      {
+        id: 'q11-5',
+        text: '¿Cómo se maneja un deep link en Capacitor?',
+        options: [
+          'Mediante el evento window.location.hash',
+          'Con App.addListener("appUrlOpen", callback)',
+          'Usando el plugin DeepLink.listen()',
+          'A través de navigator.deeplink',
+        ],
+        correctIndex: 1,
+        explanation:
+          'En Capacitor se usa App.addListener("appUrlOpen", (data) => { ... }) para capturar deep links. El objeto data contiene la URL completa que abrió la app, permitiendo extraer parámetros y navegar.',
+      },
+      {
+        id: 'q11-6',
+        text: '¿Qué es deferred deep linking?',
+        options: [
+          'Deep links que expiran después de cierto tiempo',
+          'Llevar al usuario a contenido específico DESPUÉS de instalar la app por primera vez',
+          'Deep links que solo funcionan en modo diferido/offline',
+          'Un método para postponer la apertura de links',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Deferred deep linking permite que un usuario haga clic en un link, instale la app, y al abrirla por primera vez sea llevado al contenido específico del link original. Requiere SDKs especializados como Branch o Firebase.',
+      },
+      {
+        id: 'q11-7',
+        text: '¿Cuál es una ventaja de Branch.io sobre Firebase Dynamic Links?',
+        options: [
+          'Branch.io es gratuito, Firebase no',
+          'Branch.io ofrece más analytics y atribución de marketing que Firebase Dynamic Links (descontinuado)',
+          'Branch.io solo funciona en iOS',
+          'Firebase Dynamic Links es más moderno',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Firebase Dynamic Links fue descontinuado en 2023. Branch.io ofrece deep linking robusto, atribución de marketing, analytics detallados, A/B testing de links, y mejor soporte para casos de uso complejos.',
+      },
+      {
+        id: 'q11-8',
+        text: '¿Qué archivo debe servir Android para verificar App Links?',
+        options: [
+          'assetlinks.json en /.well-known/',
+          'android-app-site-association.json',
+          'app-links.json en /assets/',
+          'digital-asset-links.xml',
+        ],
+        correctIndex: 0,
+        explanation:
+          'Android requiere un archivo assetlinks.json en https://dominio.com/.well-known/assetlinks.json que especifica qué apps (por package name y SHA256 del certificado) pueden manejar links del dominio.',
+      },
+      {
+        id: 'q11-9',
+        text: '¿Qué problema resuelven los Universal Links/App Links vs Custom URL Schemes?',
+        options: [
+          'Son más rápidos de implementar',
+          'Evitan el prompt "Abrir con..." cuando la app no está instalada y previenen hijacking de esquemas',
+          'Funcionan sin conexión a internet',
+          'No requieren permisos especiales',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Universal Links/App Links evitan el diálogo de confirmación, caen gracefully al navegador si la app no está instalada, y previenen que apps maliciosas registren el mismo custom scheme. Son verificados por el sistema operativo.',
+      },
+      {
+        id: 'q11-10',
+        text: '¿Cómo se prueba que un Universal Link está correctamente configurado en iOS?',
+        options: [
+          'Abriendo el link desde Safari en el mismo dispositivo',
+          'Abriendo el link desde Notes, Messages o una app diferente (no Safari)',
+          'Usando el navegador Chrome en iOS',
+          'Ejecutando npm run test-deeplink',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Los Universal Links NO funcionan si se abren desde Safari en la misma página (para permitir navegación web normal). Deben probarse desde Notes, Messages, Mail u otra app. También puedes usar long-press > Open in [App].',
+      },
+    ],
+  },
+  // Quiz Module 12: Hardware APIs
+  {
+    id: 'quiz-module-12',
+    moduleId: 'module-12',
+    passingScore: 70,
+    xpReward: 25,
+    questions: [
+      {
+        id: 'q12-1',
+        text: '¿Cuál es la principal diferencia entre Bluetooth Classic y BLE (Bluetooth Low Energy)?',
+        options: [
+          'BLE tiene mayor alcance que Classic',
+          'BLE consume significativamente menos energía, ideal para IoT y wearables',
+          'Classic es más moderno que BLE',
+          'BLE solo funciona en Android',
+        ],
+        correctIndex: 1,
+        explanation:
+          'BLE (Bluetooth 4.0+) fue diseñado para consumir mucha menos energía que Bluetooth Classic, siendo ideal para dispositivos que transmiten datos pequeños periódicamente como sensores, wearables y beacons.',
+      },
+      {
+        id: 'q12-2',
+        text: '¿Qué es un GATT Service en Bluetooth BLE?',
+        options: [
+          'Un protocolo de seguridad para conexiones Bluetooth',
+          'Una colección de características (characteristics) que representan funcionalidad del dispositivo',
+          'El nombre del dispositivo Bluetooth',
+          'Un tipo de batería de bajo consumo',
+        ],
+        correctIndex: 1,
+        explanation:
+          'GATT (Generic Attribute Profile) Services son contenedores de características relacionadas. Por ejemplo, un "Heart Rate Service" contendría características como "Heart Rate Measurement" y "Body Sensor Location".',
+      },
+      {
+        id: 'q12-3',
+        text: '¿Qué es una Characteristic en el contexto de GATT?',
+        options: [
+          'La marca del dispositivo Bluetooth',
+          'Un valor de dato específico que puede leerse, escribirse o notificarse (ej: temperatura, battery level)',
+          'El color del LED del dispositivo',
+          'El rango de conexión Bluetooth',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Las Characteristics son puntos de datos individuales en un Service. Cada una tiene un UUID único, un valor, y propiedades (read, write, notify, indicate) que definen cómo interactuar con ella.',
+      },
+      {
+        id: 'q12-4',
+        text: '¿Qué permisos se necesitan en Android 12+ para usar la cámara?',
+        options: [
+          'Solo CAMERA',
+          'CAMERA y WRITE_EXTERNAL_STORAGE',
+          'CAMERA; el almacenamiento usa Scoped Storage sin permiso explícito',
+          'No se necesitan permisos, es automático',
+        ],
+        correctIndex: 2,
+        explanation:
+          'Desde Android 10, Scoped Storage elimina la necesidad de WRITE_EXTERNAL_STORAGE para guardar fotos tomadas. Solo se requiere el permiso CAMERA. En iOS se necesita NSCameraUsageDescription en Info.plist.',
+      },
+      {
+        id: 'q12-5',
+        text: '¿Qué modo de precisión de geolocalización consume MENOS batería?',
+        options: [
+          'enableHighAccuracy: true con timeout corto',
+          'enableHighAccuracy: false (usa WiFi/Cell towers en lugar de GPS)',
+          'maximumAge: 0 para datos frescos',
+          'GPS con actualización cada segundo',
+        ],
+        correctIndex: 1,
+        explanation:
+          'enableHighAccuracy: false usa triangulación de WiFi y torres celulares en lugar de GPS, siendo mucho más eficiente en batería. La precisión es menor (10-100m vs 5-10m) pero suficiente para muchos casos de uso.',
+      },
+      {
+        id: 'q12-6',
+        text: '¿Cuál es la diferencia entre acelerómetro y giroscopio?',
+        options: [
+          'El acelerómetro mide aceleración lineal (movimiento), el giroscopio mide rotación (orientación)',
+          'Son lo mismo, solo cambia el nombre',
+          'El giroscopio es más antiguo que el acelerómetro',
+          'El acelerómetro solo funciona en iOS',
+        ],
+        correctIndex: 0,
+        explanation:
+          'El acelerómetro mide aceleración en ejes X, Y, Z (detecta movimiento, sacudidas, inclinación por gravedad). El giroscopio mide velocidad angular (rotación). Combinados permiten tracking preciso de orientación 3D.',
+      },
+      {
+        id: 'q12-7',
+        text: '¿Qué tipos de autenticación biométrica soporta iOS?',
+        options: [
+          'Solo Touch ID',
+          'Solo Face ID',
+          'Touch ID, Face ID, y Optic ID (Vision Pro)',
+          'Touch ID y contraseña únicamente',
+        ],
+        correctIndex: 2,
+        explanation:
+          'iOS soporta Touch ID (huella digital), Face ID (reconocimiento facial 3D), y Optic ID (escaneo de iris en Vision Pro). La API LAContext abstrae esto como "biometric authentication" sin importar el método.',
+      },
+      {
+        id: 'q12-8',
+        text: '¿Cómo se llama el sistema de autenticación biométrica de Android?',
+        options: [
+          'TouchID',
+          'BiometricPrompt API',
+          'FingerprintManager',
+          'AndroidBiometric',
+        ],
+        correctIndex: 1,
+        explanation:
+          'BiometricPrompt es la API moderna de Android (API 28+) que unifica huella, reconocimiento facial e iris. Reemplazó a FingerprintManager (deprecated) y maneja automáticamente el tipo de biometría disponible.',
+      },
+      {
+        id: 'q12-9',
+        text: '¿Qué diferencia hay entre Geolocation.getCurrentPosition() y watchPosition()?',
+        options: [
+          'getCurrentPosition obtiene la ubicación una vez, watchPosition la monitorea continuamente',
+          'watchPosition es más rápido que getCurrentPosition',
+          'getCurrentPosition requiere más permisos',
+          'Son idénticos, solo alias diferentes',
+        ],
+        correctIndex: 0,
+        explanation:
+          'getCurrentPosition() obtiene la ubicación actual una sola vez. watchPosition() retorna un ID de watch que actualiza continuamente la posición, útil para navegación. Debe llamarse clearWatch(id) para detenerlo.',
+      },
+      {
+        id: 'q12-10',
+        text: '¿Qué configuración de iOS limita el acceso a Bluetooth en background?',
+        options: [
+          'No hay limitaciones, siempre funciona',
+          'Requiere UIBackgroundModes con "bluetooth-central" y el usuario debe aprobar',
+          'Bluetooth nunca funciona en background en iOS',
+          'Solo funciona si la app está en foreground siempre',
+        ],
+        correctIndex: 1,
+        explanation:
+          'Para usar Bluetooth BLE en background en iOS, debes declarar UIBackgroundModes con "bluetooth-central" en Info.plist. Además, el sistema mostrará una barra azul indicando uso de Bluetooth en background.',
+      },
+    ],
+  },
 ]
 
 export function getQuizByModuleId(moduleId: string): Quiz | undefined {

@@ -82,6 +82,31 @@ export interface SecurityAuditScenario {
   explanation: string
 }
 
+export interface LinkPart {
+  id: string
+  text: string
+  type: 'scheme' | 'host' | 'path' | 'param'
+}
+
+export interface LinkChallenge {
+  id: string
+  instruction: string
+  description: string
+  parts: LinkPart[]
+  correctOrder: string[]
+  hint: string
+}
+
+export interface SensorChallenge {
+  id: string
+  title: string
+  description: string
+  codeSnippet: string
+  options: string[]
+  correctIndex: number
+  explanation: string
+}
+
 export interface Game {
   id: GameType
   moduleId: string
@@ -446,6 +471,73 @@ export const ARCHITECTURE_CHALLENGES: ArchitectureChallenge[] = [
   },
 ]
 
+// Link Builder Game Data (Module 11)
+export const LINK_CHALLENGES: LinkChallenge[] = [
+  {
+    id: 'link-1',
+    instruction: 'Crea un custom URL scheme simple para abrir la página principal',
+    description: 'Construye el deep link: myapp://home',
+    parts: [
+      { id: 'p1', text: 'myapp://', type: 'scheme' },
+      { id: 'p2', text: 'home', type: 'host' },
+    ],
+    correctOrder: ['p1', 'p2'],
+    hint: 'El esquema va primero, seguido del host',
+  },
+  {
+    id: 'link-2',
+    instruction: 'Crea un URL scheme con path para ver un producto específico',
+    description: 'Construye el deep link: myapp://product/123',
+    parts: [
+      { id: 'p1', text: 'myapp://', type: 'scheme' },
+      { id: 'p2', text: 'product', type: 'host' },
+      { id: 'p3', text: '/123', type: 'path' },
+    ],
+    correctOrder: ['p1', 'p2', 'p3'],
+    hint: 'Esquema + host + path con el ID del producto',
+  },
+  {
+    id: 'link-3',
+    instruction: 'Crea un Universal Link para iOS/Android con dominio verificado',
+    description: 'Construye el universal link: https://example.com/product/123',
+    parts: [
+      { id: 'p1', text: 'https://', type: 'scheme' },
+      { id: 'p2', text: 'example.com', type: 'host' },
+      { id: 'p3', text: '/product', type: 'path' },
+      { id: 'p4', text: '/123', type: 'path' },
+    ],
+    correctOrder: ['p1', 'p2', 'p3', 'p4'],
+    hint: 'Universal links usan HTTPS + dominio verificado + paths',
+  },
+  {
+    id: 'link-4',
+    instruction: 'Crea un deep link con query parameters para búsqueda',
+    description: 'Construye el deep link: myapp://search?q=phone&sort=price',
+    parts: [
+      { id: 'p1', text: 'myapp://', type: 'scheme' },
+      { id: 'p2', text: 'search', type: 'host' },
+      { id: 'p3', text: '?q=phone', type: 'param' },
+      { id: 'p4', text: '&sort=price', type: 'param' },
+    ],
+    correctOrder: ['p1', 'p2', 'p3', 'p4'],
+    hint: 'Esquema + host + primer parámetro con ? + parámetros adicionales con &',
+  },
+  {
+    id: 'link-5',
+    instruction: 'Crea un Branch link con parámetros de campaña y referencia',
+    description: 'Construye el link: https://myapp.app.link/promo?campaign=summer&ref=email',
+    parts: [
+      { id: 'p1', text: 'https://', type: 'scheme' },
+      { id: 'p2', text: 'myapp.app.link', type: 'host' },
+      { id: 'p3', text: '/promo', type: 'path' },
+      { id: 'p4', text: '?campaign=summer', type: 'param' },
+      { id: 'p5', text: '&ref=email', type: 'param' },
+    ],
+    correctOrder: ['p1', 'p2', 'p3', 'p4', 'p5'],
+    hint: 'Branch links usan subdominios .app.link con paths y parámetros de atribución',
+  },
+]
+
 // Security Audit Game Data (Module 6)
 export const SECURITY_AUDIT_SCENARIOS: SecurityAuditScenario[] = [
   {
@@ -719,6 +811,142 @@ function setupAPI(key: string) {
   },
 ]
 
+// Sensor Quest Game Data (Module 12)
+export const SENSOR_CHALLENGES: SensorChallenge[] = [
+  {
+    id: 'sensor-1',
+    title: 'Compass Quest',
+    description: 'Identifica el código correcto para obtener la orientación del dispositivo usando el magnetómetro.',
+    codeSnippet: `// compass.ts
+import { Motion } from '@capacitor/motion';
+
+async function startCompass() {
+  const handler = await Motion.addListener('orientation', (event) => {
+    const heading = event.alpha; // Ángulo del norte magnético
+    updateCompass(heading);
+  });
+
+  return handler;
+}`,
+    options: [
+      'El código es correcto y usa el magnetómetro para obtener heading',
+      'Debe usar DeviceMotion en lugar de Motion',
+      'event.alpha da el heading, pero falta solicitar permisos primero',
+      'Debe usar Geolocation plugin en lugar de Motion',
+    ],
+    correctIndex: 2,
+    explanation: 'El código usa correctamente Motion.addListener con "orientation", y event.alpha proporciona el heading del norte magnético. Sin embargo, en algunas plataformas se requiere solicitar permisos de sensores de movimiento antes de acceder al magnetómetro.',
+  },
+  {
+    id: 'sensor-2',
+    title: 'Shake Detection',
+    description: 'Revisa este código de detección de sacudidas y determina si el threshold del acelerómetro es correcto.',
+    codeSnippet: `// shake-detector.ts
+import { Motion } from '@capacitor/motion';
+
+const SHAKE_THRESHOLD = 0.5; // m/s²
+
+async function detectShake() {
+  await Motion.addListener('accel', (event) => {
+    const { x, y, z } = event.acceleration;
+    const magnitude = Math.sqrt(x*x + y*y + z*z);
+
+    if (magnitude > SHAKE_THRESHOLD) {
+      onShakeDetected();
+    }
+  });
+}`,
+    options: [
+      'El threshold de 0.5 m/s² es demasiado bajo, detectará movimientos leves',
+      'El código es perfecto, 0.5 m/s² es ideal para shake detection',
+      'Debe usar event.accelerationIncludingGravity en lugar de event.acceleration',
+      'Falta convertir la magnitud de m/s² a g-force antes de comparar',
+    ],
+    correctIndex: 0,
+    explanation: 'Un threshold de 0.5 m/s² es extremadamente bajo para detectar sacudidas. Los valores típicos para shake detection están entre 15-20 m/s² (aproximadamente 1.5-2 g). Con 0.5 m/s², cualquier movimiento mínimo del dispositivo activaría el detector.',
+  },
+  {
+    id: 'sensor-3',
+    title: 'Level Bubble',
+    description: 'Analiza esta implementación de nivel de burbuja y determina si usa correctamente el giroscopio.',
+    codeSnippet: `// level-bubble.ts
+import { Motion } from '@capacitor/motion';
+
+async function startLevelBubble() {
+  await Motion.addListener('orientation', (event) => {
+    const pitch = event.beta;  // Inclinación adelante/atrás
+    const roll = event.gamma;  // Inclinación izquierda/derecha
+
+    updateBubblePosition(pitch, roll);
+  });
+}`,
+    options: [
+      'El código usa el giroscopio correctamente para level bubble',
+      'Debería usar "accel" en lugar de "orientation" para medir gravedad',
+      'event.beta y event.gamma vienen del acelerómetro y giroscopio fusionados, no solo giroscopio',
+      'Falta calibrar el nivel antes de empezar a medir',
+    ],
+    correctIndex: 2,
+    explanation: 'El listener "orientation" proporciona datos de orientación del dispositivo que combinan información del acelerómetro, giroscopio y magnetómetro (sensor fusion). Los valores beta (pitch) y gamma (roll) son perfectos para un level bubble, pero no vienen solo del giroscopio sino de la fusión de múltiples sensores.',
+  },
+  {
+    id: 'sensor-4',
+    title: 'Location Tracker',
+    description: 'Revisa esta implementación de tracking de ubicación en tiempo real.',
+    codeSnippet: `// location-tracker.ts
+import { Geolocation } from '@capacitor/geolocation';
+
+async function startTracking() {
+  const watchId = await Geolocation.watchPosition(
+    { enableHighAccuracy: true, timeout: 5000 },
+    (position) => {
+      updateMap(position.coords);
+    }
+  );
+
+  return watchId;
+}`,
+    options: [
+      'Falta solicitar permisos de ubicación antes de watchPosition',
+      'timeout de 5000ms es demasiado corto para high accuracy GPS',
+      'El código es correcto pero debería incluir maximumAge para cachear posiciones',
+      'enableHighAccuracy: true consume mucha batería, debe ser false',
+    ],
+    correctIndex: 0,
+    explanation: 'Aunque el código configura watchPosition correctamente, falta el paso crítico de solicitar permisos al usuario con Geolocation.requestPermissions(). Sin este paso, watchPosition fallará en iOS y Android. Los permisos deben solicitarse antes de cualquier operación de geolocalización.',
+  },
+  {
+    id: 'sensor-5',
+    title: 'Biometric Auth',
+    description: 'Identifica el flujo correcto de autenticación biométrica en esta implementación.',
+    codeSnippet: `// biometric-auth.ts
+import { NativeBiometric } from '@capacitor-community/native-biometric';
+
+async function authenticateUser() {
+  const result = await NativeBiometric.isAvailable();
+
+  if (result.isAvailable) {
+    const verified = await NativeBiometric.verifyIdentity({
+      reason: 'Para acceder a tu cuenta',
+      title: 'Autenticación',
+    });
+
+    if (verified) {
+      loginUser();
+    }
+  }
+}`,
+    options: [
+      'El código es correcto y sigue el flujo estándar de biometric auth',
+      'Falta manejar el caso cuando la biometría falla o se cancela',
+      'Debe usar getCredentials() después de verificar identidad para obtener el token guardado',
+      'isAvailable() debe llamarse en el init de la app, no cada vez que se autentica',
+    ],
+    correctIndex: 1,
+    explanation: 'El código verifica disponibilidad y solicita autenticación biométrica correctamente, pero no maneja errores ni cancelaciones. verifyIdentity() puede lanzar excepciones si el usuario cancela, si falla la biometría después de varios intentos, o si hay errores de hardware. El código debe usar try-catch y proporcionar un método alternativo de autenticación.',
+  },
+]
+
 // Game Definitions
 export const GAMES: Game[] = [
   {
@@ -769,6 +997,22 @@ export const GAMES: Game[] = [
     instructions: 'Revisa cada snippet de código y selecciona las prácticas que representan vulnerabilidades de seguridad.',
     xpReward: 100,
   },
+  {
+    id: 'link-builder',
+    moduleId: 'module-11',
+    title: 'Link Builder',
+    description: 'Construye deep links y universal links arrastrando las partes en el orden correcto',
+    instructions: 'Arrastra y suelta las partes del link (esquema, host, path, parámetros) en el orden correcto para crear deep links funcionales.',
+    xpReward: 100,
+  },
+  {
+    id: 'sensor-quest',
+    moduleId: 'module-12',
+    title: 'Sensor Quest',
+    description: 'Identifica el uso correcto de sensores y APIs de hardware en código Capacitor',
+    instructions: 'Revisa cada snippet de código y selecciona la opción que describe correctamente el funcionamiento o problema del código.',
+    xpReward: 100,
+  },
 ]
 
 // Helper Functions
@@ -802,4 +1046,12 @@ export function getArchitectureChallenges(): ArchitectureChallenge[] {
 
 export function getSecurityAuditScenarios(): SecurityAuditScenario[] {
   return SECURITY_AUDIT_SCENARIOS
+}
+
+export function getLinkChallenges(): LinkChallenge[] {
+  return LINK_CHALLENGES
+}
+
+export function getSensorChallenges(): SensorChallenge[] {
+  return SENSOR_CHALLENGES
 }
