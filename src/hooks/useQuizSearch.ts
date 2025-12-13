@@ -13,9 +13,10 @@ export interface QuizSearchResult {
   moduleName: string
   quizId: string
   matchedIn: MatchLocation
+  matchLocations: MatchLocation[] // All locations where the term was found
   matchContext: string
   highlightRanges: Array<{ start: number; end: number }>
-  optionIndex?: number // Si el match está en una opción
+  optionIndex?: number // If match is in an option
 }
 
 export interface UseQuizSearchReturn {
@@ -79,78 +80,98 @@ function getModuleName(moduleId: string): string {
   return module?.title || moduleId
 }
 
-// Función principal de búsqueda
+// Priority for match locations (lower is higher priority)
+const MATCH_PRIORITY: Record<MatchLocation, number> = {
+  question: 1,
+  option: 2,
+  explanation: 3,
+}
+
+// Main search function
 function searchInQuizzes(searchTerm: string): QuizSearchResult[] {
   if (!searchTerm || searchTerm.length < 2) {
     return []
   }
 
-  const results: QuizSearchResult[] = []
+  // Map to store results by questionId for deduplication
+  const resultsMap = new Map<string, QuizSearchResult>()
   const lowerSearch = searchTerm.toLowerCase()
 
   for (const quiz of QUIZZES) {
     for (const question of quiz.questions) {
-      // Buscar en el texto de la pregunta
+      const matchLocations: MatchLocation[] = []
+      let bestMatch: {
+        location: MatchLocation
+        context: string
+        ranges: Array<{ start: number; end: number }>
+        optionIndex?: number
+      } | null = null
+
+      // Search in question text
       if (question.text.toLowerCase().includes(lowerSearch)) {
-        results.push({
-          questionId: question.id,
-          questionText: question.text,
-          question,
-          moduleId: quiz.moduleId,
-          moduleName: getModuleName(quiz.moduleId),
-          quizId: quiz.id,
-          matchedIn: 'question',
-          matchContext: extractContext(question.text, searchTerm),
-          highlightRanges: findMatchRanges(question.text, searchTerm),
-        })
+        matchLocations.push('question')
+        bestMatch = {
+          location: 'question',
+          context: extractContext(question.text, searchTerm),
+          ranges: findMatchRanges(question.text, searchTerm),
+        }
       }
 
-      // Buscar en las opciones
+      // Search in options
       question.options.forEach((option, optionIndex) => {
         if (option.toLowerCase().includes(lowerSearch)) {
-          // Evitar duplicados si ya encontramos en la pregunta
-          const alreadyAdded = results.some(
-            (r) =>
-              r.questionId === question.id &&
-              r.matchedIn === 'option' &&
-              r.optionIndex === optionIndex
-          )
-
-          if (!alreadyAdded) {
-            results.push({
-              questionId: question.id,
-              questionText: question.text,
-              question,
-              moduleId: quiz.moduleId,
-              moduleName: getModuleName(quiz.moduleId),
-              quizId: quiz.id,
-              matchedIn: 'option',
-              matchContext: extractContext(option, searchTerm),
-              highlightRanges: findMatchRanges(option, searchTerm),
+          if (!matchLocations.includes('option')) {
+            matchLocations.push('option')
+          }
+          // Only update bestMatch if we don't have one yet or this is higher priority
+          if (!bestMatch || MATCH_PRIORITY.option < MATCH_PRIORITY[bestMatch.location]) {
+            bestMatch = {
+              location: 'option',
+              context: extractContext(option, searchTerm),
+              ranges: findMatchRanges(option, searchTerm),
               optionIndex,
-            })
+            }
           }
         }
       })
 
-      // Buscar en la explicación
+      // Search in explanation
       if (question.explanation.toLowerCase().includes(lowerSearch)) {
-        results.push({
-          questionId: question.id,
-          questionText: question.text,
-          question,
-          moduleId: quiz.moduleId,
-          moduleName: getModuleName(quiz.moduleId),
-          quizId: quiz.id,
-          matchedIn: 'explanation',
-          matchContext: extractContext(question.explanation, searchTerm),
-          highlightRanges: findMatchRanges(question.explanation, searchTerm),
-        })
+        matchLocations.push('explanation')
+        // Only update bestMatch if we don't have one yet
+        if (!bestMatch) {
+          bestMatch = {
+            location: 'explanation',
+            context: extractContext(question.explanation, searchTerm),
+            ranges: findMatchRanges(question.explanation, searchTerm),
+          }
+        }
+      }
+
+      // If we found any matches, add/update the result
+      if (matchLocations.length > 0 && bestMatch) {
+        const existingResult = resultsMap.get(question.id)
+
+        if (!existingResult) {
+          resultsMap.set(question.id, {
+            questionId: question.id,
+            questionText: question.text,
+            question,
+            moduleId: quiz.moduleId,
+            moduleName: getModuleName(quiz.moduleId),
+            quizId: quiz.id,
+            matchedIn: bestMatch.location,
+            matchLocations,
+            matchContext: bestMatch.context,
+            highlightRanges: bestMatch.ranges,
+            optionIndex: bestMatch.optionIndex,
+          })
+        }
       }
     }
   }
 
-  return results
+  return Array.from(resultsMap.values())
 }
 
 // Función para agrupar resultados por módulo

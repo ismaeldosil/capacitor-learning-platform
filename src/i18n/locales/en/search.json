@@ -1,0 +1,35 @@
+{
+  "placeholder": "Search concepts in quizzes...",
+  "placeholderShort": "Search...",
+  "searching": "Searching...",
+  "closeSearch": "Close search",
+  "clearSearch": "Clear search",
+  "recentSearches": "Recent searches",
+  "clearRecent": "Clear",
+  "searchConcepts": "Search concepts...",
+  "keyboard": {
+    "toSearch": "to search",
+    "toClose": "to close",
+    "kToSearch": "+ K to search"
+  },
+  "badges": {
+    "question": "Question",
+    "answer": "Answer",
+    "explanation": "Explanation"
+  },
+  "results": {
+    "title": "Search concepts in quizzes",
+    "hint": "Type at least 2 characters to search in questions, answers and explanations.",
+    "noResults": "No results found",
+    "noResultsHint": "No matches found for \"{{term}}\" in quiz questions, answers or explanations.",
+    "count_one": "{{count}} result found",
+    "count_other": "{{count}} results found"
+  },
+  "card": {
+    "questionLabel": "Question:",
+    "questionTitle": "Question",
+    "optionsTitle": "Options",
+    "explanationTitle": "Explanation",
+    "correct": "(Correct)"
+  }
+}

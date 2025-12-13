@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Command } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -19,6 +20,7 @@ const RECENT_SEARCHES_KEY = 'quiz-recent-searches'
 const MAX_RECENT_SEARCHES = 5
 
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
+  const { t } = useTranslation('search')
   const navigate = useNavigate()
   const inputRef = useRef<HTMLInputElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
@@ -161,7 +163,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 onChange={setSearchTerm}
                 onClear={clearSearch}
                 onKeyDown={handleKeyDown}
-                placeholder="Buscar conceptos en quizzes..."
+                placeholder={t('placeholder')}
                 isLoading={isSearching}
                 size="lg"
                 className="flex-1"
@@ -170,7 +172,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
               <button
                 onClick={onClose}
                 className="flex-shrink-0 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
-                aria-label="Cerrar búsqueda"
+                aria-label={t('closeSearch')}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -178,19 +180,19 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
             {/* Content */}
             <div className="max-h-[60vh] overflow-y-auto p-4">
-              {/* Búsquedas recientes (solo si no hay búsqueda activa) */}
+              {/* Recent searches (only if no active search) */}
               {(!searchTerm || searchTerm.length < 2) &&
                 recentSearches.length > 0 && (
                   <div className="mb-6">
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                        Búsquedas recientes
+                        {t('recentSearches')}
                       </h3>
                       <button
                         onClick={clearRecentSearches}
                         className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
                       >
-                        Limpiar
+                        {t('clearRecent')}
                       </button>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -217,26 +219,26 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
               />
             </div>
 
-            {/* Footer con atajo */}
+            {/* Footer with shortcuts */}
             <div className="flex items-center justify-between px-4 py-3 border-t border-gray-700 bg-gray-800/50">
               <div className="flex items-center gap-4 text-xs text-gray-500">
                 <span className="flex items-center gap-1">
                   <kbd className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">
                     Enter
                   </kbd>
-                  <span>para buscar</span>
+                  <span>{t('keyboard.toSearch')}</span>
                 </span>
                 <span className="flex items-center gap-1">
                   <kbd className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">
                     Esc
                   </kbd>
-                  <span>para cerrar</span>
+                  <span>{t('keyboard.toClose')}</span>
                 </span>
               </div>
 
               <div className="flex items-center gap-1 text-xs text-gray-500">
                 <Command className="h-3 w-3" />
-                <span>+ K para buscar</span>
+                <span>{t('keyboard.kToSearch')}</span>
               </div>
             </div>
           </motion.div>
