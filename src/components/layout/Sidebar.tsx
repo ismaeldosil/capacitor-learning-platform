@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Home, Lock, CheckCircle, Circle } from 'lucide-react'
+import { Home, Lock, CheckCircle, Circle, ChevronDown, ChevronRight } from 'lucide-react'
 import { useUser } from '../../contexts/UserContext'
 import { MODULES } from '../../data/constants'
 import { getModuleStatus } from '../../utils'
@@ -7,6 +8,7 @@ import { Icon } from '../common/Icon'
 
 export function Sidebar() {
   const { user } = useUser()
+  const [modulesExpanded, setModulesExpanded] = useState(true)
 
   return (
     <aside
@@ -16,23 +18,41 @@ export function Sidebar() {
       <div className="flex h-full flex-col">
         {/* Navigation */}
         <nav className="flex-1 space-y-1 p-4" aria-label="Menú de módulos">
-          {/* Dashboard Link */}
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-3 py-2 transition-colors ${
-                isActive
-                  ? 'bg-primary-600/20 text-primary-400'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`
-            }
-          >
-            <Home className="h-5 w-5" />
-            <span className="font-medium">Dashboard</span>
-          </NavLink>
+          {/* Dashboard Link with Toggle */}
+          <div className="flex items-center">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `flex flex-1 items-center gap-3 rounded-lg px-3 py-2 transition-colors ${
+                  isActive
+                    ? 'bg-primary-600/20 text-primary-400'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`
+              }
+            >
+              <Home className="h-5 w-5" />
+              <span className="font-medium">Dashboard</span>
+            </NavLink>
+            <button
+              onClick={() => setModulesExpanded(!modulesExpanded)}
+              className="rounded-lg p-2 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors"
+              aria-label={modulesExpanded ? 'Ocultar módulos' : 'Mostrar módulos'}
+              aria-expanded={modulesExpanded}
+            >
+              {modulesExpanded ? (
+                <ChevronDown className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+            </button>
+          </div>
 
-          {/* Modules Section */}
-          <div className="pt-6">
+          {/* Modules Section - Collapsible */}
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              modulesExpanded ? 'max-h-[2000px] opacity-100 pt-6' : 'max-h-0 opacity-0 pt-0'
+            }`}
+          >
             <h3 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
               Módulos
             </h3>
