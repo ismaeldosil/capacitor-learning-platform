@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import type { ModuleStatus } from '../data/types'
 import { getModuleStatus } from '../utils'
+import { AdBanner } from '../components/ads'
 import { Icon } from '../components/common/Icon'
 import { BadgeGrid } from '../components/gamification/BadgeGrid'
 
@@ -118,7 +119,14 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* Badges Section - Clickable with unlock instructions */}
+      {/* Ad Banner */}
+      <AdBanner
+        slot="dashboard-footer"
+        format="horizontal"
+        className="mb-8"
+      />
+
+      {/* Badges Section */}
       <div className="card">
         <BadgeGrid
           userBadges={user.badges}
