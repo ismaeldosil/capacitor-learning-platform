@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronDown,
@@ -50,35 +51,37 @@ function HighlightedText({
 
 // Badge para indicar dónde se encontró el match
 function MatchBadge({ matchedIn }: { matchedIn: MatchLocation }) {
+  const { t } = useTranslation('search')
+
   const config: Record<
     MatchLocation,
-    { label: string; icon: typeof HelpCircle; color: string }
+    { labelKey: string; icon: typeof HelpCircle; color: string }
   > = {
     question: {
-      label: 'Pregunta',
+      labelKey: 'badges.question',
       icon: HelpCircle,
       color: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
     },
     option: {
-      label: 'Respuesta',
+      labelKey: 'badges.answer',
       icon: MessageSquare,
       color: 'bg-green-500/20 text-green-400 border-green-500/30',
     },
     explanation: {
-      label: 'Explicación',
+      labelKey: 'badges.explanation',
       icon: Lightbulb,
       color: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
     },
   }
 
-  const { label, icon: Icon, color } = config[matchedIn]
+  const { labelKey, icon: Icon, color } = config[matchedIn]
 
   return (
     <span
       className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium ${color}`}
     >
       <Icon className="h-3 w-3" />
-      {label}
+      {t(labelKey)}
     </span>
   )
 }
@@ -93,6 +96,7 @@ function ResultCard({
   searchTerm: string
   onResultClick?: (result: QuizSearchResult) => void
 }) {
+  const { t } = useTranslation('search')
   const [isExpanded, setIsExpanded] = useState(false)
 
   const handleClick = () => {
@@ -119,9 +123,11 @@ function ResultCard({
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            {/* Badge */}
-            <div className="mb-2">
-              <MatchBadge matchedIn={result.matchedIn} />
+            {/* Badges - show all match locations */}
+            <div className="mb-2 flex flex-wrap gap-1">
+              {result.matchLocations.map((location) => (
+                <MatchBadge key={location} matchedIn={location} />
+              ))}
             </div>
 
             {/* Contexto del match */}
@@ -132,10 +138,10 @@ function ResultCard({
               />
             </p>
 
-            {/* Pregunta (si el match no está en la pregunta) */}
+            {/* Question (if match is not in question) */}
             {result.matchedIn !== 'question' && (
               <p className="mt-2 text-xs text-gray-500 line-clamp-1">
-                <span className="font-medium">Pregunta:</span>{' '}
+                <span className="font-medium">{t('card.questionLabel')}</span>{' '}
                 {result.questionText}
               </p>
             )}
@@ -163,10 +169,10 @@ function ResultCard({
             className="border-t border-gray-700"
           >
             <div className="p-4 space-y-4">
-              {/* Pregunta completa */}
+              {/* Full question */}
               <div>
                 <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                  Pregunta
+                  {t('card.questionTitle')}
                 </h4>
                 <p className="text-white">
                   <HighlightedText
@@ -176,10 +182,10 @@ function ResultCard({
                 </p>
               </div>
 
-              {/* Opciones */}
+              {/* Options */}
               <div>
                 <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                  Opciones
+                  {t('card.optionsTitle')}
                 </h4>
                 <ul className="space-y-2">
                   {result.question.options.map((option, index) => (
@@ -197,7 +203,7 @@ function ResultCard({
                       <HighlightedText text={option} searchTerm={searchTerm} />
                       {index === result.question.correctIndex && (
                         <span className="ml-2 text-xs text-green-500">
-                          (Correcta)
+                          {t('card.correct')}
                         </span>
                       )}
                     </li>
@@ -205,10 +211,10 @@ function ResultCard({
                 </ul>
               </div>
 
-              {/* Explicación */}
+              {/* Explanation */}
               <div>
                 <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                  Explicación
+                  {t('card.explanationTitle')}
                 </h4>
                 <p className="text-sm text-gray-300 bg-gray-700/30 p-3 rounded">
                   <HighlightedText
@@ -225,25 +231,26 @@ function ResultCard({
   )
 }
 
-// Estado vacío
+// Empty state
 function EmptyState({ searchTerm }: { searchTerm: string }) {
+  const { t } = useTranslation('search')
+
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <div className="rounded-full bg-gray-800 p-4 mb-4">
         <Search className="h-8 w-8 text-gray-500" />
       </div>
       <h3 className="text-lg font-medium text-white mb-2">
-        No se encontraron resultados
+        {t('results.noResults')}
       </h3>
       <p className="text-sm text-gray-400 max-w-sm">
-        No hay coincidencias para "{searchTerm}" en las preguntas, respuestas o
-        explicaciones de los quizzes.
+        {t('results.noResultsHint', { term: searchTerm })}
       </p>
     </div>
   )
 }
 
-// Componente principal
+// Main component
 export function QuizSearchResults({
   results,
   groupedResults,
@@ -251,7 +258,9 @@ export function QuizSearchResults({
   onResultClick,
   isLoading = false,
 }: QuizSearchResultsProps) {
-  // Si está cargando, mostrar skeleton
+  const { t } = useTranslation('search')
+
+  // Loading state - show skeleton
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -265,7 +274,7 @@ export function QuizSearchResults({
     )
   }
 
-  // Si no hay término de búsqueda válido
+  // No valid search term
   if (!searchTerm || searchTerm.length < 2) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -273,30 +282,28 @@ export function QuizSearchResults({
           <BookOpen className="h-8 w-8 text-gray-500" />
         </div>
         <h3 className="text-lg font-medium text-white mb-2">
-          Busca conceptos en los quizzes
+          {t('results.title')}
         </h3>
         <p className="text-sm text-gray-400 max-w-sm">
-          Escribe al menos 2 caracteres para buscar en preguntas, respuestas y
-          explicaciones.
+          {t('results.hint')}
         </p>
       </div>
     )
   }
 
-  // Si no hay resultados
+  // No results
   if (results.length === 0) {
     return <EmptyState searchTerm={searchTerm} />
   }
 
-  // Mostrar resultados agrupados por módulo
+  // Show results grouped by module
   const moduleIds = Object.keys(groupedResults)
 
   return (
     <div className="space-y-6">
-      {/* Contador de resultados */}
+      {/* Results count */}
       <p className="text-sm text-gray-400">
-        {results.length} {results.length === 1 ? 'resultado' : 'resultados'}{' '}
-        encontrado{results.length === 1 ? '' : 's'}
+        {t('results.count', { count: results.length })}
       </p>
 
       {/* Resultados por módulo */}

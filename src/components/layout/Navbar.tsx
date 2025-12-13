@@ -11,7 +11,7 @@ interface NavbarProps {
 
 export function Navbar({ onSearchClick }: NavbarProps) {
   const { user, currentLevel, xpProgress, nextLevel } = useUser()
-  const { t } = useTranslation('gamification')
+  const { t } = useTranslation(['gamification', 'search'])
 
   return (
     <header className="sticky top-0 z-10 border-b border-gray-700 bg-gray-800/95 backdrop-blur">
@@ -30,10 +30,10 @@ export function Navbar({ onSearchClick }: NavbarProps) {
         <button
           onClick={onSearchClick}
           className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-700/50 border border-gray-600 text-gray-400 hover:text-white hover:border-gray-500 hover:bg-gray-700 transition-colors"
-          aria-label="Buscar conceptos"
+          aria-label={t('search:searchConcepts')}
         >
           <Search className="h-4 w-4" />
-          <span className="text-sm">Buscar conceptos...</span>
+          <span className="text-sm">{t('search:searchConcepts')}</span>
           <kbd className="hidden lg:flex items-center gap-0.5 ml-2 px-1.5 py-0.5 text-xs bg-gray-800 rounded border border-gray-600">
             <Command className="h-3 w-3" />K
           </kbd>
@@ -45,7 +45,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
           <button
             onClick={onSearchClick}
             className="md:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
-            aria-label="Buscar conceptos"
+            aria-label={t('search:searchConcepts')}
           >
             <Search className="h-5 w-5" />
           </button>
@@ -84,7 +84,7 @@ export function Navbar({ onSearchClick }: NavbarProps) {
             </div>
             {nextLevel && (
               <p className="mt-1 text-xs text-gray-400">
-                {t('xpToNext', { xp: nextLevel.minXP - user.xp, level: nextLevel.name })}
+                {t('gamification:xpToNext', { xp: nextLevel.minXP - user.xp, level: nextLevel.name })}
               </p>
             )}
           </div>
