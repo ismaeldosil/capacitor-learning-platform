@@ -13,7 +13,7 @@ type QuizState = 'intro' | 'playing' | 'result'
 export function Quiz() {
   const { moduleId } = useParams<{ moduleId: string }>()
   const navigate = useNavigate()
-  const { user, isQuizCompleted, completeQuiz } = useUser()
+  const { user, isQuizCompleted, completeQuiz, devMode } = useUser()
   const { t } = useTranslation('quiz')
   const { t: tGamification } = useTranslation('gamification')
 
@@ -108,8 +108,8 @@ export function Quiz() {
     return <Navigate to="/" replace />
   }
 
-  // Check if module is locked
-  if (user.xp < module.requiredXP) {
+  // Check if module is locked (bypass in dev mode)
+  if (!devMode && user.xp < module.requiredXP) {
     return <Navigate to="/" replace />
   }
 

@@ -18,7 +18,7 @@ import { Icon } from '../components/common/Icon'
 import { BadgeGrid } from '../components/gamification/BadgeGrid'
 
 export function Dashboard() {
-  const { user, currentLevel } = useUser()
+  const { user, currentLevel, devMode } = useUser()
   const { t } = useTranslation('dashboard')
   const { t: tGamification } = useTranslation('gamification')
 
@@ -90,7 +90,8 @@ export function Dashboard() {
               module.id,
               user.xp,
               user.completedLessons,
-              user.completedQuizzes
+              user.completedQuizzes,
+              devMode
             )
             const lessonsCompleted = module.lessons.filter((l) =>
               user.completedLessons.includes(l)

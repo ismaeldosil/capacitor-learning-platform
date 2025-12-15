@@ -136,6 +136,9 @@ interface UserContextType {
   updateStreak: () => number
   // Reset
   resetProgress: () => void
+  // Dev Mode
+  devMode: boolean
+  toggleDevMode: () => void
 }
 
 const UserContext = createContext<UserContextType | null>(null)
@@ -150,6 +153,20 @@ export function UserProvider({ children }: UserProviderProps) {
     STORAGE_KEYS.USER,
     createInitialUser()
   )
+
+  // Dev Mode state
+  const [devMode, setDevMode] = useState<boolean>(() => {
+    const stored = localStorage.getItem('capacitor-learning-dev-mode')
+    return stored === 'true'
+  })
+
+  const toggleDevMode = useCallback(() => {
+    setDevMode(prev => {
+      const newValue = !prev
+      localStorage.setItem('capacitor-learning-dev-mode', String(newValue))
+      return newValue
+    })
+  }, [])
 
   // Level up notification state
   const [levelUpNotification, setLevelUpNotification] = useState<typeof LEVELS[number] | null>(null)
@@ -477,6 +494,8 @@ export function UserProvider({ children }: UserProviderProps) {
       syncBadges,
       updateStreak,
       resetProgress,
+      devMode,
+      toggleDevMode,
     }),
     [
       user,
@@ -497,6 +516,8 @@ export function UserProvider({ children }: UserProviderProps) {
       syncBadges,
       updateStreak,
       resetProgress,
+      devMode,
+      toggleDevMode,
     ]
   )
 

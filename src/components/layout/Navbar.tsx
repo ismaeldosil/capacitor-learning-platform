@@ -1,6 +1,6 @@
 import { useUser } from '../../contexts/UserContext'
 import { useTranslation } from 'react-i18next'
-import { Flame, Zap, Search, Command } from 'lucide-react'
+import { Flame, Zap, Search, Command, Code } from 'lucide-react'
 import { LanguageSwitcher } from '../common/LanguageSwitcher'
 import { CapacitorLogo } from '../common/CapacitorLogo'
 import { Icon } from '../common/Icon'
@@ -10,7 +10,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ onSearchClick }: NavbarProps) {
-  const { user, currentLevel, xpProgress, nextLevel } = useUser()
+  const { user, currentLevel, xpProgress, nextLevel, devMode } = useUser()
   const { t } = useTranslation(['gamification', 'search'])
 
   return (
@@ -49,6 +49,14 @@ export function Navbar({ onSearchClick }: NavbarProps) {
           >
             <Search className="h-5 w-5" />
           </button>
+
+          {/* Dev Mode Badge */}
+          {devMode && (
+            <div className="flex items-center gap-1 rounded-full bg-purple-600/20 px-2 py-1 text-xs font-medium text-purple-400">
+              <Code className="h-3 w-3" />
+              DEV
+            </div>
+          )}
 
           {/* Streak */}
           <div className="flex items-center gap-2">
