@@ -118,7 +118,8 @@ export function Quiz() {
     user.completedLessons.includes(lessonId)
   )
 
-  if (!allLessonsCompleted) {
+  // Bypass lesson requirement in dev mode
+  if (!devMode && !allLessonsCompleted) {
     return <Navigate to={`/module/${moduleId}`} replace />
   }
 
