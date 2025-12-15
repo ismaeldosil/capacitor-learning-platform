@@ -14,18 +14,31 @@ import {
   GraduationCap,
   Brain,
   Gamepad2,
+  Database,
+  Palette,
+  GitBranch,
+  DollarSign,
+  Link,
+  Cpu,
   type LucideIcon,
 } from 'lucide-react'
 
 // Map icon names to Lucide components
 const iconMap: Record<string, LucideIcon> = {
-  // Modules
+  // Modules 1-6
   rocket: Rocket,
   plug: Plug,
   hammer: Hammer,
   store: Store,
   layers: Layers,
   shield: Shield,
+  // Modules 7-12
+  database: Database,
+  palette: Palette,
+  'git-branch': GitBranch,
+  'dollar-sign': DollarSign,
+  link: Link,
+  cpu: Cpu,
   // Levels
   sprout: Sprout,
   crown: Crown,
