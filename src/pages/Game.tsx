@@ -80,7 +80,8 @@ export function Game() {
 
   // Check if quiz is completed
   const quizDone = isQuizCompleted(module.quizId)
-  if (!quizDone) {
+  // Bypass quiz requirement in dev mode
+  if (!devMode && !quizDone) {
     return <Navigate to={`/module/${moduleId}`} replace />
   }
 
