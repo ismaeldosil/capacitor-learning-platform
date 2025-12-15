@@ -5,11 +5,11 @@ import { Sidebar } from './Sidebar'
 import { LevelUpPopup } from '../gamification/LevelUpPopup'
 import { SearchModal } from '../common/SearchModal'
 import { useUser } from '../../contexts/UserContext'
-import { useSearchShortcut } from '../../hooks/useKeyboardShortcut'
+import { useSearchShortcut, useKeyboardShortcut } from '../../hooks/useKeyboardShortcut'
 
 export function Layout() {
   const { pathname } = useLocation()
-  const { levelUpNotification, clearLevelUpNotification } = useUser()
+  const { levelUpNotification, clearLevelUpNotification, toggleDevMode } = useUser()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   // Scroll to top on navigation
@@ -27,6 +27,13 @@ export function Layout() {
   }, [])
 
   useSearchShortcut(openSearch)
+
+  // Toggle dev mode con Ctrl+Shift+D
+  useKeyboardShortcut({
+    key: 'd',
+    modifiers: ['ctrl', 'shift'],
+    callback: toggleDevMode,
+  })
 
   return (
     <div className="flex min-h-screen bg-gray-900">

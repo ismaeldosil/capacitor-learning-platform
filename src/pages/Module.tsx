@@ -15,7 +15,7 @@ import { Icon } from '../components/common/Icon'
 
 export function Module() {
   const { moduleId } = useParams<{ moduleId: string }>()
-  const { user, isLessonCompleted, isQuizCompleted, isGameCompleted } =
+  const { user, isLessonCompleted, isQuizCompleted, isGameCompleted, devMode } =
     useUser()
   const { t } = useTranslation('module')
   const { t: tGamification } = useTranslation('gamification')
@@ -26,8 +26,8 @@ export function Module() {
     return <Navigate to="/" replace />
   }
 
-  // Check if module is locked
-  if (user.xp < module.requiredXP) {
+  // Check if module is locked (bypass in dev mode)
+  if (!devMode && user.xp < module.requiredXP) {
     return <Navigate to="/" replace />
   }
 

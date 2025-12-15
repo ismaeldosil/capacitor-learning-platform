@@ -14,7 +14,7 @@ export function Lesson() {
     lessonId: string
   }>()
   const navigate = useNavigate()
-  const { user, isLessonCompleted, completeLesson } = useUser()
+  const { user, isLessonCompleted, completeLesson, devMode } = useUser()
   const { t } = useTranslation('lesson')
   const { t: tGamification } = useTranslation('gamification')
 
@@ -27,8 +27,8 @@ export function Lesson() {
     return <Navigate to="/" replace />
   }
 
-  // Check if module is locked
-  if (user.xp < module.requiredXP) {
+  // Check if module is locked (bypass in dev mode)
+  if (!devMode && user.xp < module.requiredXP) {
     return <Navigate to="/" replace />
   }
 

@@ -14,7 +14,7 @@ import { getModuleStatus } from '../../utils'
 import { Icon } from '../common/Icon'
 
 export function Sidebar() {
-  const { user } = useUser()
+  const { user, devMode } = useUser()
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
@@ -73,7 +73,8 @@ export function Sidebar() {
                   module.id,
                   user.xp,
                   user.completedLessons,
-                  user.completedQuizzes
+                  user.completedQuizzes,
+                  devMode
                 )
                 const isLocked = status === 'locked'
 
