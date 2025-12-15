@@ -90,6 +90,36 @@
       "title": "Segurança em Apps Móveis",
       "description": "Implementar autenticação segura, armazenamento protegido e conformidade OWASP",
       "estimatedTime": "3 horas"
+    },
+    "module-7": {
+      "title": "Offline-First & Data Sync",
+      "description": "SQLite, estratégias de cache, sync patterns e resolução de conflitos",
+      "estimatedTime": "3 horas"
+    },
+    "module-8": {
+      "title": "UI/UX Nativo & Acessibilidade",
+      "description": "Apple HIG, Material Design, Ionic styling, WCAG e animações",
+      "estimatedTime": "3 horas"
+    },
+    "module-9": {
+      "title": "CI/CD & Testing Avançado",
+      "description": "Vitest, E2E testing, GitHub Actions, Fastlane e quality gates",
+      "estimatedTime": "3 horas"
+    },
+    "module-10": {
+      "title": "Monetização & Distribuição",
+      "description": "In-App Purchases, AdMob, Live Updates e desenvolvimento de plugins",
+      "estimatedTime": "3 horas"
+    },
+    "module-11": {
+      "title": "Deep Linking & Navegação",
+      "description": "Universal Links, App Links, URL Schemes, Branch.io e Firebase Dynamic Links",
+      "estimatedTime": "3 horas"
+    },
+    "module-12": {
+      "title": "Hardware APIs & Sensores",
+      "description": "Bluetooth BLE, Camera, Geolocation, Motion sensors e biometria",
+      "estimatedTime": "3 horas"
     }
   },
   "lessonTitles": {
