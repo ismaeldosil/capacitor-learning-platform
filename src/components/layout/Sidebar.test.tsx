@@ -29,7 +29,7 @@ describe('Sidebar', () => {
 
     it('should render version footer', () => {
       render(<Sidebar />)
-      expect(screen.getByText('v0.7.0')).toBeInTheDocument()
+      expect(screen.getByText('v0.8.0')).toBeInTheDocument()
     })
   })
 

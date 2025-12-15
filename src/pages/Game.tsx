@@ -27,7 +27,7 @@ interface GameResult {
 export function Game() {
   const { moduleId } = useParams<{ moduleId: string }>()
   const navigate = useNavigate()
-  const { user, isQuizCompleted, isGameCompleted, completeGame } = useUser()
+  const { user, isQuizCompleted, isGameCompleted, completeGame, devMode } = useUser()
   const { t } = useTranslation('game')
   const { t: tGamification } = useTranslation('gamification')
 
@@ -73,8 +73,8 @@ export function Game() {
     return <Navigate to="/" replace />
   }
 
-  // Check if module is locked
-  if (user.xp < module.requiredXP) {
+  // Check if module is locked (bypass in dev mode)
+  if (!devMode && user.xp < module.requiredXP) {
     return <Navigate to="/" replace />
   }
 

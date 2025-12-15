@@ -7,18 +7,20 @@ import type { ModuleStatus } from '../data/types'
  * @param userXP - User's current XP
  * @param completedLessons - Array of completed lesson IDs
  * @param completedQuizzes - Array of completed quiz IDs
+ * @param devMode - Optional flag to bypass XP requirements for development/testing
  * @returns ModuleStatus - 'locked' | 'available' | 'in_progress' | 'completed'
  */
 export function getModuleStatus(
   moduleId: string,
   userXP: number,
   completedLessons: string[],
-  completedQuizzes: string[]
+  completedQuizzes: string[],
+  devMode?: boolean
 ): ModuleStatus {
   const module = MODULES.find((m) => m.id === moduleId)
   if (!module) return 'locked'
 
-  if (userXP < module.requiredXP) return 'locked'
+  if (userXP < module.requiredXP) return devMode ? 'available' : 'locked'
 
   const allLessonsCompleted = module.lessons.every((lessonId) =>
     completedLessons.includes(lessonId)

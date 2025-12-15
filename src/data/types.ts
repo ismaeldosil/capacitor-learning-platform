@@ -11,6 +11,7 @@ export interface User {
   completedGames: string[]
   badges: string[]
   createdAt: string
+  devMode?: boolean
 }
 
 export interface UserProgress {
